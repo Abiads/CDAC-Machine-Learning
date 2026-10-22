@@ -105,7 +105,8 @@ class MissingnessHandler:
             )
             # Impute only across numerical feature space to avoid data leakage
             num_data = df_clean.select_dtypes(include=[np.number])
-            imputed_array = imputer.fit_transform(num_data)
+            # fit and transform the numerical data : here the data is valid for KNN imputation
+            imputed_array = imputer.fit_transform(num_data) 
             df_clean[num_data.columns] = imputed_array
             logger.info("KNN imputation successfully completed.")
         else:

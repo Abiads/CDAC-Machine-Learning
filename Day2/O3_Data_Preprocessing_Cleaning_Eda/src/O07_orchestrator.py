@@ -62,6 +62,16 @@ def run_stage3_pipeline():
     numerical_sanitizer = NumericalSanitizer(config_path=config_path)
     eda_profiler = EDAProfiler()
 
+    # 3. Execution Pipeline Sequence
+    logger.info("\n--- STEP 1: Missingness Analysis & Treatment ---")
+    missingness_handler.analyze_missingness_report(df)
+    df = missingness_handler.treat_missingness(df)
+
+    logger.info("\n--- STEP 2: Structural Cleaning & Text Normalization ---")
+    df = structural_cleaner.remove_duplicates(df, subset_cols=["customer_id"] if "customer_id" in df.columns else None)
+    df = structural_cleaner.normalize_text(df)
+    df = structural_cleaner.apply_canonical_mapping(df)
+
 
 if __name__ == "__main__":
     run_stage3_pipeline()
