@@ -38,3 +38,25 @@ Stage 2: Data Ingestion & Low-Level Hygiene
     c) Low-Level Memory Optimization & Downcasting: 
         i) Data Type Downcasting: downcasting high-precision types (e.g., int64 to int32/int16/int8, float64 to float32) to optimize RAM footprint.
         ii) Out-of-Core & Chunked Processing: Utilizing chunksize parameters or distributed engines (Polars, Dask, DuckDB) when datasets exceed available system RAM.  
+
+Assignment "Stage-2 on IBM Telco Customer Churn Dataset from Kaggle and github"
+
+
+Stage 3: Data Preprocessing, Cleaning & EDA. 
+Also known as "Dirty Data" Audit(Identify and Cleaning).
+1) Missing Mechanism Analysis:
+2) Duplicate & Structurak Errors:
+3) Outliers & Anomaly Detection:
+4) Range & Regex Validation :
+5) Temporal & Mathematical Edge Casses :
+    a) Time-Series Timezone Alignment : 
+        -- Converting naive/aware datetimes to UTC to prevent silent merge errors.
+    b) Irregular Time-series Resampling:
+        -- Reindexing missing timestamps and applying forward-fill/backward-fill without introducing look-ahead bias. 
+    c) Floating-Point Precision & Infinite Propagation:  Handling IEEE 754 precision issues (np.isclose), division by zero, and inf/-NaN masking before feature transformations. 
+6) Exploratory Data Analysis (EDA):  Univariate distributions, bivariate correlation 
+matrices, missingness heatmaps, and target interaction analysis. 
+
+
+
+
