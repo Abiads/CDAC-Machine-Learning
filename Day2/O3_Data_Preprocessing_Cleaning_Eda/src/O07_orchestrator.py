@@ -72,6 +72,10 @@ def run_stage3_pipeline():
     df = structural_cleaner.normalize_text(df)
     df = structural_cleaner.apply_canonical_mapping(df)
 
+    logger.info("\n--- STEP 3: Outlier & Anomaly Detection ---")
+    df = outlier_detector.detect_and_treat_zscore(df)
+    df = outlier_detector.detect_and_treat_iqr(df)
+    df = outlier_detector.detect_multivariate_isolation_forest(df)
 
 if __name__ == "__main__":
     run_stage3_pipeline()
