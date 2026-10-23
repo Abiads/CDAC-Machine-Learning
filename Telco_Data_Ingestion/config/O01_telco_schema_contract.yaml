@@ -1,0 +1,149 @@
+# ==============================================================================
+# MODULE : Telco Customer Churn Data Contract & Schema Specification
+# FILE   : config/O01_telco_schema_contract.yaml
+# PURPOSE:
+#   Acts as the single source of truth for the IBM Telco Customer Churn dataset.
+#   Defines expected column names, data types, nullability constraints,
+#   allowed categorical domains, and numerical bounds across all 21 attributes.
+# ==============================================================================
+
+dataset_info:
+  name: "ibm_telco_customer_churn"
+  version: "1.0.0"
+  author: "CDAC Machine Learning Engineering Team"
+  description: "Enterprise schema contract and boundary validation specification for IBM Telco Churn dataset"
+
+expected_columns:
+  customerID:
+    type: "string"
+    nullable: false
+    unique: true
+    description: "Unique alphanumeric customer identifier (e.g., 7590-VHVEG)"
+
+  gender:
+    type: "string"
+    nullable: false
+    allowed_values: ["Female", "Male"]
+    description: "Customer biological gender identity"
+
+  SeniorCitizen:
+    type: "int64"
+    nullable: false
+    allowed_values: [0, 1]
+    description: "Binary indicator whether customer is a senior citizen (65+ years)"
+
+  Partner:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No"]
+    description: "Whether the customer has a domestic partner or spouse"
+
+  Dependents:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No"]
+    description: "Whether the customer lives with dependents or children"
+
+  tenure:
+    type: "int64"
+    nullable: false
+    min_value: 0
+    max_value: 120
+    description: "Number of continuous months subscriber has been with the provider"
+
+  PhoneService:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No"]
+    description: "Whether the customer subscribes to landline home phone service"
+
+  MultipleLines:
+    type: "string"
+    nullable: false
+    allowed_values: ["No", "Yes", "No phone service"]
+    description: "Whether customer has multiple telephone lines configured"
+
+  InternetService:
+    type: "string"
+    nullable: false
+    allowed_values: ["DSL", "Fiber optic", "No"]
+    description: "Core broadband ISP technology subscribed"
+
+  OnlineSecurity:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Optional subscription to cybersecurity and firewall filtering"
+
+  OnlineBackup:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Optional subscription to cloud data backup"
+
+  DeviceProtection:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Hardware insurance and equipment replacement plan"
+
+  TechSupport:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Access to dedicated 24/7 priority technical troubleshooting"
+
+  StreamingTV:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Subscription to carrier-provided television streaming"
+
+  StreamingMovies:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No", "No internet service"]
+    description: "Subscription to carrier on-demand movie streaming"
+
+  Contract:
+    type: "string"
+    nullable: false
+    allowed_values: ["Month-to-month", "One year", "Two year"]
+    description: "Customer service agreement commitment duration"
+
+  PaperlessBilling:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No"]
+    description: "Whether customer elected electronic e-mail invoicing"
+
+  PaymentMethod:
+    type: "string"
+    nullable: false
+    allowed_values: [
+      "Electronic check",
+      "Mailed check",
+      "Bank transfer (automatic)",
+      "Credit card (automatic)"
+    ]
+    description: "Payment channel used to settle monthly invoices"
+
+  MonthlyCharges:
+    type: "float64"
+    nullable: false
+    min_value: 0.0
+    max_value: 500.0
+    description: "Current recurring monthly charge amount in USD ($)"
+
+  TotalCharges:
+    type: "float64"
+    nullable: true
+    min_value: 0.0
+    max_value: 50000.0
+    description: "Cumulative total amount billed across entire tenure (USD $)"
+
+  Churn:
+    type: "string"
+    nullable: false
+    allowed_values: ["Yes", "No"]
+    description: "Target label indicating if customer terminated account in past month"
