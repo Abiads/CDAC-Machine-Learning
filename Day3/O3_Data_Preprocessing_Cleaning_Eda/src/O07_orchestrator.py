@@ -80,5 +80,31 @@ def run_stage3_pipeline():
     logger.info("\n--- STEP 4: Numerical Sanitization (IEEE 754 & Infinities) ---")
     df = numerical_sanitizer.sanitize_infinities_and_nans(df)
 
+    logger.info("\n--- STEP 5: Automated EDA Profiling ---")
+    univariate_summary = eda_profiler.generate_univariate_summary(df)
+    corr_matrix = eda_profiler.compute_correlation_matrix(df)
+    target_interaction = eda_profiler.analyze_target_interaction(df, target_col="churn_status")
+    
+    # logger.info("\n[EDA PROFILING: Univariate Summary]")
+    # print(univariate_summary)
+    # logger.info("\n[EDA PROFILING: Correlation Matrix]")
+    # print(corr_matrix)
+    # logger.info ("\n[EDA PROFILING: Target Interaction]")
+    # print(target_interaction)
+
+    # 4. Save Final Processed Dataset for Stage 4
+    output_file = processed_dir / "clean_telco_telemetry.csv"
+    df.to_csv(output_file, index=False)
+    
+    logger.info("==================================================")
+    logger.info(" STAGE 3 COMPLETED SUCCESSFULLY!")
+    logger.info(f" Clean Processed Dataset Saved To: {output_file}")
+    logger.info(f" Final Clean Shape: {df.shape[0]:,} rows, {df.shape[1]} columns")
+    logger.info("==================================================")
+
+
+
+
+
 if __name__ == "__main__":
     run_stage3_pipeline()
