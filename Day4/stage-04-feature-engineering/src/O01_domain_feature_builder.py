@@ -41,6 +41,7 @@ class DomainFeatureBuilder:
     def build_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Constructs domain features and ratio metrics specified in configuration."""
         df_clean = df.copy()
+        ratios = self.config.get("ratios_to_build", [])
         for ratio in ratios:
             num_col = ratio.get("numerator")
             denom_col = ratio.get("denominator")
