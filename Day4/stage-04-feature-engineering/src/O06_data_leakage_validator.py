@@ -19,7 +19,23 @@ class DataLeakageValidator:
         self.random_state = random_state
 
     def stratified_train_test_split(self, df: pd.DataFrame, target_col: str) -> tuple:
-        train_df, test_df = None, None
+        """Splits DataFrame into train and test sets using stratification on target_col."""
+        if target_col not in df.columns:
+            logger.warning(f"Target '{target_col}' not found. Performing standard non-stratified split.")
+            stratify_series = None
+        else:
+            stratify_series = df[target_col]
+
+        train_df, test_df = train_test_split(
+            df,
+            test_size=self.test_size,
+            random_state=self.random_state,
+            stratify=stratify_series
+        )
+        # Reset indices for clean downstream indexing
+        train_df = train_df.reset_index(drop=True)
+        test_df = test_df.reset_index(drop=True)
+        logger.info(f"Dataset split complete: Train shape={train_df.shape}, Test shape={test_df.shape}")
         return train_df, test_df
 
 if __name__ == "__main__":
