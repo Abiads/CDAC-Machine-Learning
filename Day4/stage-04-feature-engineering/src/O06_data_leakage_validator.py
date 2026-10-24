@@ -19,24 +19,37 @@ class DataLeakageValidator:
         self.random_state = random_state
 
     def stratified_train_test_split(self, df: pd.DataFrame, target_col: str) -> tuple:
-        """Splits DataFrame into train and test sets using stratification on target_col."""
+        """Splits DataFrame into train and test sets and asserts zero data leakage."""
         if target_col not in df.columns:
-            logger.warning(f"Target '{target_col}' not found. Performing standard non-stratified split.")
-            stratify_series = None
-        else:
-            stratify_series = df[target_col]
+            logger.warning(f"Target '{target_col}' not found. Falling back to random non-stratified split.")
+            train_df, test_df = train_test_split(df, test_size=self.test_size, random_state=self.random_state)
+            return train_df, test_df
 
         train_df, test_df = train_test_split(
             df,
             test_size=self.test_size,
             random_state=self.random_state,
-            stratify=stratify_series
+            stratify=df[target_col]
         )
-        # Reset indices for clean downstream indexing
-        train_df = train_df.reset_index(drop=True)
-        test_df = test_df.reset_index(drop=True)
-        logger.info(f"Dataset split complete: Train shape={train_df.shape}, Test shape={test_df.shape}")
+        train_indices = set(train_df.index)
+        test_indices = set(test_df.index)
+        overlap = train_indices & test_indices
+        if overlap:
+            raise ValueError(f"Data leakage detected: overlapping indices between train and test sets: {overlap}")
+        else:
+            logger.info("Success. Zero overlapping indices detected between train and test sets.")
+
         return train_df, test_df
 
 if __name__ == "__main__":
-    pass
+    sample_df = pd.DataFrame({
+        "feature_1": range(100),
+        "feature_2": range(100, 200),
+        "churn_status": [0]*80 + [1]*20
+    })
+    validator = DataLeakageValidator(test_size=0.2, random_state=42)
+    train_df, test_df = validator.stratified_train_test_split(sample_df, target_col="churn_status")
+    print(f"Train DataFrame: {len(train_df)}")
+    print(train_df.head())
+    print(f"\nTest DataFrame: {len(test_df)}")
+    print(test_df.head())

@@ -45,7 +45,7 @@ def run_stage4_pipeline():
     models_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
 
-    input_file = project_root / "data/raw/input.csv"
+    input_file = project_root / "data/raw/input.csv"  # stage -3 result data
     if input_file.exists():
         logger.info(f"Loading input dataset from: {input_file}")
         df = pd.read_csv(input_file)

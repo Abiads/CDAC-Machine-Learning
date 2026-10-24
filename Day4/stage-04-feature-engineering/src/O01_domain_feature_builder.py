@@ -8,6 +8,16 @@ import pandas as pd
 import numpy as np
 import yaml
 
+'''
+domain_features:
+  ratios_to_build:
+    - numerator: "total_charges"
+      denominator: "tenure_months"
+      new_feature_name: "charge_per_tenure_month"
+    - numerator: "monthly_charges"
+      denominator: "tenure_months"
+      new_feature_name: "monthly_to_tenure_ratio"
+'''
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -31,18 +41,35 @@ class DomainFeatureBuilder:
     def build_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Constructs domain features and ratio metrics specified in configuration."""
         df_clean = df.copy()
-        ratios = self.config.get("ratios_to_build", [])
-        for rule in ratios:
-            num = rule.get("numerator")
-            den = rule.get("denominator")
-            new_col = rule.get("new_feature_name")
-            if num in df_clean.columns and den in df_clean.columns:
-                # Replace 0 denominators with NaN to avoid ZeroDivisionError, fillna with 0
-                df_clean[new_col] = (df_clean[num] / df_clean[den].replace(0, np.nan)).fillna(0.0)
-                logger.info(f"Engineered ratio feature '{new_col}' = {num} / {den}")
-            else:
-                logger.warning(f"Skipping ratio '{new_col}': columns '{num}' or '{den}' not present.")
+        for ratio in ratios:
+            num_col = ratio.get("numerator")
+            denom_col = ratio.get("denominator")
+            new_col = ratio.get("new_feature_name")
+
+            if num_col not in df_clean.columns or denom_col not in df_clean.columns:
+                logger.warning(f"Skipping ratio '{new_col}': columns '{num_col}' or '{denom_col}' not present.")
+                continue
+
+            denom_series = df_clean[denom_col].replace(0, np.nan)
+            df_clean[new_col] = df_clean[num_col] / denom_series   
+            # fill NaN values resulting from division by zero with 0
+            df_clean[new_col] = df_clean[new_col].replace([np.inf, -np.inf], np.nan).fillna(0)
+            logger.info(f"Engineered ratio feature '{new_col}' = {num_col} / {denom_col}")
         return df_clean
 
 if __name__ == "__main__":
-    pass
+    config_file = Path(__file__).parent.parent / "config/O01_feature_rules.yaml"
+    sample_df = pd.DataFrame({
+        "customer_id": ["CUST-001", "CUST-002", "CUST-003"],
+        "tenure_months": [12, 0, 24],  # 0 tenure tests division-by-zero protection
+        "monthly_charges": [29.95, 75.0, 45.0],
+        "total_charges": [359.4, 0.0, 1080.0]
+    })
+    
+    if config_file.exists():
+        builder = DomainFeatureBuilder(config_path=config_file)
+        df_featured = builder.build_features(sample_df)
+        print("\n[RESULT] Domain Engineered DataFrame Preview:")
+        print(df_featured)
+    else:
+        logger.error(f"Configuration file not found: {config_file}")
