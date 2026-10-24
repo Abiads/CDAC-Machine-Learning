@@ -62,15 +62,24 @@ def run_stage4_pipeline():
 
          # 3. Instantiate Feature Engineering Engines
         domain_builder = DomainFeatureBuilder(config_path=config_path)
+        cardinality_reducer = CardinalityDimensionalityReducer(config_path=config_path)
         cat_encoder = CategoricalEncoder(config_path=config_path)
         num_transformer = NumericalTransformer(config_path=config_path)
-        cardinality_reducer = CardinalityDimensionalityReducer(config_path=config_path)
         feature_selector = FeatureSelector(config_path=config_path)
 
         # 4. STEP 2: Domain Feature Building (Applied independently to train and test)
         logger.info("\n--- STEP 2: Domain Feature Construction ---")
         train_df = domain_builder.build_features(train_df)
         test_df = domain_builder.build_features(test_df)
+
+        # 5. STEP 3: Cardinality Reduction (Fit on train, transform test)
+        cat_cols_to_reduce = ["payment_method"]
+        train_df = cardinality_reducer.group_rare_categories(train_df, categorical_cols= cat_cols_to_reduce,is_train=True)
+        test_df = cardinality_reducer.group_rare_categories(test_df, categorical_cols= cat_cols_to_reduce,is_train=False)
+
+
+
+
 
 
 if __name__ == "__main__":
