@@ -58,5 +58,156 @@ Also known as "Dirty Data" Audit(Identify and Cleaning).
 matrices, missingness heatmaps, and target interaction analysis. 
 
 
+Stage 4: Feature Engineering, Transformation & Selection 
+1) Mathematical & Distributional Transformations:
+    a) Skewness Correction:
+        i) Log Transform (np.log1p) for right-skewed distributions with long tails.
+        ii) Box-Cox (strictly positive data) and Yeo-Johnson (handles negative & zero values) power transformations.
+    b) Scaling & Normalization (Fitted ONLY on training folds):
+        i) StandardScaler: Z-score normalization (zero mean, unit variance) for distance-based & gradient models.
+        ii) MinMaxScaler: Bounding features into [0, 1] range (sensitive to extreme outliers).
+        iii) RobustScaler: Scaling via Median and Interquartile Range (IQR) for heavy outlier resilience.
+2) Domain & Interaction Feature Creation:
+    a) Arithmetic Ratios & Polynomial Interactions:
+        i) Domain-specific combinations (e.g., Debt-to-Income, Price-per-SqFt, Usage-to-Tenure).
+        ii) PolynomialFeatures (degree=2 with interaction_only=True) for non-linear feature coupling.
+    b) Group-Level Aggregations (Cohort Statistics):
+        i) Calculating customer/category segment mean, standard deviation, count, and deviation from group mean.
+    c) Temporal Feature Extraction:
+        i) Cyclical Encoding: Mapping periodic time (hour, day of week, month) into continuous sine/cosine coordinates (sin(2π*t/T), cos(2π*t/T)) to preserve cyclic continuity.
+        ii) Lag Features & Rolling Window Statistics (moving averages, rolling volatility) for sequential trends.
+3) Advanced Categorical Encoding:
+    a) Nominal Categoricals:
+        i) One-Hot Encoding (with drop='first' to avoid dummy variable trap / multicollinearity; handle_unknown='ignore').
+    b) High-Cardinality Categoricals:
+        i) Target / Mean Encoding: Replacing levels with target expectation; regularized with K-Fold out-of-fold splitting or James-Stein / Bayesian m-estimate smoothing to prevent target leakage.
+        ii) Frequency / Count Encoding: Mapping categories to their sample occurrence counts.
+    c) Ordinal Categoricals:
+        i) Integer rank mapping preserving explicit intrinsic hierarchy (e.g., Low < Medium < High).
+4) Feature Selection Paradigms:
+    a) Filter Methods:
+        i) VarianceThreshold: Removing quasi-constant features with zero or near-zero variance.
+        ii) Correlation Pruning: Dropping redundant collinear pairs (|r| > 0.85) to stabilize linear models.
+        iii) Mutual Information (MI): Measuring non-linear dependency between features and target.
+    b) Wrapper Methods:
+        i) Recursive Feature Elimination (RFECV): Iteratively pruning features using cross-validated estimator weights.
+        ii) Sequential Forward / Backward Feature Selection (SFS/SBS).
+    c) Embedded Methods:
+        i) L1 (Lasso) Regularization: Driving non-informative coefficients strictly to zero.
+        ii) Tree-based Feature Importance (Mean Decrease in Impurity vs Permutation Importance).
 
 
+Stage 5: Model Training, Experimentation & Validation Strategies 
+1) Leakage-Free Validation Strategies:
+    a) K-Fold vs. Stratified K-Fold:
+        i) Stratified K-Fold mandatory for imbalanced classification to maintain identical class ratios across folds.
+    b) Temporal & Group Partitioning:
+        i) TimeSeriesSplit / Purged Walk-Forward CV: Restricting validation folds to strictly subsequent temporal windows (eliminating look-ahead bias).
+        ii) GroupKFold: Ensuring identical entities (e.g., same customer ID, device ID) never leak across train and validation sets simultaneously.
+2) Class Imbalance Mitigation:
+    a) Algorithm-Level Cost Weighting:
+        i) Utilizing class_weight='balanced' in Logistic Regression / Random Forest or scale_pos_weight in XGBoost / LightGBM to penalize minority misclassification.
+    b) Resampling Methods (Applied ONLY inside training folds):
+        i) Oversampling: SMOTE (Synthetic Minority Over-sampling Technique) and ADASYN (focusing on hard boundary instances).
+        ii) Hybrid Sampling: SMOTE-Tomek and SMOTE-ENN (removes ambiguous boundary artifacts).
+        iii) Undersampling: Random Under-Sampling (RUS) or NearMiss for high-volume datasets.
+    c) Asymmetric Cost-Sensitive Learning:
+        i) Custom loss formulation weighting False Negatives (FN) significantly higher than False Positives (FP) according to actual business dollar costs.
+3) Algorithm Selection & Baseline Progression:
+    a) Naive Baseline:
+        i) Zero-Rule (majority class DummyClassifier or mean DummyRegressor) to define the minimum threshold of predictive utility.
+    b) Linear & Parametric Benchmarks:
+        i) Logistic Regression with ElasticNet (L1 + L2) penalty; Ridge / Lasso Regression.
+    c) Non-Linear & Ensemble Methods:
+        i) Bagging: Random Forest (reduces variance, robust against outliers).
+        ii) Boosting: XGBoost, LightGBM, and CatBoost (sequential gradient descent in functional space, handles tabular data optimally).
+    d) Multi-Model Comparison Matrix:
+        i) Cross-validated side-by-side benchmark across execution speed, memory footprint, and target metrics.
+
+
+Stage 6: Hyperparameter Optimization & Tuning 
+1) Search Strategies:
+    a) Exhaustive Grid Search (GridSearchCV):
+        i) Complete Cartesian evaluation across specified parameter combinations (guaranteed optimum within grid, high computational expense).
+    b) Random Search (RandomizedSearchCV):
+        i) Stochastic sampling from continuous statistical distributions (covers high-dimensional parameter spaces faster with lower budget).
+    c) Bayesian Optimization (Sequential Model-Based Optimization - SMBO):
+        i) Tree-structured Parzen Estimators (TPE) via Optuna or Hyperopt.
+        ii) Builds a probabilistic surrogate model P(score | hyperparameters) to guide sampling toward the most promising regions of search space.
+2) Objective Functions & Early Termination:
+    a) Business Metric Alignment:
+        i) Tuning directly against PR-AUC, Cost-Weighted F-beta (e.g., F2-score for recall priority), or Custom Profit Functions rather than vanilla Accuracy.
+    b) Asynchronous Pruning:
+        i) Early stopping on validation loss curves and Hyperband / Median Pruners in Optuna to kill unpromising trials in early epochs.
+3) Strict Pipeline Enclosure:
+    a) Encapsulating all scalers, encoders, resamplers, and estimators within sklearn.pipeline.Pipeline (or imblearn.pipeline.Pipeline) during tuning to prevent cross-fold data snooping.
+
+
+Stage 7: Model Evaluation & Explainability (XAI) 
+1) Comprehensive Metric Evaluation:
+    a) Imbalanced Classification Metrics:
+        i) Precision, Recall, F1-Score, and Macro vs. Micro vs. Weighted averages.
+        ii) Precision-Recall Curve (PR-AUC / Average Precision): Primary metric when positive instances are rare.
+        iii) Receiver Operating Characteristic (ROC-AUC): Discrimination across all classification thresholds.
+        iv) Confusion Matrix & Cost-Benefit Matrix ($ Saved vs $ Intervention Cost).
+    b) Probability Calibration:
+        i) Brier Score & Calibration Curves (Reliability Diagrams) checking whether predicted probabilities equal observed frequencies.
+        ii) Post-processing calibration using Platt Scaling (Sigmoidal) or Isotonic Regression.
+    c) Regression Metrics:
+        i) RMSE, MAE, MAPE, R², Adjusted R², and Residual Normality Diagnostics (Q-Q plots, Homoscedasticity checks).
+2) Global Model Interpretability:
+    a) Feature Importance:
+        i) Mean Decrease in Impurity (MDI / Gini Importance): Fast, but biased toward high-cardinality features.
+        ii) Permutation Feature Importance: Evaluates metric drop when a feature column is randomly shuffled.
+    b) Global SHAP (SHapley Additive exPlanations):
+        i) SHAP Summary Beeswarm Plots: Displays directionality, magnitude, and density of feature impacts.
+        ii) SHAP Dependence & Interaction Plots: Reveals non-linear relationships and pairwise feature coupling.
+3) Local Explainability (Per-Prediction Decisions):
+    a) Instance Attribution:
+        i) SHAP Waterfall Plots & Force Plots: Decomposing an individual prediction from the base value to the final score: f(x) = E[f(x)] + ∑ φ_i.
+        ii) LIME (Local Interpretable Model-agnostic Explanations): Local sparse linear surrogate models around individual query points.
+4) Fairness & Ethical Governance:
+    a) Bias Auditing across protected demographic cohorts (checking Disparate Impact Ratio, Equal Opportunity, and Equalized Odds).
+
+
+Stage 8: Model Serialization & MLOps Deployment 
+1) Production Pipeline Packaging:
+    a) Atomic Pipeline Packaging:
+        i) Bundling ColumnTransformer (preprocessing) and Estimator into a single composite artifact (raw input in -> final prediction out).
+2) Serialization Formats & Registry:
+    a) Serialization Formats:
+        i) Joblib / Cloudpickle: Standard Python serialization for Scikit-Learn / XGBoost.
+        ii) ONNX (Open Neural Network Exchange): Cross-platform, language-agnostic format enabling sub-millisecond C++ runtime execution.
+        iii) Treelite: Compiles tree ensembles directly into native C code for high-throughput inference.
+    b) Model Versioning & Registry:
+        i) MLflow / Weights & Biases / DVC: Storing immutable artifacts with Git commit hashes, environment dependencies, training data version, and evaluation tags.
+3) Deployment Topologies:
+    a) Batch / Offline Scoring:
+        i) Scheduled inference on data warehouses / object stores via Airflow, Celery cron jobs, or DuckDB/Spark.
+    b) Real-Time Microservice (Online Scoring):
+        i) High-concurrency RESTful API using FastAPI & Uvicorn with Pydantic schema validation (<50 ms SLA).
+    c) Containerization & Hardening:
+        i) Multi-stage Docker builds with pinned requirements.txt, non-root user privilege, and health checks.
+
+
+Stage 9: Production Monitoring, Drift Detection & Retraining 
+1) Drift Detection & Statistical Auditing:
+    a) Data / Covariate Drift (Shift in input distribution P(X)):
+        i) Population Stability Index (PSI): (PSI < 0.1: Stable; 0.1 <= PSI < 0.25: Moderate shift; PSI >= 0.25: Significant drift requiring retraining).
+        ii) Kolmogorov-Smirnov (K-S) Test for continuous features; Chi-Square (χ²) goodness-of-fit for categoricals.
+    b) Concept Drift (Shift in relationship between inputs and targets P(y | X)):
+        i) Tracking decay in real-world business KPIs and prediction residuals over time.
+2) Operational Telemetry & Infrastructure Health:
+    a) System Observability:
+        i) Latency percentiles (p50, p95, p99), CPU/RAM utilization, throughput (Requests Per Second - RPS).
+        ii) HTTP 4xx/5xx status monitoring and rate limiting.
+    b) Prediction Audit Logging:
+        i) Append-only logging of inference inputs, predicted probabilities, model versions, and latency for retrospective root-cause debugging.
+3) Retraining Strategies & Continuous Delivery (CD4ML):
+    a) Retraining Triggers:
+        i) Scheduled Cadence: Periodic retraining (e.g., weekly/monthly).
+        ii) Event-Driven: Triggered automatically when PSI exceeds 0.25 or performance metrics fall below SLA.
+    b) Safe Rollout Strategies:
+        i) Shadow / Dark Deployment: New candidate model scores real traffic silently alongside the production model without serving results to users.
+        ii) Canary Release: Directing 5% to 10% of live traffic to the new model, progressively scaling up upon error-free operation.
+        iii) Blue-Green Deployment: Zero-downtime traffic switching between production and staging environments.
