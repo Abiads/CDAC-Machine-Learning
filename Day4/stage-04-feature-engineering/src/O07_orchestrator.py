@@ -77,8 +77,45 @@ def run_stage4_pipeline():
         train_df = cardinality_reducer.group_rare_categories(train_df, categorical_cols= cat_cols_to_reduce,is_train=True)
         test_df = cardinality_reducer.group_rare_categories(test_df, categorical_cols= cat_cols_to_reduce,is_train=False)
 
+        # 6. STEP 4: Categorical Encoding (Fit on train, transform test)
+        train_df = cat_encoder.fit_transform_low_cardinality(train_df, is_train=True)
+        test_df = cat_encoder.fit_transform_low_cardinality(test_df, is_train=False)
 
+        # Align columns between train and test (in case rare categories caused minor mismatch in dummy columns)
+        train_df, test_df = train_df.align(test_df, join="left", axis=1, fill_value=0.0)
+        # Re-assign target column to test_df since align can set it to NaN if missing in test columns
+        test_df[target_col] = test_df[target_col].fillna(test_df[target_col].mode()[0] if not test_df[target_col].empty else 0)
 
+        # 8. STEP 6: Multistage Feature Selection (Fit on train, filter test)
+        train_df = feature_selector.apply_variance_threshold(train_df, is_train=True)
+        test_df = feature_selector.apply_variance_threshold(test_df, is_train=False)
+
+        train_df = feature_selector.apply_correlation_filter(train_df)
+        # Ensure test df keeps the same columns retained after correlation filter
+        retained_cols = [c for c in train_df.columns if c in test_df.columns]
+        test_df = test_df[retained_cols]
+
+        train_df = feature_selector.apply_statistical_scoring(train_df, target_col=target_col, is_train=True)
+        test_df = feature_selector.apply_statistical_scoring(test_df, target_col=target_col, is_train=False)
+
+        # 9. STEP 7: Artifact Serialization (Saving fitted transformers for production inference)
+        joblib.dump(cat_encoder, models_dir / "fitted_categorical_encoder.pkl")
+        joblib.dump(num_transformer, models_dir / "fitted_numerical_transformer.pkl")
+        joblib.dump(cardinality_reducer, models_dir / "fitted_cardinality_reducer.pkl")
+        joblib.dump(feature_selector, models_dir / "fitted_feature_selector.pkl")
+
+        # 10. Persist Final Engineered Feature Matrices
+        train_output = processed_dir / "train_features.csv"
+        test_output = processed_dir / "test_features.csv"
+
+        train_df.to_csv(train_output, index=False)
+        test_df.to_csv(test_output, index=False)
+
+        logger.info("==================================================")
+        logger.info(" STAGE 4 COMPLETED SUCCESSFULLY!")
+        logger.info(f" Train Feature Matrix Saved: {train_output} ({train_df.shape[0]:,} rows, {train_df.shape[1]} cols)")
+        logger.info(f" Test Feature Matrix Saved : {test_output} ({test_df.shape[0]:,} rows, {test_df.shape[1]} cols)")
+        logger.info("==================================================")
 
 
 
