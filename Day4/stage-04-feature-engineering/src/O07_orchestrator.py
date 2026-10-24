@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 import pandas as pd
 import joblib
+
 from O01_domain_feature_builder import DomainFeatureBuilder
 from O02_categorical_encoder import CategoricalEncoder
 from O03_numerical_transformer import NumericalTransformer
@@ -23,6 +24,7 @@ logger = logging.getLogger("Stage4Orchestrator")
 
 
 
+
 def run_stage4_pipeline():
     # 1. Resolve Paths
     current_dir = Path(__file__).parent
@@ -35,9 +37,9 @@ def run_stage4_pipeline():
     models_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
 
-    input_file = project_root / "data/raw/input.csv"
-    if not input_file.exists():
-        return
+    input_file = project_root / "data/raw/input.csv" # stage -3 result data
+    if input_file.exists():
+        df = pd.read_csv(input_file)
     else:
         df = pd.DataFrame({
             "customer_id": [f"CUST-{i:03d}" for i in range(1, 101)],
