@@ -3,16 +3,10 @@ O07_orchestrator.py
 Main master runner chaining feature engineering, transformation, selection, and artifact serialization.
 """
 
-import sys
-from pathlib import Path
 import logging
+from pathlib import Path
 import pandas as pd
 import joblib
-
-# Ensure local imports work regardless of execution working directory
-current_dir = Path(__file__).resolve().parent
-if str(current_dir) not in sys.path:
-    sys.path.insert(0, str(current_dir))
 
 from O01_domain_feature_builder import DomainFeatureBuilder
 from O02_categorical_encoder import CategoricalEncoder
@@ -28,14 +22,12 @@ logging.basicConfig(
 logger = logging.getLogger("Stage4Orchestrator")
 
 
-def run_stage4_pipeline():
-    """Chains feature engineering, encoding, transformation, selection, and artifact serialization."""
-    logger.info("==================================================")
-    logger.info(" STARTING STAGE 4: FEATURE ENGINEERING & SELECTION")
-    logger.info("==================================================")
 
+
+
+def run_stage4_pipeline():
     # 1. Resolve Paths
-    current_dir = Path(__file__).resolve().parent
+    current_dir = Path(__file__).parent
     project_root = current_dir.parent
     
     config_path = project_root / "config/O01_feature_rules.yaml"
@@ -45,12 +37,10 @@ def run_stage4_pipeline():
     models_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
 
-    input_file = project_root / "data/raw/input.csv"  # stage -3 result data
+    input_file = project_root / "data/raw/input.csv" # stage -3 result data
     if input_file.exists():
-        logger.info(f"Loading input dataset from: {input_file}")
         df = pd.read_csv(input_file)
     else:
-        logger.info(f"Input file not found at {input_file}. Generating synthetic benchmark dataset for Stage 4...")
         df = pd.DataFrame({
             "customer_id": [f"CUST-{i:03d}" for i in range(1, 101)],
             "tenure_months": [12, 24, 6, 48, 3, 18, 36, 12, 60, 2] * 10,
@@ -61,78 +51,72 @@ def run_stage4_pipeline():
             "churn_status": [0, 1, 0, 0, 1, 0, 1, 0, 0, 1] * 10
         })
 
-    target_col = "churn_status"
-    if target_col not in df.columns:
-        raise ValueError(f"Target column '{target_col}' missing from input dataset.")
+        target_col = "churn_status"
+        if target_col not in df.columns:
+            raise ValueError(f"Target column '{target_col}' missing from input dataset.")
 
-    # STEP 1: Strict Train/Test Split (Preventing Global Data Leakage)
-    logger.info("\n--- STEP 1: Stratified Train/Test Partitioning ---")
-    leakage_validator = DataLeakageValidator(test_size=0.2, random_state=42)
-    train_df, test_df = leakage_validator.stratified_train_test_split(df, target_col)
 
-    # Instantiate Feature Engineering Engines
-    domain_builder = DomainFeatureBuilder(config_path=config_path)
-    cardinality_reducer = CardinalityDimensionalityReducer(config_path=config_path)
-    cat_encoder = CategoricalEncoder(config_path=config_path)
-    num_transformer = NumericalTransformer(config_path=config_path)
-    feature_selector = FeatureSelector(config_path=config_path)
+        # 2 step 1 : Strict Train/Test Split (Preventing Global Data Leakage)
+        leakage_validator = DataLeakageValidator(test_size=0.2, random_state=42)
+        train_df, test_df = leakage_validator.stratified_train_test_split(df, target_col)
 
-    # STEP 2: Domain Feature Building
-    logger.info("\n--- STEP 2: Domain Feature Construction ---")
-    train_df = domain_builder.build_features(train_df)
-    test_df = domain_builder.build_features(test_df)
+         # 3. Instantiate Feature Engineering Engines
+        domain_builder = DomainFeatureBuilder(config_path=config_path)
+        cardinality_reducer = CardinalityDimensionalityReducer(config_path=config_path)
+        cat_encoder = CategoricalEncoder(config_path=config_path)
+        num_transformer = NumericalTransformer(config_path=config_path)
+        feature_selector = FeatureSelector(config_path=config_path)
 
-    # STEP 3: Cardinality & Rare Level Grouping
-    logger.info("\n--- STEP 3: Rare-Label Cardinality Reduction ---")
-    train_df = cardinality_reducer.group_rare_categories(train_df, is_train=True)
-    test_df = cardinality_reducer.group_rare_categories(test_df, is_train=False)
+        # 4. STEP 2: Domain Feature Building (Applied independently to train and test)
+        logger.info("\n--- STEP 2: Domain Feature Construction ---")
+        train_df = domain_builder.build_features(train_df)
+        test_df = domain_builder.build_features(test_df)
 
-    # STEP 4: Categorical Encoding
-    logger.info("\n--- STEP 4: Categorical Encoding (One-Hot & Target) ---")
-    train_df = cat_encoder.fit_transform_low_cardinality(train_df, is_train=True)
-    test_df = cat_encoder.fit_transform_low_cardinality(test_df, is_train=False)
-    train_df = cat_encoder.fit_transform_target_encoding(train_df, target_col=target_col, is_train=True)
-    test_df = cat_encoder.fit_transform_target_encoding(test_df, target_col=target_col, is_train=False)
+        # 5. STEP 3: Cardinality Reduction (Fit on train, transform test)
+        cat_cols_to_reduce = ["payment_method"]
+        train_df = cardinality_reducer.group_rare_categories(train_df, categorical_cols= cat_cols_to_reduce,is_train=True)
+        test_df = cardinality_reducer.group_rare_categories(test_df, categorical_cols= cat_cols_to_reduce,is_train=False)
 
-    # STEP 5: Numerical Power Transformation & Scaling
-    logger.info("\n--- STEP 5: Numerical Power Transformation & Scaling ---")
-    id_cols = [c for c in ["customer_id", target_col] if c in train_df.columns]
-    train_df = num_transformer.fit_transform_features(train_df, exclude_cols=id_cols, is_train=True)
-    test_df = num_transformer.fit_transform_features(test_df, exclude_cols=id_cols, is_train=False)
+        # 6. STEP 4: Categorical Encoding (Fit on train, transform test)
+        train_df = cat_encoder.fit_transform_low_cardinality(train_df, is_train=True)
+        test_df = cat_encoder.fit_transform_low_cardinality(test_df, is_train=False)
 
-    # STEP 6: Multi-Stage Feature Selection
-    logger.info("\n--- STEP 6: Multi-Stage Feature Selection ---")
-    train_df = feature_selector.apply_variance_threshold(train_df, exclude_cols=id_cols, is_train=True)
-    test_df = feature_selector.apply_variance_threshold(test_df, exclude_cols=id_cols, is_train=False)
+        # Align columns between train and test (in case rare categories caused minor mismatch in dummy columns)
+        train_df, test_df = train_df.align(test_df, join="left", axis=1, fill_value=0.0)
+        # Re-assign target column to test_df since align can set it to NaN if missing in test columns
+        test_df[target_col] = test_df[target_col].fillna(test_df[target_col].mode()[0] if not test_df[target_col].empty else 0)
 
-    train_df = feature_selector.apply_correlation_filter(train_df, exclude_cols=id_cols)
-    test_df = feature_selector.apply_correlation_filter(test_df, exclude_cols=id_cols)
+        # 8. STEP 6: Multistage Feature Selection (Fit on train, filter test)
+        train_df = feature_selector.apply_variance_threshold(train_df, is_train=True)
+        test_df = feature_selector.apply_variance_threshold(test_df, is_train=False)
 
-    train_df = feature_selector.apply_statistical_scoring(train_df, target_col=target_col, exclude_cols=["customer_id"], is_train=True)
-    test_df = feature_selector.apply_statistical_scoring(test_df, target_col=target_col, exclude_cols=["customer_id"], is_train=False)
+        train_df = feature_selector.apply_correlation_filter(train_df)
+        # Ensure test df keeps the same columns retained after correlation filter
+        retained_cols = [c for c in train_df.columns if c in test_df.columns]
+        test_df = test_df[retained_cols]
 
-    # STEP 7: Pipeline Artifact Serialization & Export
-    logger.info("\n--- STEP 7: Pipeline Artifact Serialization & Export ---")
-    train_output_path = processed_dir / "train_features.csv"
-    test_output_path = processed_dir / "test_features.csv"
-    train_df.to_csv(train_output_path, index=False)
-    test_df.to_csv(test_output_path, index=False)
-    logger.info(f"Saved processed train features -> {train_output_path} ({train_df.shape})")
-    logger.info(f"Saved processed test features  -> {test_output_path} ({test_df.shape})")
+        train_df = feature_selector.apply_statistical_scoring(train_df, target_col=target_col, is_train=True)
+        test_df = feature_selector.apply_statistical_scoring(test_df, target_col=target_col, is_train=False)
 
-    pipeline_artifacts = {
-        "domain_builder": domain_builder,
-        "cardinality_reducer": cardinality_reducer,
-        "cat_encoder": cat_encoder,
-        "num_transformer": num_transformer,
-        "feature_selector": feature_selector,
-    }
-    model_artifact_path = models_dir / "stage4_feature_pipeline.joblib"
-    joblib.dump(pipeline_artifacts, model_artifact_path)
-    logger.info(f"Saved fitted transformer artifacts -> {model_artifact_path}")
-    logger.info("==================================================")
-    logger.info(" STAGE 4 FEATURE PIPELINE COMPLETED SUCCESSFULLY")
-    logger.info("==================================================")
+        # 9. STEP 7: Artifact Serialization (Saving fitted transformers for production inference)
+        joblib.dump(cat_encoder, models_dir / "fitted_categorical_encoder.pkl")
+        joblib.dump(num_transformer, models_dir / "fitted_numerical_transformer.pkl")
+        joblib.dump(cardinality_reducer, models_dir / "fitted_cardinality_reducer.pkl")
+        joblib.dump(feature_selector, models_dir / "fitted_feature_selector.pkl")
+
+        # 10. Persist Final Engineered Feature Matrices
+        train_output = processed_dir / "train_features.csv"
+        test_output = processed_dir / "test_features.csv"
+
+        train_df.to_csv(train_output, index=False)
+        test_df.to_csv(test_output, index=False)
+
+        logger.info("==================================================")
+        logger.info(" STAGE 4 COMPLETED SUCCESSFULLY!")
+        logger.info(f" Train Feature Matrix Saved: {train_output} ({train_df.shape[0]:,} rows, {train_df.shape[1]} cols)")
+        logger.info(f" Test Feature Matrix Saved : {test_output} ({test_df.shape[0]:,} rows, {test_df.shape[1]} cols)")
+        logger.info("==================================================")
+
 
 
 if __name__ == "__main__":
