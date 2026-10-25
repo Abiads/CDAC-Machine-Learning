@@ -5,36 +5,66 @@
 
 ## 🗺️ 1. Complete Architecture Mindmap
 
+### A. ASCII Visual Diagram (Guaranteed to render in any editor / terminal)
+```text
+┌──────────────────────────────────────────────────────────────────────────┐
+│              STAGE 4: FEATURE ENGINEERING & SELECTION PIPELINE           │
+└────────────────────────────────────┬─────────────────────────────────────┘
+                                     │
+ 1. DATA LEAKAGE GUARD               ├── Stratified Train/Test Split (80% / 20%)
+                                     └── Disjoint Index Assertion: set(train) ∩ set(test) == ∅
+                                     │
+ 2. DOMAIN FEATURES                  ├── Ratio Metrics: total_charges / tenure_months
+                                     └── Zero-Division Shield: replace 0 with NaN -> fillna 0
+                                     │
+ 3. CARDINALITY REDUCTION            ├── Rare-Label Filter: Frequency < 2%
+                                     └── Group infrequent levels into 'Other' Category
+                                     │
+ 4. CATEGORICAL ENCODING             ├── Low Cardinality: One-Hot Encoding (drop='first')
+                                     └── High Cardinality: Smoothed Target Encoding (Empirical Bayes)
+                                     │
+ 5. NUMERICAL TRANSFORMATION         ├── Power Transform: Yeo-Johnson (Normalizes positive & negative)
+                                     └── Scaling: RobustScaler (Median & IQR, immune to outliers)
+                                     │
+ 6. MULTI-STAGE FEATURE SELECTION    ├── Filter 1: VarianceThreshold (Drop near-zero variance < 0.01)
+                                     ├── Filter 2: Collinearity Filter (Drop abs correlation > 0.85)
+                                     └── Filter 3: Information Scoring (Mutual Information Top Features)
+                                     │
+ 7. ARTIFACT EXPORT                  ├── Export train_features.csv & test_features.csv
+                                     └── Export .pkl Models (Encoders, Scalers, Selectors via joblib)
+```
+
+### B. Mermaid Flowchart
 ```mermaid
-graph TD
+flowchart TD
     A["Raw Cleaned Data (Stage 3 Output)"] --> B["STEP 1: Data Leakage Guard"]
-    B --> B1["Stratified Train/Test Split (80/20)"]
-    B --> B2["Index Overlap Validation (set(train) ∩ set(test) == ∅)"]
+    B --> B1["Stratified Split (80% Train / 20% Test)"]
+    B --> B2["Index Overlap Check (Train and Test Disjoint)"]
     
     B1 --> C["STEP 2: Domain Feature Engineering"]
-    C --> C1["Ratios (total_charges / tenure)"]
-    C --> C2["Zero-Division Shield (replace 0 with NaN -> fillna 0)"]
+    C --> C1["Ratio Metrics (total_charges / tenure)"]
+    C --> C2["Zero-Division Shield (replace 0 with NaN, then fill 0)"]
 
     C1 --> D["STEP 3: Cardinality Reduction"]
-    D --> D1["Rare-Label Thresholding (< 2% frequency)"]
-    D --> D2["Group into 'Other' Bucket (Prevents OHE explosion)"]
+    D --> D1["Rare-Label Threshold (Frequency < 2%)"]
+    D --> D2["Group into 'Other' Category"]
 
     D2 --> E["STEP 4: Categorical Encoding"]
     E --> E1["Low Cardinality: One-Hot Encoding (drop='first')"]
-    E --> E2["High Cardinality: Smoothed Target Encoding (Empirical Bayes)"]
+    E --> E2["High Cardinality: Smoothed Target Encoding"]
 
     E1 --> F["STEP 5: Numerical Transformation"]
-    F --> F1["Power Transform: Yeo-Johnson (Handles 0 & negative numbers)"]
-    F --> F2["Scaling: RobustScaler (Uses Median & IQR, immune to outliers)"]
+    F --> F1["Power Transform: Yeo-Johnson (Normalizes skewness)"]
+    F --> F2["Scaling: RobustScaler (Median and IQR)"]
 
     F1 --> G["STEP 6: Multi-Stage Feature Selection"]
-    G --> G1["Stage 1: VarianceThreshold (Drop near-zero variance < 0.01)"]
-    G --> G2["Stage 2: Collinearity Filter (Drop |r| > 0.85 from upper triangle)"]
-    G --> G3["Stage 3: Information Scoring (SelectKBest with Mutual Information)"]
+    G --> G1["Filter 1: VarianceThreshold (Drop variance < 0.01)"]
+    G --> G2["Filter 2: Collinearity Filter (Drop abs correlation > 0.85)"]
+    G --> G3["Filter 3: Information Scoring (Mutual Information)"]
 
     G3 --> H["STEP 7: Artifact Serialization"]
-    H --> H1["train_features.csv & test_features.csv"]
-    H --> H2[".pkl Model Checkpoints (Fitted Encoders, Scalers, Selectors)"]
+    H --> H1["Export train_features.csv and test_features.csv"]
+    H --> H2["Export .pkl Pipelines (Encoders, Scalers, Selectors)"]
 ```
 
 ---
