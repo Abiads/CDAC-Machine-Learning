@@ -11,7 +11,7 @@ Comprehensive Feature Engineering Tutorial (12 Core Steps)
 9. Feature Scaling & Normalization (StandardScaler)
 10. Date-Time & Temporal Decomposition
 11. Binning & Discretization
-12. Dimensionality Reduction (PCA) & Automated Feature Selection (SelectKBest)
+12. Automated Feature Selection (ANOVA F-value via SelectKBest)
 '''
 import warnings
 warnings.filterwarnings("ignore")
@@ -125,8 +125,8 @@ print("10. Date-Time Extracted:", date_features.columns.tolist())
 sat_binned = pd.cut(X["satisfaction_score"], bins=[0, 3.5, 4.5, 5.0], labels=["Low", "Medium", "High"])
 sat_encoded = pd.get_dummies(sat_binned, prefix="sat", drop_first=True, dtype=int)
 print("11. Satisfaction Binned & Encoded:", sat_encoded.columns.tolist())
-
-# 12. Dimensionality Reduction & Automated Feature Selection
+# print(sat_binned)
+# 12. Automated Feature Selection (ANOVA F-value via SelectKBest)
 X_final = pd.concat([
     X_scaled,
     dept_encoded,
@@ -138,11 +138,10 @@ X_final = pd.concat([
 
 selector = SelectKBest(score_func=f_classif, k=4)
 X_selected = selector.fit_transform(X_final, Y)
-print("12. Top 4 Features Selected (SelectKBest):", X_final.columns[selector.get_support()].tolist())
-
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X_final)
-print("    PCA 2 Components Variance Retained: {:.2f}%".format(pca.explained_variance_ratio_.sum() * 100))
+selected_cols = X_final.columns[selector.get_support()].tolist()
+print("12. Top 4 Features Selected (ANOVA F-value):", selected_cols)
+f_scores = pd.Series(selector.scores_, index=X_final.columns).loc[selected_cols]
+print("    ANOVA F-values:", f_scores.round(2).to_dict())
 print("=" * 60)
 print(f"Final Feature Matrix Shape: {X_final.shape}")
 print("All 12 Feature Engineering Steps Completed Successfully!")
