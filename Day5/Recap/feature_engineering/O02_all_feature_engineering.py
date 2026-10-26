@@ -39,4 +39,66 @@ data = {
     "promoted": [0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0] # Target variable
 }
 df = pd.DataFrame(data)
-print(df)
+X = df.drop(columns=["promoted"])
+Y = df["promoted"]
+# print(df)
+# print("_"*60)
+# print("DataFrame Info:")
+# print(df.info())
+# print("_"*60)
+# print("DataFrame Description:")
+# print(df.describe(include='all').T)
+# print("_"*60)
+# print("_"*60)
+# print("Checking for Missing Values:")
+# print(df.isnull().sum())
+print("_"*60)
+print("All Columns in predictor list : ", X.columns.tolist())
+# 1 Zero-Variance Feature Removal
+vt_zero = VarianceThreshold(threshold=0)
+X_num = X.select_dtypes(include=[np.number])
+print("Numeric Columns Before Zero-Variance Features Removed: ", X_num.columns.tolist())
+vt_zero.fit(X_num)
+X_num = X_num.loc[:, vt_zero.get_support()]
+print("Numeric Columns After Zero-Variance Features Removed: ", X_num.columns.tolist())
+# 2. Quasi-Constant Feature Removal
+quasi_threshold = 0.06 # Binary threshold for quasi-constant features p * (1-p) for 94% threshold
+vt_quasi = VarianceThreshold(threshold=quasi_threshold)
+vt_quasi.fit(X_num)
+X_num = X_num.loc[:, vt_quasi.get_support()]
+print("Numeric Columns After Quasi-Constant Features Removed: ", X_num.columns.tolist())
+# 3.  Highly Correlated & Redundant Removal
+corr_threshold = 0.9
+# corr_matrix = X_num.corr().abs()
+# upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+# to_drop = [column for column in upper_tri.columns if any(upper_tri[column] > corr_threshold)]
+# X_num = X_num.drop(columns=to_drop)
+
+corr = X_num.corr().abs()
+# print("Correlation Matrix: ")
+# print(corr)
+to_drop = set()
+for i in range(len(X_num.columns)):
+    for j in range(i):
+        if corr.iloc[i, j] > corr_threshold:
+            to_drop.add(X_num.columns[i])
+X_num = X_num.drop(columns=list(to_drop))
+print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
+
+# 4. Missing Value Imputation & Indicators
+
+# 5. Outlier Treatment (Winsorization)
+
+# 6. Categorical Encoding & Rare Categories
+
+# 7. High-Cardinality Feature Management
+
+# 8. Mathematical & Power Transformations
+
+# 9. Feature Scaling & Normalization
+
+# 10. Date-Time & Temporal Decomposition
+
+# 11. Binning & Discretization
+
+# 12. Dimensionality Reduction & Automated Feature Selection
