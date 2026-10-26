@@ -3,14 +3,15 @@
 2. Quasi-Constant Feature Removal
 3. Highly Correlated & Redundant Feature Removal
 4. Missing Value Imputation & Missingness Indicators
-5. Outlier Treatment
+5. Outlier Treatment (Winsorization / IQR Capping)
 6. Categorical Encoding & Rare Category Handling
-7. High-Cardinality Feature Management
-8. Mathematical & Power Transformations
-9. Feature Scaling & Normalization
+7. High-Cardinality Feature Management (Smoothed Target Encoding)
+8. Mathematical & Power Transformations (Yeo-Johnson)
+9. Feature Scaling & Normalization (StandardScaler)
 10. Date-Time & Temporal Decomposition
 11. Binning & Discretization
-12. Dimensionality Reduction & Automated Feature Selection
+12. Dimensionality Reduction (PCA) & Automated Feature Selection (SelectKBest)
+13. Model Training, Prediction & Evaluation (Following O01 Pattern)
 '''
 import warnings
 warnings.filterwarnings("ignore")
@@ -19,6 +20,9 @@ import pandas as pd
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif
 from sklearn.preprocessing import PowerTransformer, StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
 
 data = {
     "always_zero": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5], # 1. Zero-Variance
@@ -40,115 +44,141 @@ data = {
                   "2020-06-25", "2023-01-05", "2021-10-10", "2019-12-15", "2022-04-01", "2023-05-01", "2017-06-18", "2021-03-12", "2022-11-22", "2023-04-10"], # 10. Date-Time
     "promoted": [0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0] # Target variable
 }
+
 df = pd.DataFrame(data)
+print("Original Dataset (df):")
+print(df.head(5))
+print("_" * 60)
+
+# Separate Predictors (X) and Target (Y)
 X = df.drop(columns=["promoted"])
 Y = df["promoted"]
-# print(df)
-# print("_"*60)
-# print("DataFrame Info:")
-# print(df.info())
-# print("_"*60)
-# print("DataFrame Description:")
-# print(df.describe(include='all').T)
-# print("_"*60)
-# print("_"*60)
-# print("Checking for Missing Values:")
-# print(df.isnull().sum())
-print("="*60)
-print("All Columns in predictor list : ", X.columns.tolist())
 
-# 1 Zero-Variance Feature Removal
-print("_"*60)
+print("Original Features (X):")
+print(X.head(5))
+print("Target (Y):")
+print(Y.values)
+print("_" * 60)
+
+# Step 1 : Zero-Variance Feature Removal
 print("Step 1: Zero-Variance Feature Removal")
 vt_zero = VarianceThreshold(threshold=0)
 X_num = X.select_dtypes(include=[np.number])
-print("Numeric Columns Before Zero-Variance Features Removed: ", X_num.columns.tolist())
-vt_zero.fit(X_num)
-X_num = X_num.loc[:, vt_zero.get_support()]
-print("Numeric Columns After Zero-Variance Features Removed: ", X_num.columns.tolist())
+print("Numeric Columns Before Zero-Variance Filter:")
+print(X_num.columns.tolist())
 
-# 2. Quasi-Constant Feature Removal
-print("_"*60)
+vt_zero.fit(X_num)
+surviving_step1 = X_num.columns[vt_zero.get_support()]
+dropped_step1 = X_num.columns[~vt_zero.get_support()]
+print("Surviving Features after Zero-Variance Filter:")
+print(surviving_step1.tolist())
+print("Dropped Features (Zero Variance):")
+print(dropped_step1.tolist())
+print("_" * 60)
+
+# Rebuild Numeric DataFrame after Step 1
+X_num = X_num[surviving_step1]
+print("Rebuilt Numeric DataFrame (after Zero-Variance Filter):")
+print(X_num.head(4))
+print("_" * 60)
+
+# Step 2 : Quasi-Constant Feature Removal
 print("Step 2: Quasi-Constant Feature Removal")
 quasi_threshold = 0.06 # Binary threshold for quasi-constant features p * (1-p) for 94% threshold
 vt_quasi = VarianceThreshold(threshold=quasi_threshold)
 vt_quasi.fit(X_num)
-X_num = X_num.loc[:, vt_quasi.get_support()]
-print("Numeric Columns After Quasi-Constant Features Removed: ", X_num.columns.tolist())
+surviving_step2 = X_num.columns[vt_quasi.get_support()]
+dropped_step2 = X_num.columns[~vt_quasi.get_support()]
+print("Surviving Features after Quasi-Constant Filter:")
+print(surviving_step2.tolist())
+print("Dropped Features (Quasi-Constant):")
+print(dropped_step2.tolist())
+print("_" * 60)
 
-# 3.  Highly Correlated & Redundant Removal
-print("_"*60)
+# Rebuild Numeric DataFrame after Step 2
+X_num = X_num[surviving_step2]
+print("Rebuilt Numeric DataFrame (after Quasi-Constant Filter):")
+print(X_num.head(4))
+print("_" * 60)
+
+# Step 3 : Highly Correlated & Redundant Feature Removal
 print("Step 3: Highly Correlated & Redundant Feature Removal")
-corr_threshold = 0.9
-# corr_matrix = X_num.corr().abs()
-# upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
-# to_drop = [column for column in upper_tri.columns if any(upper_tri[column] > corr_threshold)]
-# X_num = X_num.drop(columns=to_drop)
-
-corr = X_num.corr().abs()
-# print("Correlation Matrix: ")
-# print(corr)
-to_drop = set()
-for i in range(len(X_num.columns)):
+corr_matrix = X_num.corr().abs()
+print("Correlation Matrix:")
+print(corr_matrix)
+print("_" * 60)
+corr_threshold = 0.90
+to_drop_corr = set()
+for i in range(len(corr_matrix.columns)):
     for j in range(i):
-        if corr.iloc[i, j] > corr_threshold:
-            to_drop.add(X_num.columns[i])
-print("Highly Correlated Features to Drop:", list(to_drop))
-X_num = X_num.drop(columns=list(to_drop))
-print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
+        if corr_matrix.iloc[i, j] > corr_threshold:
+            to_drop_corr.add(corr_matrix.columns[i])
 
-# 4. Missing Value Imputation & Indicators
-print("_"*60)
+print("Features to Drop due to High Correlation:")
+print(list(to_drop_corr))
+print("_" * 60)
+
+X_num = X_num.drop(columns=list(to_drop_corr))
+print("Final Numeric Features after Removing Highly Correlated Features:")
+print(X_num.head(4))
+print("_" * 60)
+
+# Step 4 : Missing Value Imputation & Indicators
 print("Step 4: Missing Value Imputation & Indicators")
+print("Missing Values Count Before Imputation:")
+print(X_num.isnull().sum())
+
 # Create a binary missingness indicator column (1 if missing, 0 if present)
 X_num["salary_is_missing"] = X_num["salary"].isna().astype(int)
 
 # Median imputation for continuous numerical feature
 salary_median = X_num["salary"].median()
 X_num["salary"] = X_num["salary"].fillna(salary_median)
-print("Salary median used for imputation:", salary_median)
-print("Missing values in salary after imputation:", X_num["salary"].isna().sum())
+print(f"Salary Median Imputed: {salary_median}")
+print("Missing Values Count After Imputation:")
+print(X_num.isnull().sum())
+print("Rebuilt DataFrame with Imputation & Missingness Indicator:")
+print(X_num.head(4))
+print("_" * 60)
 
-# 5. Outlier Treatment (Winsorization / IQR Capping)
-print("_"*60)
+# Step 5 : Outlier Treatment (IQR Capping / Winsorization)
 print("Step 5: Outlier Treatment (IQR Capping / Winsorization)")
-# Calculate IQR for salary
 Q1 = X_num["salary"].quantile(0.25)
 Q3 = X_num["salary"].quantile(0.75)
 IQR = Q3 - Q1
 lower_limit = Q1 - 1.5 * IQR
 upper_limit = Q3 + 1.5 * IQR
+print(f"Salary IQR Bounds: Lower = {lower_limit}, Upper = {upper_limit}")
+print(f"Salary Max Before Outlier Capping: {X_num['salary'].max()}")
 
-print(f"Salary bounds: Lower = {lower_limit}, Upper = {upper_limit}")
-print("Salary before outlier treatment (Max):", X_num["salary"].max())
-
-# Clip / Winsorize salary values within the [lower_limit, upper_limit] bounds
+# Clip / Winsorize salary values within the IQR limits
 X_num["salary"] = X_num["salary"].clip(lower=lower_limit, upper=upper_limit)
-print("Salary after outlier capping (Max):", X_num["salary"].max())
+print(f"Salary Max After Outlier Capping: {X_num['salary'].max()}")
+print("Salary Column Preview After Winsorization:")
+print(X_num[["salary"]].head(4))
+print("_" * 60)
 
-# 6. Categorical Encoding & Rare Categories
-print("_"*60)
+# Step 6 : Categorical Encoding & Rare Category Handling
 print("Step 6: Categorical Encoding & Rare Category Handling")
 dept = X["department"].copy()
 dept_freq = dept.value_counts(normalize=True)
-print("Department Frequency Distribution:\n", dept_freq)
+print("Department Value Counts (Normalized Frequency):")
+print(dept_freq)
 
-# Identify categories appearing in 5% or fewer records and replace with 'Other'
-rare_cats = dept_freq[dept_freq <= 0.05].index
+# Group rare categories (<= 5% frequency) into 'Other'
+rare_cats = dept_freq[dept_freq <= 0.05].index.tolist()
+print("Rare Categories Detected (<= 5%):", rare_cats)
 dept = dept.replace(rare_cats, "Other")
-print("Unique departments after rare category grouping:", dept.unique().tolist())
+print("Department Categories after Grouping into 'Other':", dept.unique().tolist())
 
 # One-Hot Encoding (drop_first=True to avoid dummy variable trap / multicollinearity)
 dept_encoded = pd.get_dummies(dept, prefix="dept", drop_first=True, dtype=int)
-print("One-Hot Encoded Department Columns:")
-print(dept_encoded.head(3))
+print("One-Hot Encoded Department DataFrame (drop_first=True):")
+print(dept_encoded.head(4))
+print("_" * 60)
 
-# 7. High-Cardinality Feature Management
-print("_"*60)
-print("Step 7: High-Cardinality Feature Management")
-# postal_code has 20 unique values (high cardinality relative to sample size)
-# Using Target Encoding with smoothing:
-# formula: (count * mean + smoothing * global_mean) / (count + smoothing)
+# Step 7 : High-Cardinality Feature Management (Smoothed Target Encoding)
+print("Step 7: High-Cardinality Feature Management (Smoothed Target Encoding)")
 smoothing = 5.0
 global_mean = Y.mean()
 postal_stats = pd.DataFrame({"postal_code": X["postal_code"], "target": Y})
@@ -156,101 +186,129 @@ stats = postal_stats.groupby("postal_code")["target"].agg(["count", "mean"])
 smoothed_target = (stats["count"] * stats["mean"] + smoothing * global_mean) / (stats["count"] + smoothing)
 
 postal_encoded = X["postal_code"].map(smoothed_target).fillna(global_mean)
-postal_encoded = pd.DataFrame({"postal_code_encoded": postal_encoded})
-print("Smoothed Target Encoded Postal Code Sample:")
-print(postal_encoded.head(3))
+postal_encoded_df = pd.DataFrame({"postal_code_encoded": postal_encoded})
+print("Smoothed Target Encoded Postal Code DataFrame Preview:")
+print(postal_encoded_df.head(4))
+print("_" * 60)
 
-# 8. Mathematical & Power Transformations
-print("_"*60)
+# Step 8 : Mathematical & Power Transformations (Yeo-Johnson)
 print("Step 8: Mathematical & Power Transformations (Yeo-Johnson)")
-# bonus_amount is right-skewed; apply Yeo-Johnson PowerTransformer to normalize
 pt = PowerTransformer(method="yeo-johnson")
 skew_before = X_num["bonus_amount"].skew()
-X_num["bonus_transformed"] = pt.fit_transform(X_num[["bonus_amount"]])
+bonus_transformed = pt.fit_transform(X_num[["bonus_amount"]])
+X_num["bonus_transformed"] = bonus_transformed
 skew_after = X_num["bonus_transformed"].skew()
 print(f"Bonus Amount Skewness: Before = {skew_before:.2f}, After = {skew_after:.2f}")
+print("Bonus Amount Transformed Preview:")
+print(X_num[["bonus_amount", "bonus_transformed"]].head(4))
+X_num = X_num.drop(columns=["bonus_amount"])
+print("_" * 60)
 
-# 9. Feature Scaling & Normalization
-print("_"*60)
-print("Step 9: Feature Scaling & Normalization")
-# Scale numerical features using StandardScaler (mean=0, variance=1)
+# Step 9 : Feature Scaling & Normalization (StandardScaler)
+print("Step 9: Feature Scaling & Normalization (StandardScaler)")
 scaler = StandardScaler()
-num_cols_to_scale = ["hours_worked", "salary", "bonus_transformed"]
-scaled_array = scaler.fit_transform(X_num[num_cols_to_scale])
-X_scaled = pd.DataFrame(
-    scaled_array,
-    columns=[f"{col}_scaled" for col in num_cols_to_scale],
-    index=X.index
-)
-print("Scaled Numerical Features Sample:")
-print(X_scaled.head(3))
+cols_to_scale = ["hours_worked", "salary", "bonus_transformed"]
+scaled_vals = scaler.fit_transform(X_num[cols_to_scale])
+X_scaled_df = pd.DataFrame(scaled_vals, columns=[f"{c}_scaled" for c in cols_to_scale], index=X.index)
+print("Scaled Numerical Features (mean=0, std=1):")
+print(X_scaled_df.head(4))
+print("_" * 60)
 
-# 10. Date-Time & Temporal Decomposition
-print("_"*60)
+# Step 10 : Date-Time & Temporal Decomposition
 print("Step 10: Date-Time & Temporal Decomposition")
 dates = pd.to_datetime(X["join_date"])
-# Extract year, month, and day of week
-join_year = dates.dt.year
-join_month = dates.dt.month
-join_dayofweek = dates.dt.dayofweek
-
-# Compute tenure in years from reference date (2026-01-01)
 ref_date = pd.to_datetime("2026-01-01")
-tenure_years = ((ref_date - dates).dt.days / 365.25).round(2)
-
 date_features = pd.DataFrame({
-    "join_year": join_year,
-    "join_month": join_month,
-    "join_dayofweek": join_dayofweek,
-    "tenure_years": tenure_years
+    "join_year": dates.dt.year,
+    "join_month": dates.dt.month,
+    "join_dayofweek": dates.dt.dayofweek,
+    "tenure_years": ((ref_date - dates).dt.days / 365.25).round(2)
 }, index=X.index)
-print("Extracted Temporal Features:")
-print(date_features.head(3))
+print("Decomposed Temporal Features DataFrame:")
+print(date_features.head(4))
+print("_" * 60)
 
-# 11. Binning & Discretization
-print("_"*60)
+# Step 11 : Binning & Discretization
 print("Step 11: Binning & Discretization")
-# Convert continuous satisfaction_score into Low, Medium, High categories
 satisfaction_binned = pd.cut(
     X["satisfaction_score"],
     bins=[0, 3.5, 4.5, 5.0],
     labels=["Low", "Medium", "High"]
 )
-print("Binned Satisfaction Distribution:\n", satisfaction_binned.value_counts())
-# One-hot encode the binned satisfaction levels
+print("Binned Satisfaction Distribution:")
+print(satisfaction_binned.value_counts())
 satisfaction_encoded = pd.get_dummies(satisfaction_binned, prefix="sat", drop_first=True, dtype=int)
-print("Satisfaction Binned & Encoded Sample:")
-print(satisfaction_encoded.head(3))
+print("Discretized & Encoded Satisfaction DataFrame:")
+print(satisfaction_encoded.head(4))
+print("_" * 60)
 
-# 12. Dimensionality Reduction & Automated Feature Selection
-print("_"*60)
+# Step 12 : Dimensionality Reduction & Automated Feature Selection
 print("Step 12: Dimensionality Reduction & Automated Feature Selection")
-# Combine all processed features into one final feature matrix
-final_features = pd.concat([
-    X_scaled,
+# Assemble all processed and engineered feature components into final matrix
+X_final = pd.concat([
+    X_scaled_df,
     dept_encoded,
-    postal_encoded,
+    postal_encoded_df,
     date_features,
     satisfaction_encoded,
     X_num[["salary_is_missing"]]
 ], axis=1)
 
-print("Final Combined Feature Matrix Shape:", final_features.shape)
-print("Features List:", final_features.columns.tolist())
+print("Final Rebuilt Feature Matrix (Shape: {}):".format(X_final.shape))
+print(X_final.head(4))
+print("_" * 60)
 
-# 12.A: Automated Feature Selection using SelectKBest (ANOVA F-value)
-selector = SelectKBest(score_func=f_classif, k=4)
-X_selected = selector.fit_transform(final_features, Y)
-selected_mask = selector.get_support()
-selected_columns = final_features.columns[selected_mask].tolist()
-print("\nTop 4 Features Selected by SelectKBest:")
+# 12.A: Automated Feature Selection via SelectKBest (ANOVA F-statistic)
+k_best = 4
+selector = SelectKBest(score_func=f_classif, k=k_best)
+X_selected = selector.fit_transform(X_final, Y)
+selected_columns = X_final.columns[selector.get_support()].tolist()
+print(f"Top {k_best} Features Selected by SelectKBest:")
 print(selected_columns)
+print("_" * 60)
 
-# 12.B: Dimensionality Reduction using PCA (Principal Component Analysis)
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(final_features)
-print("\nPCA Reduced Features (Shape: {}):".format(X_pca.shape))
-print(f"Explained Variance Ratio by 2 Components: {pca.explained_variance_ratio_}")
+# 12.B: Dimensionality Reduction via PCA (Principal Component Analysis)
+n_pca = 2
+pca = PCA(n_components=n_pca)
+X_pca = pca.fit_transform(X_final)
+print(f"PCA Reduced Features (Shape: {X_pca.shape}):")
+print("Explained Variance Ratio by 2 Components:", np.round(pca.explained_variance_ratio_, 4))
 print(f"Total Variance Retained: {pca.explained_variance_ratio_.sum() * 100:.2f}%")
-print("_"*60)
-print("All 12 Feature Engineering Steps Completed Successfully!")
+print("_" * 60)
+
+# Step 13 : Split Data into Training and Testing Sets & Evaluate Prediction (Following O01 Pattern)
+print("Step 13: Model Training, Prediction & Evaluation (Following O01 Pattern)")
+X_train, X_test, y_train, y_test = train_test_split(
+    X_final[selected_columns], Y, test_size=0.3, random_state=42, stratify=Y
+)
+
+print("Training Features (X_train):")
+print(X_train)
+print("Testing Features (X_test):")
+print(X_test)
+print("Training Labels (y_train):")
+print(y_train)
+print("Testing Labels (y_test):")
+print(y_test)
+print("_" * 60)
+
+# Fit Logistic Regression on the engineered and selected features
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Evaluate model on test data
+accuracy = model.score(X_test, y_test)
+print("Model Accuracy on Test Data:", accuracy)
+
+# Predict labels for test set
+y_pred = model.predict(X_test)
+print("Predicted Labels for Test Data:")
+print(y_pred)
+print("Actual Labels for Test Data:")
+print(y_test.values)
+print("_" * 60)
+
+# Performance metrics (Accuracy Score & Classification Report)
+print(f"Accuracy Score : {accuracy_score(y_test, y_pred):.2f}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
