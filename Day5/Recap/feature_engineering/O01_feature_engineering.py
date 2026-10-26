@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 # predict Exam success
 # Features: hours_studied, has_pencil, minutes_studied, breakfast_eaten
@@ -14,6 +17,15 @@ from sklearn.feature_selection import VarianceThreshold
 # 4. breakfast_eaten ---> Binary Feature (0 = not eaten or 1 = eaten).
 # should it be dropped? --> Not necessarily, it could be useful for prediction depending on the context
 # 5. passed_exam --> Target variable (Y), should not be used as a feature for prediction 
+
+'''
+Main apis used in this script:
+- VarianceThreshold from sklearn.feature_selection for removing quasi-constant features
+- pandas corr for correlation matrix calculation for removing redundant features due to high correlation
+- fit_transform method of VarianceThreshold for applying the variance threshold filtering
+- get_support method of VarianceThreshold for retrieving the mask of selected features
+'''
+
 data = {
     "hours_studied": [1, 2, 5, 6, 8, 9, 10, 12, 14, 15],
     "has_pencil": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0], 
@@ -86,6 +98,39 @@ print("Final Features after Removing Highly Correlated Features:")
 print(X_final)
 print("_" * 60)
 
+# Step 4 : split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_final, y, test_size=0.3, random_state=42,stratify=y)
 
+print("Training Features (X_train):")
+print(X_train)
+print("Testing Features (X_test):")
+print(X_test)
+print("Training Labels (y_train):")
+print(y_train)
+print("Testing Labels (y_test):")
+print(y_test)
+print("_" * 60)
 
+# why Logistic Regression? 
+# Logistic Regression is a simple and interpretable model for binary classification tasks.
+# It works well when the relationship between the features and the target is approximately linear in the log-odds space.
+model = LogisticRegression()
+# Fit the model on the training data
+model.fit(X_train, y_train)
 
+# Evaluate the model on the testing data
+accuracy = model.score(X_test, y_test)
+print("Model Accuracy on Test Data:", accuracy)
+
+# Predict the labels for the test set
+y_pred = model.predict(X_test)
+print("Predicted Labels for Test Data:")
+print(y_pred)
+print("Actual Labels for Test Data:")
+print(y_test.values)
+print("_" * 60)
+
+# Perfomance matrix (Confusion Matrix)
+print(f"Accuracy Score : {accuracy_score(y_test, y_pred):.2f}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
