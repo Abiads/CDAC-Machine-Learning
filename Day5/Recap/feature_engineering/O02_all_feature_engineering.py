@@ -12,6 +12,8 @@
 11. Binning & Discretization
 12. Dimensionality Reduction & Automated Feature Selection
 '''
+import warnings
+warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif
@@ -86,19 +88,157 @@ X_num = X_num.drop(columns=list(to_drop))
 print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
 
 # 4. Missing Value Imputation & Indicators
+print("_"*60)
+print("Step 4: Missing Value Imputation & Indicators")
+# Create a binary missingness indicator column (1 if missing, 0 if present)
+X_num["salary_is_missing"] = X_num["salary"].isna().astype(int)
 
-# 5. Outlier Treatment (Winsorization)
+# Median imputation for continuous numerical feature
+salary_median = X_num["salary"].median()
+X_num["salary"] = X_num["salary"].fillna(salary_median)
+print("Salary median used for imputation:", salary_median)
+print("Missing values in salary after imputation:", X_num["salary"].isna().sum())
+
+# 5. Outlier Treatment (Winsorization / IQR Capping)
+print("_"*60)
+print("Step 5: Outlier Treatment (IQR Capping / Winsorization)")
+# Calculate IQR for salary
+Q1 = X_num["salary"].quantile(0.25)
+Q3 = X_num["salary"].quantile(0.75)
+IQR = Q3 - Q1
+lower_limit = Q1 - 1.5 * IQR
+upper_limit = Q3 + 1.5 * IQR
+
+print(f"Salary bounds: Lower = {lower_limit}, Upper = {upper_limit}")
+print("Salary before outlier treatment (Max):", X_num["salary"].max())
+
+# Clip / Winsorize salary values within the [lower_limit, upper_limit] bounds
+X_num["salary"] = X_num["salary"].clip(lower=lower_limit, upper=upper_limit)
+print("Salary after outlier capping (Max):", X_num["salary"].max())
 
 # 6. Categorical Encoding & Rare Categories
+print("_"*60)
+print("Step 6: Categorical Encoding & Rare Category Handling")
+dept = X["department"].copy()
+dept_freq = dept.value_counts(normalize=True)
+print("Department Frequency Distribution:\n", dept_freq)
+
+# Identify categories appearing in 5% or fewer records and replace with 'Other'
+rare_cats = dept_freq[dept_freq <= 0.05].index
+dept = dept.replace(rare_cats, "Other")
+print("Unique departments after rare category grouping:", dept.unique().tolist())
+
+# One-Hot Encoding (drop_first=True to avoid dummy variable trap / multicollinearity)
+dept_encoded = pd.get_dummies(dept, prefix="dept", drop_first=True, dtype=int)
+print("One-Hot Encoded Department Columns:")
+print(dept_encoded.head(3))
 
 # 7. High-Cardinality Feature Management
+print("_"*60)
+print("Step 7: High-Cardinality Feature Management")
+# postal_code has 20 unique values (high cardinality relative to sample size)
+# Using Target Encoding with smoothing:
+# formula: (count * mean + smoothing * global_mean) / (count + smoothing)
+smoothing = 5.0
+global_mean = Y.mean()
+postal_stats = pd.DataFrame({"postal_code": X["postal_code"], "target": Y})
+stats = postal_stats.groupby("postal_code")["target"].agg(["count", "mean"])
+smoothed_target = (stats["count"] * stats["mean"] + smoothing * global_mean) / (stats["count"] + smoothing)
+
+postal_encoded = X["postal_code"].map(smoothed_target).fillna(global_mean)
+postal_encoded = pd.DataFrame({"postal_code_encoded": postal_encoded})
+print("Smoothed Target Encoded Postal Code Sample:")
+print(postal_encoded.head(3))
 
 # 8. Mathematical & Power Transformations
+print("_"*60)
+print("Step 8: Mathematical & Power Transformations (Yeo-Johnson)")
+# bonus_amount is right-skewed; apply Yeo-Johnson PowerTransformer to normalize
+pt = PowerTransformer(method="yeo-johnson")
+skew_before = X_num["bonus_amount"].skew()
+X_num["bonus_transformed"] = pt.fit_transform(X_num[["bonus_amount"]])
+skew_after = X_num["bonus_transformed"].skew()
+print(f"Bonus Amount Skewness: Before = {skew_before:.2f}, After = {skew_after:.2f}")
 
 # 9. Feature Scaling & Normalization
+print("_"*60)
+print("Step 9: Feature Scaling & Normalization")
+# Scale numerical features using StandardScaler (mean=0, variance=1)
+scaler = StandardScaler()
+num_cols_to_scale = ["hours_worked", "salary", "bonus_transformed"]
+scaled_array = scaler.fit_transform(X_num[num_cols_to_scale])
+X_scaled = pd.DataFrame(
+    scaled_array,
+    columns=[f"{col}_scaled" for col in num_cols_to_scale],
+    index=X.index
+)
+print("Scaled Numerical Features Sample:")
+print(X_scaled.head(3))
 
 # 10. Date-Time & Temporal Decomposition
+print("_"*60)
+print("Step 10: Date-Time & Temporal Decomposition")
+dates = pd.to_datetime(X["join_date"])
+# Extract year, month, and day of week
+join_year = dates.dt.year
+join_month = dates.dt.month
+join_dayofweek = dates.dt.dayofweek
+
+# Compute tenure in years from reference date (2026-01-01)
+ref_date = pd.to_datetime("2026-01-01")
+tenure_years = ((ref_date - dates).dt.days / 365.25).round(2)
+
+date_features = pd.DataFrame({
+    "join_year": join_year,
+    "join_month": join_month,
+    "join_dayofweek": join_dayofweek,
+    "tenure_years": tenure_years
+}, index=X.index)
+print("Extracted Temporal Features:")
+print(date_features.head(3))
 
 # 11. Binning & Discretization
+print("_"*60)
+print("Step 11: Binning & Discretization")
+# Convert continuous satisfaction_score into Low, Medium, High categories
+satisfaction_binned = pd.cut(
+    X["satisfaction_score"],
+    bins=[0, 3.5, 4.5, 5.0],
+    labels=["Low", "Medium", "High"]
+)
+print("Binned Satisfaction Distribution:\n", satisfaction_binned.value_counts())
+# One-hot encode the binned satisfaction levels
+satisfaction_encoded = pd.get_dummies(satisfaction_binned, prefix="sat", drop_first=True, dtype=int)
 
 # 12. Dimensionality Reduction & Automated Feature Selection
+print("_"*60)
+print("Step 12: Dimensionality Reduction & Automated Feature Selection")
+# Combine all processed features into one final feature matrix
+final_features = pd.concat([
+    X_scaled,
+    dept_encoded,
+    postal_encoded,
+    date_features,
+    satisfaction_encoded,
+    X_num[["salary_is_missing"]]
+], axis=1)
+
+print("Final Combined Feature Matrix Shape:", final_features.shape)
+print("Features List:", final_features.columns.tolist())
+
+# 12.A: Automated Feature Selection using SelectKBest (ANOVA F-value)
+selector = SelectKBest(score_func=f_classif, k=4)
+X_selected = selector.fit_transform(final_features, Y)
+selected_mask = selector.get_support()
+selected_columns = final_features.columns[selected_mask].tolist()
+print("\nTop 4 Features Selected by SelectKBest:")
+print(selected_columns)
+
+# 12.B: Dimensionality Reduction using PCA (Principal Component Analysis)
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(final_features)
+print("\nPCA Reduced Features (Shape: {}):".format(X_pca.shape))
+print(f"Explained Variance Ratio by 2 Components: {pca.explained_variance_ratio_}")
+print(f"Total Variance Retained: {pca.explained_variance_ratio_.sum() * 100:.2f}%")
+print("_"*60)
+print("All 12 Feature Engineering Steps Completed Successfully!")
