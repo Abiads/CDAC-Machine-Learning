@@ -54,22 +54,31 @@ Y = df["promoted"]
 # print("_"*60)
 # print("Checking for Missing Values:")
 # print(df.isnull().sum())
-print("_"*60)
+print("="*60)
 print("All Columns in predictor list : ", X.columns.tolist())
+
 # 1 Zero-Variance Feature Removal
+print("_"*60)
+print("Step 1: Zero-Variance Feature Removal")
 vt_zero = VarianceThreshold(threshold=0)
 X_num = X.select_dtypes(include=[np.number])
 print("Numeric Columns Before Zero-Variance Features Removed: ", X_num.columns.tolist())
 vt_zero.fit(X_num)
 X_num = X_num.loc[:, vt_zero.get_support()]
 print("Numeric Columns After Zero-Variance Features Removed: ", X_num.columns.tolist())
+
 # 2. Quasi-Constant Feature Removal
+print("_"*60)
+print("Step 2: Quasi-Constant Feature Removal")
 quasi_threshold = 0.06 # Binary threshold for quasi-constant features p * (1-p) for 94% threshold
 vt_quasi = VarianceThreshold(threshold=quasi_threshold)
 vt_quasi.fit(X_num)
 X_num = X_num.loc[:, vt_quasi.get_support()]
 print("Numeric Columns After Quasi-Constant Features Removed: ", X_num.columns.tolist())
+
 # 3.  Highly Correlated & Redundant Removal
+print("_"*60)
+print("Step 3: Highly Correlated & Redundant Feature Removal")
 corr_threshold = 0.9
 # corr_matrix = X_num.corr().abs()
 # upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
@@ -84,6 +93,7 @@ for i in range(len(X_num.columns)):
     for j in range(i):
         if corr.iloc[i, j] > corr_threshold:
             to_drop.add(X_num.columns[i])
+print("Highly Correlated Features to Drop:", list(to_drop))
 X_num = X_num.drop(columns=list(to_drop))
 print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
 
@@ -209,6 +219,8 @@ satisfaction_binned = pd.cut(
 print("Binned Satisfaction Distribution:\n", satisfaction_binned.value_counts())
 # One-hot encode the binned satisfaction levels
 satisfaction_encoded = pd.get_dummies(satisfaction_binned, prefix="sat", drop_first=True, dtype=int)
+print("Satisfaction Binned & Encoded Sample:")
+print(satisfaction_encoded.head(3))
 
 # 12. Dimensionality Reduction & Automated Feature Selection
 print("_"*60)
