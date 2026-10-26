@@ -31,7 +31,7 @@ data = {
     "postal_code": ["56001", "56002", "56003", "56004", "56005", "56006", "56007", "56008", "56009", "56010",
                     "56011", "56012", "56013", "56014", "56015", "56016", "56017", "56018", "56019", "56020"], # 7. High-Cardinality
     "bonus_amount": [100, 150, 200, 120, 300, 800, 400, 110, 250, 900, 
-                     1000, 1300, 350, 850, 450, 90, 5000, 32050, 500, 105], # 8. Skewed continuous distribution
+                     1000, 1300, 350, 850, 450, 90, 5000, 32050, 500, 400], # 8. Skewed continuous distribution
     "satisfaction_score": [3.2, 4.1, 4.5, 3.8, 4.0, 4.9, 4.2, 3.5, 3.9, 4.8, 
                            4.7, 3.6, 4.1, 4.8, 4.3, 3.1, 5.0, 4.2, 4.6, 3.4], # 11. Continuous for Binning
     "join_date": ["2022-01-10", "2021-05-15", "2023-03-20", "2020-11-05", "2022-07-12", "2019-01-01", "2021-08-19", "2023-02-14", "2022-09-30", "2018-04-11",
@@ -85,20 +85,123 @@ for i in range(len(X_num.columns)):
 X_num = X_num.drop(columns=list(to_drop))
 print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
 
+# to get upper trianlge only
+# to_drop = set()
+# for i in range(len(X_num.columns)):
+#     for j in range(i + 1, len(X_num.columns)):
+#         if corr.iloc[i, j] > corr_threshold:
+#             to_drop.add(X_num.columns[j])
+# X_num = X_num.drop(columns=list(to_drop))
+# print("Numeric Columns After Highly Correlated Features Removed: ", X_num.columns.tolist())
+print("_" * 60)
+
 # 4. Missing Value Imputation & Indicators
 
+X_num["salary_is_missing"] = X_num["salary"].isna().astype(int)
+X_num["salary"] = X_num["salary"].fillna(X_num["salary"].median())
+
 # 5. Outlier Treatment (Winsorization)
+cap = X_num['salary'].quantile(0.95)
+X_num['salary'] = np.where(X_num['salary'] > cap, cap, X_num['salary'])
 
 # 6. Categorical Encoding & Rare Categories
+# Identify columns with rare categories
+X_cat = X.select_dtypes(include=['object','str']).copy()
+counts=X_cat["department"].value_counts()
+X_cat['department'] = X_cat['department'].replace(counts[counts < 2].index, 'other')
+X_cat = pd.get_dummies(X_cat, columns=["department"], drop_first=True)
+
 
 # 7. High-Cardinality Feature Management
+X_cat["postal_code_freq"] = X_cat["postal_code"].map(X_cat["postal_code"].value_counts()) # frequency encoding for postal_code
+X_cat = X_cat.drop(columns=["postal_code"])
+# print(X_cat)
+# drop column join_date from X_cat
+X_cat = X_cat.drop(columns=["join_date"])
 
 # 8. Mathematical & Power Transformations
+pt = PowerTransformer(method = 'yeo-johnson')
+X_num[["bonus_amount"]] = pt.fit_transform(X_num[["bonus_amount"]])
+# X_num["bonus_recovered"]=pt.inverse_transform(X_num[["bonus_amount1"]])
 
 # 9. Feature Scaling & Normalization
+# standard scaling for numeric features
+# maths formula for standard scaling: (x - mean) / std
+scaler = StandardScaler()
+cols_to_scale = ["hours_worked","salary", "bonus_amount"]
+X_num[cols_to_scale] = scaler.fit_transform(X_num[cols_to_scale])
+# print(X_num)
 
 # 10. Date-Time & Temporal Decomposition
+dates = pd.to_datetime(X["join_date"])
+X_time = pd.DataFrame({
+    "join_year": dates.dt.year,
+    "join_month": dates.dt.month,
+    "join_dayofweek": dates.dt.dayofweek,
+    "tenure_days": (pd.Timestamp("today") - dates).dt.days
+})
+# cyclical transformation for join_month and join_dayofweek
+X_time["month_sin"] = np.sin(2 * np.pi * X_time["join_month"] / 12)
+X_time["month_cos"] = np.cos(2 * np.pi * X_time["join_month"] / 12)
+# print(X_time)
 
 # 11. Binning & Discretization
+X_num["satisfaction_bin"] = pd.qcut(X_num["bonus_amount"], q=3, labels=[0,1,2]).astype(int)
+# print(X_num)
+
+X_processed = pd.concat([X_num, X_cat, X_time], axis=1)
+# print(list(X_processed.columns.values))
+# print(X_processed)
 
 # 12. Dimensionality Reduction & Automated Feature Selection
+# What is ANOVA F-value?
+# ANOVA F-value is a statistical measure used to determine the significance of the relationship between a categorical feature and a continuous target variable. It helps in feature selection by identifying features that have a strong influence on the target variable.
+# ANOVA = Analysis of Variance
+# The F-value is calculated as the ratio of the variance between the groups to the variance within the groups. A higher F-value indicates that the feature has a stronger relationship with the target variable.
+'''
+Mathematics for ANOVA F-value:
+F = variance_between_groups / variance_within_groups
+'''
+
+selector_vt = VarianceThreshold(threshold=0)
+X_processed_clean = pd.DataFrame(
+    selector_vt.fit_transform(X_processed), 
+    columns=X_processed.columns[selector_vt.get_support()]
+)
+
+selector = SelectKBest(score_func=f_classif, k=5)
+X_selected = selector.fit_transform(X_processed_clean, Y)
+selected_features = X_processed_clean.columns[selector.get_support()]
+# print("Selected features:", selected_features)
+# print("Selected features shape:", X_selected.shape)
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_processed_clean)
+print(X_processed_clean)
+# print("PCA transformed shape:", X_pca.shape)
+
+# Print SelectKBest Results (ANOVA F-values)
+selected_mask = selector.get_support()
+selected_features = X_processed_clean.columns[selected_mask]
+feature_scores = selector.scores_[selected_mask]
+
+print("-" * 60)
+print("Top 5 Selected Features (via ANOVA F-value):")
+for feat, score in zip(selected_features, feature_scores):
+    print(f" - {feat}: F-score = {score:.4f}")
+
+print("-" * 60)
+# Print PCA Explained Variance Ratio
+
+# Safe calculation of explained variance ratio
+explained_var_ratio = pca.explained_variance_ / np.sum(pca.explained_variance_)
+
+print("-" * 60)
+print("PCA Explained Variance Ratio per Component:", explained_var_ratio)
+print(f"Total Cumulative Variance Captured: {np.sum(explained_var_ratio)*100:.2f}%")
+print("PCA transformed shape:", X_pca.shape)
+print("=" * 60)
+X_selected_df = pd.DataFrame(X_selected, columns=selected_features)
+print(X_selected_df)
+print("=" * 60)
+
