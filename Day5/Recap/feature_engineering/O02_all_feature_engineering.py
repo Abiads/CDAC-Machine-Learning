@@ -79,12 +79,10 @@ X_num["salary_is_missing"] = X_num["salary"].isna().astype(int)
 X_num["salary"] = X_num["salary"].fillna(X_num["salary"].median())
 print(f"4. Missing Imputed: salary filled with median | Nulls left: {X_num['salary'].isna().sum()}")
 
-# 5. Outlier Treatment (Winsorization via IQR Capping)
-q1 = X_num["salary"].quantile(0.25)
-q3 = X_num["salary"].quantile(0.75)
-iqr = q3 - q1
-X_num["salary"] = X_num["salary"].clip(lower=q1 - 1.5 * iqr, upper=q3 + 1.5 * iqr)
-print(f"5. Outlier Capped: salary clipped between [{q1 - 1.5 * iqr:.0f}, {q3 + 1.5 * iqr:.0f}] | Max: {X_num['salary'].max():.0f}")
+# 5. Outlier Treatment (Winsorization via 95th Percentile Capping)
+cap = X_num["salary"].quantile(0.95)
+X_num["salary"] = X_num["salary"].clip(upper=cap)
+print(f"5. Outlier Capped: salary capped at 95th percentile ({cap:.0f}) | Max: {X_num['salary'].max():.0f}")
 
 # 6. Categorical Encoding & Rare Category Handling
 dept_freq = X["department"].value_counts(normalize=True)
