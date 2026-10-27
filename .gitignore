@@ -43,6 +43,8 @@ processed_data/
 downloads/
 output/
 outputs/
+Day6/emails/
+emails/
 *.csv
 *.tsv
 *.parquet
