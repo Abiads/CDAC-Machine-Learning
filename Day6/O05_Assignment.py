@@ -29,3 +29,55 @@ df_tech = pd.DataFrame({
     "code_review_score": code_review_score.round(2),
     "annual_salary": annual_salary.round(2)
 })
+
+# 2. Extract Features (X) and Target (y)
+X_tech = df_tech[["experience_years", "projects_completed", "code_review_score"]]
+y_tech = df_tech["annual_salary"]
+
+# 3. Model Building & Fitting
+tech_model = LinearRegression()
+tech_model.fit(X_tech, y_tech)
+
+# 4. Coefficient & Intercept Interpretation
+print("--- Tech Salary Multi-Feature Model Coefficients ---")
+print(rf"Intercept (Base Salary): ₹{tech_model.intercept_:.2f}")
+coef_summary = pd.DataFrame({
+    "Feature": X_tech.columns,
+    "Partial Coefficient (₹)": tech_model.coef_
+})
+print(coef_summary.to_string(index=False))
+
+# 5. Inference / Predictions on New Engineers
+new_engineers = pd.DataFrame({
+    "experience_years": [2.5, 8.0],
+    "projects_completed": [3, 12],
+    "code_review_score": [4.1, 4.9]
+})
+
+predictions = tech_model.predict(new_engineers)
+new_engineers["Salary_Predicted"] = predictions
+print(new_engineers)
+# print("\n--- Predictions for New Candidates ---")
+# for idx, pred in enumerate(predictions):
+#     cand = new_engineers.iloc[idx]
+#     print(rf"Candidate {idx+1} ({cand['experience_years']} yrs exp, {cand['projects_completed']} projects, {cand['code_review_score']} rating) -> Estimated Salary: ₹{pred:,.2f}")
+
+# compare actual and predicted
+
+y_tech_pred = tech_model.predict(X_tech)
+comparison_df = pd.DataFrame({
+    "Actual": y_tech,
+    "Predicted": y_tech_pred,
+    "Difference": y_tech - y_tech_pred
+})
+print("\n--- Actual vs Predicted Salaries ---")
+print(comparison_df.head())
+
+# visualize Comparison
+# plt.figure(figsize=(10, 6))
+# plt.scatter(y_tech, y_tech_pred, color='blue', alpha=0.6)
+# plt.plot([y_tech.min(), y_tech.max()], [y_tech.min(), y_tech.max()], 'r--', lw=2)
+# plt.xlabel("Actual Salaries")
+# plt.ylabel("Predicted Salaries")
+# plt.title("Actual vs Predicted Salaries")
+# plt.show()
