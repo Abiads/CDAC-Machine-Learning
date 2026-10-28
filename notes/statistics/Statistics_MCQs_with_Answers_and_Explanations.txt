@@ -1,0 +1,491 @@
+================================================================================
+  STATISTICS FOR DATA SCIENCE COURSE NOTES
+  MULTIPLE CHOICE QUESTIONS (MCQs) WITH ANSWERS & DETAILED EXPLANATIONS
+================================================================================
+
+Total Questions Extracted: 28
+Number of Sessions: 11
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 1: Session 1: DataFrames in Python (Pandas)
+================================================================================
+
+Question 1 (Session Q1):
+What is the primary difference between a Python list and a Pandas DataFrame?
+
+Options:
+  A. Lists store only numbers, DataFrames store only text.
+  B. Lists are 1D, DataFrames are 2D.
+  C. Lists are used only in machine learning.
+  D. DataFrames cannot store numerical data.
+
+Correct Answer: B. Lists are 1D, DataFrames are 2D.
+
+Explanation:
+  A Python list is a one-dimensional (1D) sequential collection of items, whereas a Pandas DataFrame is a two-dimensional (2D) tabular data structure consisting of rows and columns with labeled axes.
+--------------------------------------------------------------------------------
+
+Bonus Concept Check / Practice Quiz:
+  Fill in the Blanks Summary Quiz:
+  1. A DataFrame is a two-dimensional data structure used for data manipulation in Python.
+  2. In a Data Table, the horizontal sections are called rows, and the vertical sections are called columns.
+  3. A dictionary in Python stores data as key-value pairs.
+  4. A tuple is similar to a list, but it is immutable, meaning its values cannot be changed.
+  5. The process of summarizing and organizing data to extract useful insights is called data analysis.
+  6. The vertical sections in a DataFrame, each representing a specific attribute or feature, are called columns.
+  7. A structured collection of data that is stored electronically and can be queried is known as a database.
+  8. The function used to remove missing values from a DataFrame is dropna().
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 2: Session 2: Introduction to Descriptive Statistics
+================================================================================
+
+Question 2 (Session Q1):
+What is the primary goal of descriptive statistics?
+
+Options:
+  A) To make inferences about a population
+  B) To describe and summarize data
+  C) To test hypotheses
+  D) To establish causality
+
+Correct Answer: B) To describe and summarize data
+
+Explanation:
+  Descriptive statistics aims to provide a summary of the main features of a dataset, making it easier to understand. Inferential statistics, hypothesis testing, and causal inference deal with drawing generalized conclusions about broader populations.
+--------------------------------------------------------------------------------
+
+Question 3 (Session Q2):
+Which measure of central tendency is most affected by outliers?
+
+Options:
+  A) Median
+  B) Mode
+  C) Mean
+  D) Range
+
+Correct Answer: C) Mean
+
+Explanation:
+  The arithmetic mean incorporates the exact magnitude of every single value in the dataset (sum divided by count). As a result, extreme outliers pull the mean heavily toward them. The median and mode are positional measures and remain unaffected by extreme outliers.
+--------------------------------------------------------------------------------
+
+Question 4 (Session Q3):
+What does a standard deviation of 0 indicate?
+
+Options:
+  A) All values are different
+  B) Data is widely spread
+  C) All values are the same
+  D) There are outliers in the data
+
+Correct Answer: C) All values are the same
+
+Explanation:
+  Standard deviation quantifies the dispersion of values around the mean. If standard deviation = 0, there is zero variability around the mean, which guarantees that every single value in the dataset is identical.
+--------------------------------------------------------------------------------
+
+Question 5 (Session Q4):
+If the mean and median are equal, the data is likely:
+
+Options:
+  A) Skewed right
+  B) Symmetrical
+  C) Skewed left
+  D) Uniform
+
+Correct Answer: B) Symmetrical
+
+Explanation:
+  In a symmetrical distribution (such as the standard normal distribution), the left and right halves are mirror images, causing the Mean, Median, and Mode to coincide at the central axis (Mean = Median = Mode).
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 3: Session 3: Data Visualization
+================================================================================
+
+Question 6 (Session Q1):
+A data scientist wants to show the monthly trend of website traffic over a year. Which visualization is most appropriate?
+
+Options:
+  A. Scatter Plot
+  B. Line Chart
+  C. Pie Chart
+  D. Bar Plot
+
+Correct Answer: B. Line Chart
+
+Explanation:
+  A line chart connects sequential continuous data points over time, making it the most effective visualization for observing trends, seasonal variations, and temporal progression (time series data).
+--------------------------------------------------------------------------------
+
+Question 7 (Session Q2):
+A researcher wants to examine the relationship between students’ study hours and their exam scores. Which visualization should be used?
+
+Options:
+  A. Pie Chart
+  B. Line Chart
+  C. Scatter Plot
+  D. Bar Plot
+
+Correct Answer: C. Scatter Plot
+
+Explanation:
+  A scatter plot plots individual bivariate data points along two continuous quantitative axes, making it the standard choice for discovering relationships, correlations, and clusters between two continuous variables (study hours vs. exam scores).
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 4: Session 4: Understanding Data Features
+================================================================================
+
+Question 8 (Session Q1):
+Which feature type is used to represent customer feedback: "Satisfied", "Neutral", "Dissatisfied"?
+
+Options:
+  A) Categorical
+  B) Discrete
+  C) Continuous
+  D) Ordinal
+
+Correct Answer: A) Categorical (specifically Ordinal Categorical)
+
+Explanation:
+  Customer feedback consists of qualitative category labels with a meaningful internal hierarchy or order ("Satisfied" > "Neutral" > "Dissatisfied"), classifying it as an ordinal categorical feature.
+--------------------------------------------------------------------------------
+
+Question 9 (Session Q2):
+The number of books a person owns is an example of which feature type?
+
+Options:
+  A) Categorical
+  B) Discrete
+  C) Continuous
+  D) Ordinal
+
+Correct Answer: B) Discrete
+
+Explanation:
+  Discrete features represent countable numeric quantities that take distinct, isolated integer values (0, 1, 2, ...). You cannot own 2.7 books, unlike continuous features which can assume any value along a continuum.
+--------------------------------------------------------------------------------
+
+Bonus Concept Check / Practice Quiz:
+  Fill in the Blanks Summary Quiz:
+  1. Categorical features represent categories or groups.
+  2. A Continuous feature can take any value within a range.
+  3. The count of items purchased is an example of a Discrete feature.
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 5: Session 5: Data Distributions (Skewness, Kurtosis & Spread)
+================================================================================
+
+Question 10 (Session Q1):
+What does a right-skewed distribution indicate?
+
+Options:
+  A) The majority of values are low, with a few high values
+  B) The majority of values are high, with a few low values
+  C) The data is perfectly symmetrical
+  D) The data has no variation
+
+Correct Answer: A) The majority of values are low, with a few high values
+
+Explanation:
+  In a right-skewed (positively skewed) distribution, the bulk of observations are clustered at the lower end (left), while a long tail of infrequent, extreme high values stretches out to the right. In this case, Mean > Median > Mode.
+--------------------------------------------------------------------------------
+
+Question 11 (Session Q2):
+Which measure is best for skewed data?
+
+Options:
+  A) Mean
+  B) Median
+  C) Mode
+  D) Standard deviation
+
+Correct Answer: B) Median
+
+Explanation:
+  The median represents the 50th percentile (exact middle value) and is robust to extreme values, unlike the mean and standard deviation which are disproportionately distorted by skewness and outliers.
+--------------------------------------------------------------------------------
+
+Question 12 (Session Q3):
+What does a high positive kurtosis (leptokurtic distribution) indicate about a dataset?
+
+Options:
+  A) The data has lighter tails and fewer extreme outliers than a normal distribution.
+  B) The distribution is skewed heavily to the right.
+  C) The data has heavy tails and a higher risk of extreme outliers.
+  D) The mean, median, and mode are all equal.
+
+Correct Answer: C) The data has heavy tails and a higher risk of extreme outliers.
+
+Explanation:
+  Leptokurtic distributions possess positive excess kurtosis (> 0), characterized by a sharper central peak and fat, heavy tails. This indicates a significantly higher probability of extreme outlier events compared to a standard normal bell curve.
+--------------------------------------------------------------------------------
+
+Question 13 (Session Q4):
+In a negatively skewed (left-skewed) distribution, which of the following relationships generally holds true?
+
+Options:
+  A) Mean > Median > Mode
+  B) Mean < Median < Mode
+  C) Mean = Median = Mode
+  D) Median > Mean > Mode
+
+Correct Answer: B) Mean < Median < Mode
+
+Explanation:
+  In a negatively skewed (left-skewed) distribution, the long tail extends toward the left due to extreme low values. These low values drag the mean down below the median, leading to the general ordering: Mean < Median < Mode.
+--------------------------------------------------------------------------------
+
+Question 14 (Session Q5):
+How does Winsorizing handle extreme outliers in a dataset?
+
+Options:
+  A) It completely deletes the outlier observations from the dataset.
+  B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).
+  C) It transforms the entire dataset using a logarithmic scale.
+  D) It replaces all missing and extreme values with the dataset mean.
+
+Correct Answer: B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).
+
+Explanation:
+  Winsorization limits the influence of outliers by capping values beyond specified percentiles (e.g., values below the 5th percentile are set to the 5th percentile value, and values above the 95th percentile are set to the 95th percentile value) instead of trimming/removing records.
+--------------------------------------------------------------------------------
+
+Question 15 (Session Q6):
+How is the Interquartile Range (IQR) calculated, and why is it preferred over standard deviation for skewed data?
+
+Options:
+  A) IQR = Q3 - Q1; it is robust to extreme outliers.
+  B) IQR = Q4 - Q1; it covers 100% of the dataset.
+  C) IQR = Q3 + Q1; it measures the total variance of the sample.
+  D) IQR = Mean - Median; it measures the symmetry of the data.
+
+Correct Answer: A) IQR = Q3 - Q1; it is robust to extreme outliers.
+
+Explanation:
+  The Interquartile Range is computed as the difference between the 75th percentile (Q3) and the 25th percentile (Q1). By focusing strictly on the middle 50% of the dataset, it completely filters out extreme tail values, providing a robust measure of statistical dispersion for skewed distributions.
+--------------------------------------------------------------------------------
+
+Bonus Concept Check / Practice Quiz:
+  Fill in the Blanks Summary Quiz:
+  1. Skewness measures the asymmetry of a data distribution.
+  2. The 68-95-99.7 Rule states that 95% of data falls within 2 standard deviations of the mean in a normal distribution.
+  3. If the tails of a distribution are heavier than normal, it is called Leptokurtic kurtosis.
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 6: Session 6: Probability Theory
+================================================================================
+
+Question 16 (Session Q1):
+If events A and B are independent, P(A ∩ B) is:
+
+Options:
+  A) P(A) + P(B)
+  B) P(A) - P(B)
+  C) P(A) * P(B)
+  D) None of the above
+
+Correct Answer: C) P(A) * P(B)
+
+Explanation:
+  By the fundamental multiplication rule of probability, when two events A and B are independent (the occurrence of one does not affect the probability of the other), their joint probability is the product of their individual probabilities: P(A ∩ B) = P(A) * P(B).
+--------------------------------------------------------------------------------
+
+Question 17 (Session Q2):
+What is the sample space for a coin toss?
+
+Options:
+  A) {H, T}
+  B) {1, 2}
+  C) {Red, Black}
+
+Correct Answer: A) {H, T}
+
+Explanation:
+  The sample space S represents the set of all possible distinct outcomes resulting from a random experiment. Tossing a coin has two elementary outcomes: Head (H) and Tail (T), so S = {H, T}.
+--------------------------------------------------------------------------------
+
+Bonus Concept Check / Practice Quiz:
+  Conceptual Problem & Solution:
+  Question: What is the probability of rolling a number greater than 4 on a fair six-sided die?
+  Solution: A standard die has 6 outcomes: {1, 2, 3, 4, 5, 6}. The favorable outcomes for rolling > 4 are {5, 6} (2 outcomes).
+  Answer: Probability = 2/6 = 1/3 (or ~33.33%).
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 7: Session 7: Probability Distributions (Normal, Binomial & Poisson)
+================================================================================
+
+Question 18 (Session Q1):
+What is a Random Variable?
+
+Options:
+  a) A variable that takes deterministic values.
+  b) A variable that always takes integer values.
+  c) A constant that never changes.
+  d) A variable that assigns numerical values to the outcomes of a random process.
+
+Correct Answer: d) A variable that assigns numerical values to the outcomes of a random process.
+
+Explanation:
+  A random variable is a formal mathematical rule/function that associates a unique numerical real value with each elementary outcome in the sample space of a random experiment.
+--------------------------------------------------------------------------------
+
+Question 19 (Session Q2):
+Which distribution has mean = variance?
+
+Options:
+  A) Normal
+  B) Binomial
+  C) Poisson
+
+Correct Answer: C) Poisson
+
+Explanation:
+  A unique defining characteristic of the Poisson distribution is that both its expected value (mean) and variance are equal to its single rate parameter lambda (E[X] = Var(X) = lambda).
+--------------------------------------------------------------------------------
+
+Question 20 (Session Q3):
+Which is used for yes/no trials?
+
+Options:
+  A) Poisson
+  B) Binomial
+
+Correct Answer: B) Binomial
+
+Explanation:
+  The Binomial distribution models the number of successes in n repeated, independent Bernoulli trials, where each trial has strictly two possible complementary outcomes (success/failure, yes/no).
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 8: Session 8: Types of Sampling Methods
+================================================================================
+
+Question 21 (Session Q1):
+Which sampling ensures proportional representation?
+
+Options:
+  A) Random
+  B) Stratified
+  C) Cluster
+
+Correct Answer: B) Stratified
+
+Explanation:
+  Stratified sampling partitions the population into non-overlapping subgroups (strata) based on known characteristics (e.g., gender, grade, income) and selects proportional random samples from each stratum, guaranteeing representation across all segments.
+--------------------------------------------------------------------------------
+
+Question 22 (Session Q2):
+Which method selects every k-th item?
+
+Options:
+  A) Random
+  B) Systematic
+  C) Cluster
+
+Correct Answer: B) Systematic
+
+Explanation:
+  Systematic sampling selects elements from an ordered population list at regular intervals of size k (e.g., every 10th customer) starting from a randomly determined initial point.
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 9: Session 9: Hypothesis Testing Formulation
+================================================================================
+
+Question 23 (Session Q1):
+What is H0 usually about?
+
+Options:
+  A) No change
+  B) New discovery
+  C) 5% significance
+
+Correct Answer: A) No change
+
+Explanation:
+  The null hypothesis (H0) posits the baseline claim of no effect, no difference, or no relationship. It represents status quo that requires strong empirical evidence to be refuted.
+--------------------------------------------------------------------------------
+
+Question 24 (Session Q2):
+Which error occurs when H0 is wrongly rejected?
+
+Options:
+  A) Type I
+  B) Type II
+  C) Type III
+
+Correct Answer: A) Type I
+
+Explanation:
+  A Type I error (false positive) occurs when the researcher rejects a null hypothesis that is actually true in reality. The probability of committing a Type I error is controlled by the significance level alpha.
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 10: Session 10: Hypothesis Testing using Statistical Tests
+================================================================================
+
+Question 25 (Session Q1):
+Which test is appropriate for testing a sample mean when the sample size is less than 30 and the population standard deviation is known?
+
+Options:
+  A) F-test
+  B) T-test
+  C) Chi-square test
+  D) Z-test
+
+Correct Answer: D) Z-test
+
+Explanation:
+  Even though the sample size is small (< 30), if the population standard deviation (sigma) is known and the underlying population is approximately normally distributed, a Z-test can still be used. If the population standard deviation were unknown, a Student's T-test would be required.
+--------------------------------------------------------------------------------
+
+================================================================================
+SESSION 11: Session 11: A/B Testing in Python
+================================================================================
+
+Question 26 (Session Q1):
+p = 0.03 -> ? (assuming standard alpha = 0.05)
+
+Options:
+  A) Accept H0
+  B) Reject H0
+
+Correct Answer: B) Reject H0
+
+Explanation:
+  Because the p-value (0.03) is less than the significance threshold alpha (0.05), the observed test statistic is unlikely to have occurred under H0 alone, leading us to reject the null hypothesis.
+--------------------------------------------------------------------------------
+
+Question 27 (Session Q2):
+CI = (48, 52), mu0 = 53 -> ?
+
+Options:
+  A) Reject H0
+  B) Accept H0
+
+Correct Answer: A) Reject H0 (when hypothesized mean is outside the CI, reject the null hypothesis)
+
+Explanation:
+  The hypothesized value mu0 = 53 falls completely outside the 95% Confidence Interval (48, 52). A value outside the confidence interval is statistically incompatible with the observed sample at that confidence level, leading to the rejection of H0.
+--------------------------------------------------------------------------------
+
+Question 28 (Session Q3):
+p = 0.07, alpha = 0.05 -> ?
+
+Options:
+  A) Reject H0
+  B) Fail to reject H0
+
+Correct Answer: B) Fail to reject H0
+
+Explanation:
+  Because the p-value (0.07) is greater than alpha (0.05), the difference could reasonably be attributed to random sampling variability. Therefore, there is insufficient evidence against H0, and we fail to reject the null hypothesis.
+--------------------------------------------------------------------------------
