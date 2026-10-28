@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Machine Learning & Statistics Interactive MCQ Quiz</title>
-  <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with answers, slide references, local session saving, and mistake retry mode.">
-  <!-- Tailwind CSS fallback & font -->
+  <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with slide references, local session persistence, mistake retry mode, fill-in-the-blanks review, and responsive hamburger navigation.">
+  <!-- Tailwind CSS CDN -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     :root {
@@ -74,6 +74,7 @@
       flex: 1;
     }
 
+    /* Header */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--surface-border);
@@ -120,7 +121,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .btn-icon {
@@ -135,6 +136,7 @@
       align-items: center;
       gap: 0.4rem;
       transition: all 0.2s ease;
+      font-weight: 500;
     }
 
     .btn-icon:hover {
@@ -151,6 +153,335 @@
       background-color: var(--warning-bg);
     }
 
+    /* Hamburger Button */
+    .btn-hamburger {
+      background-color: var(--surface-hover);
+      border: 1.5px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-hamburger:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .hamburger-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    /* Backdrop Overlay for Drawer & Modal */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .drawer-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Slide-out Navigation Drawer */
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 360px;
+      max-width: 88vw;
+      background-color: var(--surface);
+      border-left: 1px solid var(--surface-border);
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .nav-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1.15rem 1.25rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .drawer-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+    }
+
+    .drawer-close-btn {
+      background: transparent;
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .drawer-close-btn:hover {
+      color: var(--text);
+      background-color: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .drawer-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .drawer-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .drawer-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background-color: var(--surface-hover);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      margin-bottom: 0.45rem;
+    }
+
+    .drawer-item:hover {
+      background-color: rgba(99, 102, 241, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .drawer-item.active {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .drawer-item.danger:hover {
+      background-color: var(--error-bg);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .drawer-item-badge {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .drawer-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--surface-border);
+      background-color: rgba(0, 0, 0, 0.02);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* In-App Guide Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-window {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      max-width: 920px;
+      width: 100%;
+      height: 90vh;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      transform: translateY(20px) scale(0.98);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .modal-overlay.active .modal-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .guide-search-box {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      border: 1.5px solid var(--surface-border);
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .guide-search-box:focus {
+      border-color: var(--accent);
+    }
+
+    .guide-section-card {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .guide-section-header {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 0.5rem;
+    }
+
+    .guide-q-box {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .guide-q-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .guide-blank-highlight {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent);
+      font-weight: 700;
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
+      border: 1px dashed var(--accent);
+    }
+
+    .guide-ans-badge {
+      display: inline-block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success-border);
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .guide-exp {
+      font-size: 0.88rem;
+      color: var(--text);
+      white-space: pre-line;
+      line-height: 1.55;
+    }
+
+    /* Progress and Stats */
     .progress-section {
       background-color: var(--surface);
       border-radius: 12px;
@@ -211,6 +542,7 @@
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* Controls Bar */
     .controls-bar {
       display: flex;
       align-items: center;
@@ -272,6 +604,7 @@
       outline: none;
     }
 
+    /* Question Card */
     .quiz-card {
       background-color: var(--surface);
       border-radius: 16px;
@@ -534,6 +867,7 @@
       cursor: not-allowed;
     }
 
+    /* Jump Grid */
     .grid-toggle-box {
       background-color: var(--surface);
       border-radius: 12px;
@@ -600,6 +934,7 @@
       color: var(--error);
     }
 
+    /* Metadata Info Banner */
     .meta-card {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
       border: 1px solid var(--surface-border);
@@ -635,16 +970,22 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Responsive Breakpoints */
     @media (max-width: 640px) {
       .header-inner { padding: 0.75rem; }
       .app-container { padding: 1rem 0.5rem 2rem 0.5rem; }
       .quiz-card { padding: 1.25rem; border-radius: 12px; }
       .question-prompt { font-size: 1.05rem; }
       .option-btn { padding: 0.8rem 0.9rem; font-size: 0.9rem; }
+      .header-actions .btn-text-hide { display: none; }
+      .nav-drawer { width: 310px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Drawer Backdrop Overlay -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
 
   <!-- Top Sticky Navigation -->
   <header>
@@ -654,15 +995,131 @@
         <h1 class="logo-title">Interactive MCQ Quiz</h1>
       </div>
       <div class="header-actions">
+        <button id="openGuideBtn" class="btn-icon" title="View In-Depth Fill-in-the-Blanks & Conceptual Review Guide">
+          <span>📝</span> <span class="btn-text-hide">Review Guide</span>
+        </button>
         <button id="toggleInfoBtn" class="btn-icon" title="View Source Information & Metadata">
-          <span>📚</span> Sources
+          <span>📚</span> <span class="btn-text-hide">Sources</span>
         </button>
         <button id="themeToggleBtn" class="btn-icon" title="Toggle Light/Dark Theme">
           <span id="themeIcon">🌙</span>
         </button>
+        <button id="hamburgerBtn" class="btn-hamburger" title="Open Navigation & Tools Menu" aria-label="Toggle Navigation Menu">
+          <span class="hamburger-icon">☰</span>
+          <span>Menu</span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Slide-out Navigation Drawer (Hamburger Menu) -->
+  <aside id="navDrawer" class="nav-drawer" aria-label="Quick Navigation Drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <span>⚡</span> Quick Navigation & Tools
+      </div>
+      <button id="drawerCloseBtn" class="drawer-close-btn" title="Close Menu (Esc)">✕</button>
+    </div>
+
+    <div class="drawer-content">
+      <!-- Section: Study Guides & Reference -->
+      <div>
+        <div class="drawer-section-title">
+          <span>📖</span> Study & Conceptual Guides
+        </div>
+        <button id="drawerGuideBtn" class="drawer-item">
+          <span>📝 Fill-in-the-Blanks Guide</span>
+          <span class="drawer-item-badge">Comprehensive</span>
+        </button>
+        <button id="drawerSourcesBtn" class="drawer-item">
+          <span>📚 Slide Sources & Provenance</span>
+          <span class="drawer-item-badge">17 Decks</span>
+        </button>
+      </div>
+
+      <!-- Section: Filter Tracks -->
+      <div>
+        <div class="drawer-section-title">
+          <span>🎯</span> Filter by Track
+        </div>
+        <button class="drawer-item" data-drawer-filter="all">
+          <span>All Questions</span>
+          <span class="drawer-item-badge">66</span>
+        </button>
+        <button class="drawer-item" data-drawer-filter="Machine Learning">
+          <span>Machine Learning Track</span>
+          <span class="drawer-item-badge">38</span>
+        </button>
+        <button class="drawer-item" data-drawer-filter="Statistics">
+          <span>Statistics Track</span>
+          <span class="drawer-item-badge">28</span>
+        </button>
+        <button class="drawer-item" data-drawer-filter="mistakes" id="drawerMistakesItem">
+          <span>❌ Attempt Mistakes Only</span>
+          <span class="drawer-item-badge" id="drawerMistakesBadge">0</span>
+        </button>
+      </div>
+
+      <!-- Section: Quick Session Selector -->
+      <div>
+        <div class="drawer-section-title">
+          <span>📂</span> Jump to Session
+        </div>
+        <select id="drawerSessionSelect" class="select-filter" style="width: 100%; padding: 0.65rem 0.85rem;">
+          <option value="all">All Sessions (17 total)</option>
+        </select>
+      </div>
+
+      <!-- Section: Practice Actions -->
+      <div>
+        <div class="drawer-section-title">
+          <span>⚙️</span> Practice Actions
+        </div>
+        <button id="drawerShuffleBtn" class="drawer-item">
+          <span>🔀 Shuffle Questions</span>
+        </button>
+        <button id="drawerRetryMistakesBtn" class="drawer-item">
+          <span>🔁 Re-attempt All Mistakes</span>
+        </button>
+        <button id="drawerResetBtn" class="drawer-item danger">
+          <span>🔄 Reset Progress & Storage</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span>Local Storage:</span>
+        <span style="color: var(--success); font-weight: 600;">Active 💾</span>
+      </div>
+      <div style="font-size: 0.75rem; opacity: 0.8;">
+        Progress & mistakes automatically persist across page reloads.
+      </div>
+    </div>
+  </aside>
+
+  <!-- In-App Modal: Fill-in-the-Blanks & Conceptual Review Guide -->
+  <div id="blanksModal" class="modal-overlay">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>📝</span> Fill-in-the-Blanks & Conceptual Review Guide
+        </div>
+        <button id="closeGuideModalBtn" class="drawer-close-btn" title="Close Modal (Esc)">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="guideSearchInput" class="guide-search-box" placeholder="🔍 Search concepts, formulas, topics (e.g. DataFrame, Skewness, Binomial, P-value, Immutability)...">
+        
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          This guide provides in-depth conceptual explanations, mathematical representations, and slide citations for all fill-in-the-blanks and numerical exercises across the CDAC Statistics & Machine Learning modules.
+        </div>
+
+        <div id="guideCardsContainer">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Container -->
   <div class="app-container">
@@ -1880,6 +2337,9 @@
   }
 ];
 
+    // Embedded Guide Text
+    const rawGuideText = "================================================================================\n  CDAC MACHINE LEARNING & STATISTICS FOR DATA SCIENCE\n  COMPREHENSIVE FILL-IN-THE-BLANKS & CONCEPTUAL QUESTIONS REFERENCE GUIDE\n  WITH IN-DEPTH PEDAGOGICAL EXPLANATIONS, FORMULAS & SLIDE REFERENCES\n================================================================================\n\nThis guide compiles and extensively explains all \"Fill in the Blanks\", \nconceptual review exercises, and numerical problem-solving slides found \nacross the CDAC Statistics and Machine Learning presentation decks.\n\n--------------------------------------------------------------------------------\nTABLE OF CONTENTS\n--------------------------------------------------------------------------------\n1. Statistics Session 1: DataFrames, Tables & Python Data Structures (8 Items)\n2. Statistics Session 4: Data Feature Types & Classification (3 Items)\n3. Statistics Session 5: Data Distributions, Skewness & Kurtosis (3 Items)\n4. Statistics Session 6: Probability Foundations & Dice Problems (Conceptual)\n5. Statistics Session 7: Binomial & Poisson Probability Numerical Problems\n6. Statistics Session 9 & 10: Hypothesis Formulation & Test Selection Rules\n7. Statistics Session 11: A/B Testing, P-Value Decision Rules & Confidence Intervals\n8. Machine Learning Core Conceptual Comparison Matrix (Sessions 1-6)\n\n================================================================================\nSECTION 1: STATISTICS SESSION 1 - DATAFRAMES IN PYTHON (PANDAS)\nSource Presentation: Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)\n================================================================================\n\nQUESTION 1.1:\n\"A DataFrame is a ______ data structure used for data manipulation in Python.\"\n\n  ANSWER: two-dimensional (2D)\n\n  IN-DEPTH EXPLANATION:\n  - In Pandas, the two foundational data structures are the Series and the DataFrame.\n  - A Series is a 1-dimensional labeled array capable of holding data of any type.\n  - A DataFrame is a 2-dimensional labeled data structure with columns of potentially\n    different types. It is structured like a spreadsheet or SQL table with both\n    row labels (index) and column labels.\n  - Mathematical representation: A DataFrame can be modeled as a matrix M of size\n    m x n, where m is the number of rows (observations) and n is the number of \n    columns (variables/features).\n  - Python implementation:\n      import pandas as pd\n      df = pd.DataFrame({'Age': [25, 30], 'Salary': [50000, 75000]})\n      print(df.ndim)  # Outputs: 2\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.2:\n\"In a Data Table, the horizontal sections are called ______, and the vertical \nsections are called ______.\"\n\n  ANSWER: rows, columns\n\n  IN-DEPTH EXPLANATION:\n  - Rows (Horizontal): Represent individual records, observations, samples, or instances.\n    In machine learning, each row corresponds to a single data point vector x_i.\n  - Columns (Vertical): Represent attributes, features, variables, or dimensions measured\n    for each observation.\n  - Terminology Equivalence:\n    * Relational Databases: Row = Record / Tuple; Column = Attribute / Field.\n    * Machine Learning: Row = Instance / Sample; Column = Feature / Predictor.\n    * Statistics: Row = Observation / Case; Column = Variable / Measurement.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.3:\n\"A dictionary in Python stores data as ______ pairs.\"\n\n  ANSWER: key-value\n\n  IN-DEPTH EXPLANATION:\n  - A Python dictionary (`dict`) is an unordered, mutable collection of associative items.\n  - Each item consists of a unique, immutable 'key' (such as a string, integer, or tuple)\n    mapped to a 'value' (which can be any arbitrary Python object).\n  - Time Complexity: Key lookups, insertions, and deletions have an average time \n    complexity of O(1) due to underlying hash table implementation.\n  - Relation to Pandas: A Pandas DataFrame is internally implemented as a dictionary-like \n    container for Series objects, where keys correspond to column names.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.4:\n\"A tuple is similar to a list, but it is ______, meaning its values cannot be changed.\"\n\n  ANSWER: immutable\n\n  IN-DEPTH EXPLANATION:\n  - Mutability distinguishes lists from tuples in Python:\n    * Lists (`[...]`): Mutable. Elements can be added, removed, or modified in-place.\n    * Tuples (`(...)`): Immutable. Once created, their size and element bindings \n      cannot be altered.\n  - Why Immutability Matters:\n    1. Integrity: Guarantees write-protection for sensitive, constant configuration data.\n    2. Hashability: Because tuples are immutable, they are hashable and can serve as \n       dictionary keys or set elements, whereas lists cannot.\n    3. Performance: Tuples have smaller memory overhead and slightly faster allocation \n       times compared to dynamic lists.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.5:\n\"The process of summarizing and organizing data to extract useful insights is called ______.\"\n\n  ANSWER: data analysis (or Exploratory Data Analysis - EDA)\n\n  IN-DEPTH EXPLANATION:\n  - Data analysis is the systematic process of applying statistical and logical techniques \n    to describe, condense, illustrate, and evaluate data.\n  - Core stages of modern Data Analysis:\n    1. Data Collection: Sourcing raw data from databases, APIs, or sensor streams.\n    2. Data Cleaning: Handling nulls, correcting formatting anomalies, trimming whitespace.\n    3. Exploratory Data Analysis (EDA): Generating summary statistics (mean, median, IQR), \n       frequency tables, and visualizations to reveal latent patterns.\n    4. Inferential Modeling: Drawing statistical hypotheses or predictive conclusions.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.6:\n\"The vertical sections in a DataFrame, each representing a specific attribute or feature, \nare called ______.\"\n\n  ANSWER: columns\n\n  IN-DEPTH EXPLANATION:\n  - In tabular modeling, a column represents a homogeneous property observed across all subjects.\n  - In Pandas, extracting a single column returns a `pd.Series` object.\n  - Example: `df['Salary']` isolates the salary column as a 1D labeled array.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.7:\n\"A structured collection of data that is stored electronically and can be queried is \nknown as a ______.\"\n\n  ANSWER: database\n\n  IN-DEPTH EXPLANATION:\n  - A database is an organized collection of structured data, typically stored electronically \n    in a computer system and managed by a Database Management System (DBMS).\n  - Main categories:\n    1. Relational Databases (RDBMS): PostgreSQL, MySQL, SQLite, Oracle (tabular, strict schemas, SQL).\n    2. NoSQL Databases: MongoDB (Document), Redis (Key-Value), Cassandra (Columnar), Neo4j (Graph).\n  - Integration: Data analysts query databases using SQL (`SELECT * FROM table WHERE condition`)\n    and ingest result sets directly into Pandas via `pd.read_sql()`.\n\n--------------------------------------------------------------------------------\n\nQUESTION 1.8:\n\"The function used to remove missing values from a DataFrame is ______.\"\n\n  ANSWER: dropna()\n\n  IN-DEPTH EXPLANATION:\n  - In Pandas, missing or null values are represented by `NaN` (Not a Number) or `None`.\n  - The `dropna()` method filters out rows or columns containing missing values.\n  - Key Parameters:\n    * `axis=0` (default): Drops rows containing NaN.\n    * `axis=1`: Drops columns containing NaN.\n    * `how='any'` (default): Drops the row/column if at least one NaN is present.\n    * `how='all'`: Drops only if all entries in that row/column are NaN.\n    * `subset=['col1', 'col2']`: Restricts null-checking to designated columns.\n  - Best Practice Consideration: Dropping data can lead to substantial information loss. \n    If nulls exceed 5-10% of records, imputation (`df.fillna(df.median())`) is usually \n    preferred over blanket row deletion.\n\n\n================================================================================\nSECTION 2: STATISTICS SESSION 4 - UNDERSTANDING DATA FEATURES\nSource Presentation: Session 4 Understanding Data Features -Tuned.pptx (Slide 21)\n================================================================================\n\nQUESTION 2.1:\n\"______ features represent categories or groups.\"\n\n  ANSWER: Categorical (or Qualitative)\n\n  IN-DEPTH EXPLANATION:\n  - Categorical variables represent qualitative characteristics that fall into distinct bins.\n  - Subtypes:\n    1. Nominal Categorical: Categories without inherent mathematical ordering.\n       Examples: Gender (Male, Female, Other), City (Mumbai, Delhi, Bangalore), Blood Type (A, B, AB, O).\n    2. Ordinal Categorical: Categories with an intrinsic, meaningful hierarchy or order.\n       Examples: Education Level (High School < Bachelor's < Master's < PhD), \n       Customer Satisfaction (Dissatisfied < Neutral < Satisfied), Severity (Low < Medium < High).\n  - Preprocessing Requirement: Machine learning models cannot process raw strings; categorical \n    variables must be encoded into numerical values via One-Hot Encoding or Ordinal Encoding.\n\n--------------------------------------------------------------------------------\n\nQUESTION 2.2:\n\"A ______ feature can take any value within a range.\"\n\n  ANSWER: Continuous\n\n  IN-DEPTH EXPLANATION:\n  - Continuous features are quantitative variables obtained through measurement.\n  - Distinctive property: Between any two continuous values, there exist an infinite \n    number of intermediate values along the real number line.\n  - Examples:\n    * Height (e.g., 175.42 cm)\n    * Temperature (e.g., 36.65 °C)\n    * Stock Price (e.g., 2450.75 INR)\n    * Time to complete a marathon (e.g., 2 hours, 14 minutes, 33.12 seconds)\n  - Visual Representation: Continuous data is commonly visualized using histograms, \n    KDE (Kernel Density Estimation) plots, and box plots.\n\n--------------------------------------------------------------------------------\n\nQUESTION 2.3:\n\"The count of items purchased is an example of a ______ feature.\"\n\n  ANSWER: Discrete\n\n  IN-DEPTH EXPLANATION:\n  - Discrete features are quantitative variables obtained through counting.\n  - Distinctive property: They take distinct, separate numerical values—typically \n    non-negative integers {0, 1, 2, 3, ...}.\n  - Examples:\n    * Number of children in a household (0, 1, 2, ... cannot have 2.3 children)\n    * Number of items purchased in a shopping cart\n    * Count of website visits per day\n    * Number of customer service calls made\n  - Probability Modeling: Discrete counts are typically modeled using Poisson, \n    Binomial, or Negative Binomial distributions.\n\n\n================================================================================\nSECTION 3: STATISTICS SESSION 5 - DATA DISTRIBUTIONS\nSource Presentation: Session 5 Data Distributions - Tuned.pptx (Slides 33-34)\n================================================================================\n\nQUESTION 3.1:\n\"______ measures the asymmetry of a data distribution.\"\n\n  ANSWER: Skewness\n\n  IN-DEPTH EXPLANATION:\n  - Skewness is the 3rd standardized moment of a probability distribution.\n  - Formula: Skewness = E[((X - mu) / sigma)^3]\n  - Classification:\n    * Symmetrical (Skewness ≈ 0): Normal bell curve where Mean = Median = Mode.\n    * Positive / Right-Skewed (Skewness > 0): The right tail is longer. The majority \n      of data points cluster at lower values, while a few extreme high values pull \n      the mean to the right. Ordering: Mean > Median > Mode.\n      Real-world example: Household income, house prices, insurance claim sizes.\n    * Negative / Left-Skewed (Skewness < 0): The left tail is longer. Extreme low \n      values pull the mean to the left. Ordering: Mean < Median < Mode.\n      Real-world example: Human lifespan in developed countries, retirement age.\n\n--------------------------------------------------------------------------------\n\nQUESTION 3.2:\n\"The ______ rule states that 95% of data falls within 2 standard deviations \nof the mean in a normal distribution.\"\n\n  ANSWER: 68-95-99.7 Rule (or Empirical Rule)\n\n  IN-DEPTH EXPLANATION:\n  - In any symmetrical, bell-shaped Gaussian (Normal) distribution N(mu, sigma^2):\n    * Approximately 68.27% of observations fall within mu ± 1 sigma.\n    * Approximately 95.45% of observations fall within mu ± 2 sigma.\n    * Approximately 99.73% of observations fall within mu ± 3 sigma.\n  - Statistical Significance: Observations lying beyond 3 standard deviations \n    (|z| > 3) represent only ~0.27% of the distribution and are universally \n    flagged as statistical outliers.\n\n--------------------------------------------------------------------------------\n\nQUESTION 3.3:\n\"If the tails of a distribution are heavier than normal, it is called ______ kurtosis.\"\n\n  ANSWER: Leptokurtic (or Positive Kurtosis)\n\n  IN-DEPTH EXPLANATION:\n  - Kurtosis measures the \"tailedness\" and peak sharpness of a distribution \n    (the 4th standardized moment).\n  - Normal distribution reference: Excess Kurtosis = Kurtosis - 3 = 0 (Mesokurtic).\n  - Three Kurtosis Types:\n    1. Leptokurtic (Excess Kurtosis > 0): Sharp, high peak and fat, heavy tails.\n       Critical implication: Indicates high \"tail risk\"—a significantly greater probability \n       of extreme, rare outlier events than predicted by a normal distribution. \n       Common in financial asset returns and algorithmic trading.\n    2. Mesokurtic (Excess Kurtosis = 0): Standard normal distribution.\n    3. Platykurtic (Excess Kurtosis < 0): Flat, broad peak with thin, light tails. \n       Extreme outliers are very rare. Example: Uniform distribution.\n\n\n================================================================================\nSECTION 4: STATISTICS SESSION 6 - PROBABILITY THEORY FOUNDATIONS\nSource Presentation: Session 6 Probability Theory - Tuned.pptx (Slides 5-6)\n================================================================================\n\nPROBLEM 4.1:\n\"What is the probability of rolling a number greater than 4 on a fair six-sided die?\"\n\n  ANSWER: 1/3 (or ~33.33% / 0.333)\n\n  SOLUTION BREAKDOWN:\n  - Sample Space (S): The set of all possible outcomes for a fair 6-sided die:\n    S = {1, 2, 3, 4, 5, 6} -> Total outcomes n(S) = 6.\n  - Event (E): Rolling a number strictly greater than 4:\n    E = {5, 6} -> Favorable outcomes n(E) = 2.\n  - Classical Probability Formula:\n    P(E) = n(E) / n(S) = 2 / 6 = 1 / 3 ≈ 0.3333 (33.33%).\n\n  EXTENDED PROBABILITY AXIOMS:\n  1. Non-negativity: 0 <= P(E) <= 1 for any event E.\n  2. Total Certainty: P(S) = 1.\n  3. Complement Rule: P(E') = 1 - P(E) = 1 - 1/3 = 2/3 (Rolling <= 4).\n  4. Independent Events Multiplication Rule: P(A ∩ B) = P(A) * P(B).\n     Example: Probability of rolling two 6s consecutively = (1/6) * (1/6) = 1/36.\n\n\n================================================================================\nSECTION 5: STATISTICS SESSION 7 - PROBABILITY DISTRIBUTIONS\nSource Presentation: Session 7 Probability Distributions Tuned.pptx (Slides 15-17, 26-27)\n================================================================================\n\nCONCEPT 5.1: THE BINOMIAL DISTRIBUTION (POLLUTION INSPECTION NUMERICAL)\nScenario from Slide 15:\n\"In an inspection of cement companies, 60% of all industries had emissions that \ndo not meet the pollution requirement. For a random sample of 15 companies, \ncompute:\n1. Probability that all 15 fail the inspection.\n2. Probability that exactly 8 fail the inspection.\"\n\n  FORMULA:\n  P(X = k) = C(n, k) * (p^k) * (q^(n - k))\n  where:\n  - n = 15 (sample size)\n  - p = 0.60 (probability of failure / non-compliance)\n  - q = 1 - p = 0.40 (probability of compliance)\n  - C(n, k) = n! / (k! * (n - k)!)\n\n  COMPUTATION 1: All 15 Fail (k = 15)\n  - P(X = 15) = C(15, 15) * (0.60^15) * (0.40^0)\n  - C(15, 15) = 1, 0.40^0 = 1\n  - P(X = 15) = 0.60^15 ≈ 0.000470 (0.047%)\n\n  COMPUTATION 2: Exactly 8 Fail (k = 8)\n  - C(15, 8) = 15! / (8! * 7!) = 6,435\n  - 0.60^8 ≈ 0.016796\n  - 0.40^7 ≈ 0.0016384\n  - P(X = 8) = 6435 * 0.016796 * 0.0016384 ≈ 0.17708 (17.71%)\n\n--------------------------------------------------------------------------------\n\nCONCEPT 5.2: THE POISON DISTRIBUTION UNIQUE PROPERTY\n\"Which distribution has Mean = Variance?\"\n\n  ANSWER: Poisson Distribution\n\n  IN-DEPTH EXPLANATION:\n  - A Poisson process models the count of rare events occurring within a fixed interval \n    of time, distance, or space.\n  - Probability Mass Function: P(X = k) = (lambda^k * e^(-lambda)) / k!\n  - Key Parameter: lambda represents both the arrival rate and expected occurrences.\n  - Derivation of Moments:\n    * E[X] = lambda\n    * Var(X) = lambda\n  - Diagnostic Tip: In exploratory data analysis, if sample mean ≈ sample variance, \n    the count data is a strong candidate for Poisson modeling. If variance >> mean, \n    the data is overdispersed and requires a Negative Binomial model.\n\n\n================================================================================\nSECTION 6: STATISTICS SESSIONS 9-11 - HYPOTHESIS TESTING & A/B TESTING\nSource Presentations: Sessions 9, 10 & 11\n================================================================================\n\nDECISION RULE TABLE FOR HYPOTHESIS TESTING:\n\n  Parameter Tested       Sample Size (n)   Pop. SD Known?    Appropriate Test\n  --------------------   ---------------   ---------------   ----------------\n  Single Mean            n >= 30           Yes or No         Z-test (CLT holds)\n  Single Mean            n < 30            Yes               Z-test\n  Single Mean            n < 30            No                Student's T-test\n  Two Independent Means  n1, n2 < 30       No                Two-sample T-test\n  Proportions / A/B      n1, n2 large      Binomial          Two-proportion Z-test\n  Categorical Freqs      Any               Contingency       Chi-Square Test\n\nERROR CLASSIFICATION MATRIX:\n\n                             Truth: H0 is True        Truth: H0 is False\n  ------------------------   ---------------------    ---------------------\n  Decision: Reject H0        Type I Error (alpha)     Correct Decision (Power = 1 - beta)\n  Decision: Fail to Reject   Correct (1 - alpha)      Type II Error (beta)\n\nP-VALUE INTERPRETATION BENCHMARK (alpha = 0.05):\n- p-value < 0.05: Reject H0. The observed evidence is statistically significant.\n- p-value >= 0.05: Fail to reject H0. Insufficient evidence against the null baseline.\n- Confidence Interval Rule: If the hypothesized parameter value mu0 lies OUTSIDE the \n  95% Confidence Interval (L, U), reject H0 at alpha = 0.05.\n\n\n================================================================================\nSECTION 7: MACHINE LEARNING CORE CONCEPTUAL COMPARISON\n================================================================================\n\n1. SUPERVISED LEARNING vs UNSUPERVISED LEARNING vs REINFORCEMENT LEARNING\n------------------------------------------------------------------------\nDimension         Supervised               Unsupervised              Reinforcement\nData Type         Labeled (X, y)           Unlabeled (X)             Environment States (S)\nGoal              Map input to target y    Discover latent patterns  Maximize cumulative reward\nAlgorithms        Linear Reg, Naive Bayes  K-Means, PCA, DBSCAN      Q-Learning, Policy Gradient\nFeedback          Direct ground truth      No external ground truth  Delayed rewards/penalties\n\n2. FEATURE SCALING: NORMALIZATION vs STANDARDIZATION\n---------------------------------------------------\n- Min-Max Normalization: Rescales values to range [0, 1].\n  Formula: X_scaled = (X - X_min) / (X_max - X_min)\n  Best used when: Algorithms require bounded boundaries (e.g., neural nets, image pixels).\n  Limitation: Highly sensitive to outliers.\n\n- Z-Score Standardization: Rescales values to Mean = 0, Standard Deviation = 1.\n  Formula: X_standardized = (X - mu) / sigma\n  Best used when: Features have different units, algorithms assume normality (PCA, SVM, Linear Regression).\n  Advantage: Does not bound values, robust to outliers.\n\n================================================================================\nEND OF REFERENCE GUIDE\n================================================================================\n";
+
     // State Variables
     let currentQuestions = [...rawQuestions];
     let currentIndex = 0;
@@ -1901,6 +2361,7 @@
     const gridSummary = document.getElementById('gridSummary');
     const navigatorTitle = document.getElementById('navigatorTitle');
     const sessionSelect = document.getElementById('sessionSelect');
+    const drawerSessionSelect = document.getElementById('drawerSessionSelect');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
     const toggleInfoBtn = document.getElementById('toggleInfoBtn');
@@ -1909,7 +2370,71 @@
     const resetQuizBtn = document.getElementById('resetQuizBtn');
     const storageStatusBadge = document.getElementById('storageStatusBadge');
     const mistakesCount = document.getElementById('mistakesCount');
+    const drawerMistakesBadge = document.getElementById('drawerMistakesBadge');
     const retryAllMistakesBtn = document.getElementById('retryAllMistakesBtn');
+
+    // Hamburger Menu & Drawer DOM
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+    const drawerGuideBtn = document.getElementById('drawerGuideBtn');
+    const drawerSourcesBtn = document.getElementById('drawerSourcesBtn');
+    const drawerShuffleBtn = document.getElementById('drawerShuffleBtn');
+    const drawerRetryMistakesBtn = document.getElementById('drawerRetryMistakesBtn');
+    const drawerResetBtn = document.getElementById('drawerResetBtn');
+
+    // In-App Guide Modal DOM
+    const openGuideBtn = document.getElementById('openGuideBtn');
+    const blanksModal = document.getElementById('blanksModal');
+    const closeGuideModalBtn = document.getElementById('closeGuideModalBtn');
+    const guideSearchInput = document.getElementById('guideSearchInput');
+    const guideCardsContainer = document.getElementById('guideCardsContainer');
+
+    // Drawer Open / Close Functions
+    function openDrawer() {
+      navDrawer.classList.add('open');
+      drawerBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      navDrawer.classList.remove('open');
+      drawerBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', openDrawer);
+    drawerCloseBtn.addEventListener('click', closeDrawer);
+    drawerBackdrop.addEventListener('click', () => {
+      closeDrawer();
+      closeGuideModal();
+    });
+
+    // Modal Open / Close Functions
+    function openGuideModal() {
+      closeDrawer();
+      blanksModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      if (!guideCardsContainer.innerHTML.trim()) {
+        buildGuideCards();
+      }
+    }
+
+    function closeGuideModal() {
+      blanksModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    openGuideBtn.addEventListener('click', openGuideModal);
+    drawerGuideBtn.addEventListener('click', openGuideModal);
+    closeGuideModalBtn.addEventListener('click', closeGuideModal);
+
+    drawerSourcesBtn.addEventListener('click', () => {
+      closeDrawer();
+      metaInfoPanel.style.display = 'block';
+      metaInfoPanel.scrollIntoView({ behavior: 'smooth' });
+    });
 
     // Get List of Incorrect Question IDs
     function getMistakeQuestions() {
@@ -1968,6 +2493,7 @@
         if (state.currentSessionFilter) {
           currentSessionFilter = state.currentSessionFilter;
           if (sessionSelect) sessionSelect.value = currentSessionFilter;
+          if (drawerSessionSelect) drawerSessionSelect.value = currentSessionFilter;
         }
 
         if (typeof state.currentIndex === 'number' && state.currentIndex >= 0) {
@@ -1994,11 +2520,18 @@
     function populateSessionDropdown() {
       const sessions = [...new Set(rawQuestions.map(q => q.session))];
       sessionSelect.innerHTML = '<option value="all">All Sessions (17 total)</option>';
+      drawerSessionSelect.innerHTML = '<option value="all">All Sessions (17 total)</option>';
+      
       sessions.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        sessionSelect.appendChild(opt);
+        const opt1 = document.createElement('option');
+        opt1.value = s;
+        opt1.textContent = s;
+        sessionSelect.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = s;
+        opt2.textContent = s;
+        drawerSessionSelect.appendChild(opt2);
       });
     }
 
@@ -2052,12 +2585,17 @@
       updateMistakesCount();
     }
 
-    // Update Mistakes Count in Filter Button
+    // Update Mistakes Count in Filter Button & Drawer
     function updateMistakesCount() {
       const wrongs = getMistakeQuestions().length;
       mistakesCount.textContent = wrongs;
+      drawerMistakesBadge.textContent = wrongs;
       if (wrongs > 0) {
         mistakesCount.style.fontWeight = '700';
+        drawerMistakesBadge.style.color = 'var(--error)';
+        drawerMistakesBadge.style.fontWeight = '700';
+      } else {
+        drawerMistakesBadge.style.color = '';
       }
     }
 
@@ -2237,7 +2775,7 @@
     };
 
     // Re-attempt All Mistakes (Clears answers only for incorrect questions)
-    retryAllMistakesBtn.addEventListener('click', () => {
+    function triggerRetryAllMistakes() {
       const wrongs = getMistakeQuestions();
       if (wrongs.length === 0) return;
       if (confirm(`Do you want to clear your previous attempts for all ${wrongs.length} incorrect questions so you can retry them?`)) {
@@ -2248,6 +2786,12 @@
         saveLocalSession();
         applyFilters();
       }
+    }
+
+    retryAllMistakesBtn.addEventListener('click', triggerRetryAllMistakes);
+    drawerRetryMistakesBtn.addEventListener('click', () => {
+      closeDrawer();
+      triggerRetryAllMistakes();
     });
 
     // Handle Option Click
@@ -2292,7 +2836,7 @@
       progressBarFill.style.width = `${progressPercent}%`;
     }
 
-    // Filter Buttons Handlers
+    // Filter Buttons Handlers (Navbar tabs)
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -2304,15 +2848,35 @@
       });
     });
 
+    // Drawer Filter Handlers
+    document.querySelectorAll('[data-drawer-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filterVal = btn.getAttribute('data-drawer-filter');
+        const mainBtn = document.querySelector(`.filter-btn[data-filter="${filterVal}"]`);
+        if (mainBtn) mainBtn.click();
+        closeDrawer();
+      });
+    });
+
     sessionSelect.addEventListener('change', (e) => {
       currentSessionFilter = e.target.value;
+      drawerSessionSelect.value = currentSessionFilter;
       currentIndex = 0;
       saveLocalSession();
       applyFilters();
     });
 
+    drawerSessionSelect.addEventListener('change', (e) => {
+      currentSessionFilter = e.target.value;
+      sessionSelect.value = currentSessionFilter;
+      currentIndex = 0;
+      saveLocalSession();
+      applyFilters();
+      closeDrawer();
+    });
+
     // Shuffle Quiz
-    shuffleBtn.addEventListener('click', () => {
+    function triggerShuffle() {
       for (let i = currentQuestions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
@@ -2322,10 +2886,16 @@
       renderJumpGrid();
       renderCurrentCard();
       updateScoreboard();
+    }
+
+    shuffleBtn.addEventListener('click', triggerShuffle);
+    drawerShuffleBtn.addEventListener('click', () => {
+      triggerShuffle();
+      closeDrawer();
     });
 
     // Reset Quiz & Local Session
-    resetQuizBtn.addEventListener('click', () => {
+    function triggerReset() {
       if (confirm('Are you sure you want to reset all answers, scores, and your saved local session?')) {
         try {
           localStorage.removeItem(STORAGE_KEY);
@@ -2338,6 +2908,12 @@
         renderCurrentCard();
         flashStorageStatus();
       }
+    }
+
+    resetQuizBtn.addEventListener('click', triggerReset);
+    drawerResetBtn.addEventListener('click', () => {
+      closeDrawer();
+      triggerReset();
     });
 
     // Theme Toggle (Dark / Light)
@@ -2368,7 +2944,16 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
-      if (e.key === 'ArrowLeft') {
+      if (e.key === 'Escape') {
+        closeDrawer();
+        closeGuideModal();
+      } else if (e.key === 'm' || e.key === 'M') {
+        if (navDrawer.classList.contains('open')) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      } else if (e.key === 'ArrowLeft') {
         if (currentIndex > 0) {
           currentIndex--;
           saveLocalSession();
@@ -2395,6 +2980,96 @@
           handleAnswerSelect(q.id, optIdx);
         }
       }
+    });
+
+    // Parse & Build In-App Guide Cards from Guide Text
+    function buildGuideCards(filterKeyword = '') {
+      guideCardsContainer.innerHTML = '';
+      const sections = rawGuideText.split(/=(10,)\s*
+SECTION\s+/i);
+      
+      let matchedCount = 0;
+
+      sections.forEach((sec, idx) => {
+        if (idx === 0) return; // Skip preamble before SECTION 1
+        
+        const firstLineEnd = sec.indexOf('\n');
+        const secTitle = sec.substring(0, firstLineEnd).trim();
+        const secBody = sec.substring(firstLineEnd).trim();
+
+        if (filterKeyword) {
+          const lower = sec.toLowerCase();
+          if (!lower.includes(filterKeyword.toLowerCase())) return;
+        }
+
+        matchedCount++;
+        const card = document.createElement('div');
+        card.className = 'guide-section-card';
+
+        // Extract Questions within section
+        const qBlocks = secBody.split(/QUESTION\s+/i);
+        let qCardsHtml = '';
+
+        if (qBlocks.length > 1) {
+          qBlocks.forEach((qb, qIdx) => {
+            if (qIdx === 0) return;
+            const qLines = qb.split('\n');
+            const qHeader = qLines[0].trim();
+            const rest = qb.substring(qLines[0].length).trim();
+
+            const ansMatch = rest.match(/ANSWER:\s*([^\n]+)/i);
+            const ansText = ansMatch ? ansMatch[1].trim() : '';
+
+            const expMatch = rest.match(/IN-DEPTH EXPLANATION:\s*([\s\S]*?)(?:-(10,)|$)/i);
+            const expText = expMatch ? expMatch[1].trim() : rest;
+
+            qCardsHtml += `
+              <div class="guide-q-box">
+                <div class="guide-q-title">
+                  <span style="color: var(--accent);">Item ${qHeader}</span>
+                </div>
+                ${ansText ? `<div class="guide-ans-badge">Key Answer: ${ansText}</div>` : ''}
+                <div class="guide-exp">${escapeHtml(expText)}</div>
+              </div>
+            `;
+          });
+        } else {
+          // Non-split section (e.g. matrices, probability reviews)
+          qCardsHtml = `
+            <div class="guide-q-box">
+              <pre style="white-space: pre-wrap; font-family: monospace; font-size: 0.85rem; color: var(--text);">${escapeHtml(secBody)}</pre>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="guide-section-header">SECTION ${secTitle}</div>
+          ${qCardsHtml}
+        `;
+
+        guideCardsContainer.appendChild(card);
+      });
+
+      if (matchedCount === 0) {
+        guideCardsContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 2rem;">No concepts found matching your search. Try "Pandas", "Skewness", "Poisson", "Hypothesis", or "Immutability".</div>';
+      }
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Guide Search Filter Listener
+    guideSearchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      buildGuideCards(query);
     });
 
     // Initialize App
