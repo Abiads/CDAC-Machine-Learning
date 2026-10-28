@@ -57,7 +57,6 @@ def train_linear_regression(X_train: pd.DataFrame, y_train: pd.Series) -> Linear
     model.fit(X_train, y_train)
     return model
 
-
 def evaluate_model(
     model: LinearRegression, X_test: pd.DataFrame, y_test: pd.Series
 ) -> Dict[str, float]:
