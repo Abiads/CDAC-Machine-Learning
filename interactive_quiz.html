@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Machine Learning & Statistics Interactive MCQ Quiz</title>
-  <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with answers, slide references, and detailed explanations.">
+  <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with answers, slide references, local session saving, and mistake retry mode.">
   <!-- Tailwind CSS fallback & font -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
@@ -23,6 +23,8 @@
       --error: #ef4444;
       --error-bg: rgba(239, 68, 68, 0.15);
       --error-border: #dc2626;
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
       --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
     }
 
@@ -41,6 +43,8 @@
       --error: #dc2626;
       --error-bg: #fef2f2;
       --error-border: #ef4444;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
       --card-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
     }
 
@@ -138,6 +142,15 @@
       border-color: var(--accent);
     }
 
+    .btn-warning {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .btn-warning:hover {
+      background-color: var(--warning-bg);
+    }
+
     .progress-section {
       background-color: var(--surface);
       border-radius: 12px;
@@ -209,6 +222,7 @@
 
     .filter-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.35rem;
       background-color: var(--surface);
       padding: 0.3rem;
@@ -234,9 +248,16 @@
       box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
     }
 
+    .filter-btn.tab-mistakes.active {
+      background-color: var(--error);
+      color: white;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+    }
+
     .view-toggle-area {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 0.5rem;
     }
 
@@ -292,6 +313,15 @@
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    .mistake-badge {
+      background: var(--error-bg);
+      color: var(--error);
+      border: 1px solid var(--error-border);
       padding: 0.25rem 0.65rem;
       border-radius: 9999px;
       font-weight: 600;
@@ -421,6 +451,8 @@
     .explanation-header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
       gap: 0.5rem;
       font-weight: 700;
       font-size: 0.9rem;
@@ -442,7 +474,28 @@
       padding-top: 0.5rem;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
       gap: 0.4rem;
+    }
+
+    .retry-single-btn {
+      background-color: var(--surface);
+      border: 1px solid var(--warning);
+      color: var(--warning);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s;
+    }
+
+    .retry-single-btn:hover {
+      background-color: var(--warning-bg);
     }
 
     .card-nav {
@@ -664,7 +717,7 @@
           <span>Accuracy:</span>
           <span id="accuracyDisplay" class="val val-acc">0%</span>
         </div>
-        <div class="stat-pill" title="Quiz progress is automatically preserved in your browser's local session storage (no database needed)">
+        <div class="stat-pill" title="Quiz progress and mistakes are automatically preserved in your browser's local session storage (no database needed)">
           <span id="storageStatusBadge" class="val val-storage">💾 Session Saved</span>
         </div>
       </div>
@@ -679,12 +732,18 @@
         <button class="filter-btn active" data-filter="all">All (66)</button>
         <button class="filter-btn" data-filter="Machine Learning">ML (38)</button>
         <button class="filter-btn" data-filter="Statistics">Statistics (28)</button>
+        <button id="mistakesTabBtn" class="filter-btn tab-mistakes" data-filter="mistakes" title="View and attempt only questions answered incorrectly">
+          ❌ Attempt Wrong (<span id="mistakesCount">0</span>)
+        </button>
       </div>
 
       <div class="view-toggle-area">
         <select id="sessionSelect" class="select-filter">
           <option value="all">All Sessions</option>
         </select>
+        <button id="retryAllMistakesBtn" class="btn-icon btn-warning" title="Re-attempt all questions you got wrong" style="display: none;">
+          🔁 Re-attempt Mistakes
+        </button>
         <button id="shuffleBtn" class="btn-icon" title="Shuffle Questions">🔀 Shuffle</button>
         <button id="resetQuizBtn" class="btn-icon" title="Reset all answers & local session">🔄 Reset</button>
       </div>
@@ -693,7 +752,7 @@
     <!-- Question Jump Grid -->
     <div class="grid-toggle-box">
       <div class="grid-header">
-        <span>Question Navigator</span>
+        <span id="navigatorTitle">Question Navigator</span>
         <span id="gridSummary" style="font-size: 0.8rem; color: var(--text-muted);">0 / 66 answered</span>
       </div>
       <div id="jumpGrid" class="jump-grid">
@@ -1840,6 +1899,7 @@
     const progressBarFill = document.getElementById('progressBarFill');
     const jumpGrid = document.getElementById('jumpGrid');
     const gridSummary = document.getElementById('gridSummary');
+    const navigatorTitle = document.getElementById('navigatorTitle');
     const sessionSelect = document.getElementById('sessionSelect');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
@@ -1848,6 +1908,16 @@
     const shuffleBtn = document.getElementById('shuffleBtn');
     const resetQuizBtn = document.getElementById('resetQuizBtn');
     const storageStatusBadge = document.getElementById('storageStatusBadge');
+    const mistakesCount = document.getElementById('mistakesCount');
+    const retryAllMistakesBtn = document.getElementById('retryAllMistakesBtn');
+
+    // Get List of Incorrect Question IDs
+    function getMistakeQuestions() {
+      return rawQuestions.filter(q => {
+        const ans = userAnswers[q.id];
+        return ans !== undefined && ans !== q.correctIndex;
+      });
+    }
 
     // Local Storage Helper: Save Session
     function saveLocalSession() {
@@ -1866,7 +1936,7 @@
       }
     }
 
-    // Local Storage Helper: Flash Badge on update
+    // Local Storage Helper: Update Status Badge
     function flashStorageStatus() {
       if (!storageStatusBadge) return;
       const count = Object.keys(userAnswers).length;
@@ -1934,14 +2004,41 @@
 
     // Filter Logic
     function applyFilters() {
-      currentQuestions = rawQuestions.filter(q => {
-        const trackMatch = (currentFilter === 'all') || (q.track === currentFilter);
-        const sessionMatch = (currentSessionFilter === 'all') || (q.session === currentSessionFilter);
-        return trackMatch && sessionMatch;
-      });
+      if (currentFilter === 'mistakes') {
+        currentQuestions = getMistakeQuestions();
+        retryAllMistakesBtn.style.display = currentQuestions.length > 0 ? 'inline-flex' : 'none';
+        navigatorTitle.textContent = `Mistakes Navigator (${currentQuestions.length} wrong)`;
+      } else {
+        currentQuestions = rawQuestions.filter(q => {
+          const trackMatch = (currentFilter === 'all') || (q.track === currentFilter);
+          const sessionMatch = (currentSessionFilter === 'all') || (q.session === currentSessionFilter);
+          return trackMatch && sessionMatch;
+        });
+        retryAllMistakesBtn.style.display = 'none';
+        navigatorTitle.textContent = 'Question Navigator';
+      }
 
       if (currentQuestions.length === 0) {
-        quizCardContainer.innerHTML = '<div class="quiz-card" style="text-align: center; color: var(--text-muted);">No questions match the selected filter.</div>';
+        if (currentFilter === 'mistakes') {
+          quizCardContainer.innerHTML = `
+            <div class="quiz-card" style="text-align: center; padding: 3rem 1.5rem;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎉</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--success);">No Incorrect Answers!</h3>
+              <p style="color: var(--text-muted); max-width: 450px; margin: 0 auto 1.5rem auto;">
+                You haven't made any mistakes yet, or you have successfully corrected all of them. Keep up the great work!
+              </p>
+              <button class="nav-btn" onclick="document.querySelector('[data-filter=all]').click();">
+                View All Questions
+              </button>
+            </div>
+          `;
+        } else {
+          quizCardContainer.innerHTML = '<div class="quiz-card" style="text-align: center; color: var(--text-muted);">No questions match the selected filter.</div>';
+        }
+        jumpGrid.innerHTML = '';
+        currentQDisplay.textContent = '0 / 0';
+        progressBarFill.style.width = '0%';
+        updateMistakesCount();
         return;
       }
 
@@ -1952,6 +2049,16 @@
       renderJumpGrid();
       renderCurrentCard();
       updateScoreboard();
+      updateMistakesCount();
+    }
+
+    // Update Mistakes Count in Filter Button
+    function updateMistakesCount() {
+      const wrongs = getMistakeQuestions().length;
+      mistakesCount.textContent = wrongs;
+      if (wrongs > 0) {
+        mistakesCount.style.fontWeight = '700';
+      }
     }
 
     // Render Question Navigator Jump Grid
@@ -1993,6 +2100,7 @@
       const q = currentQuestions[currentIndex];
       const hasAnswered = userAnswers[q.id] !== undefined;
       const selectedIdx = userAnswers[q.id];
+      const isWrong = hasAnswered && selectedIdx !== q.correctIndex;
 
       let optionsHtml = '';
       const letters = ['A', 'B', 'C', 'D'];
@@ -2034,14 +2142,15 @@
         explanationHtml = `
           <div class="explanation-box ${isCorrect ? 'is-correct' : 'is-wrong'}" style="display: block;">
             <div class="explanation-header">
-              <span>${isCorrect ? '✅ Correct Answer!' : '❌ Incorrect'}</span>
-              <span style="font-weight: 500; opacity: 0.85;">(Correct: ${q.answerText})</span>
+              <span>${isCorrect ? '✅ Correct Answer!' : '❌ Incorrect Answer'}</span>
+              <span style="font-weight: 500; opacity: 0.85;">(Correct Key: ${q.answerText})</span>
             </div>
             <div class="explanation-body">
               <strong>Explanation:</strong> ${q.explanation}
             </div>
             <div class="explanation-source">
-              <span>📄</span> <strong>Slide Reference:</strong> ${q.sourceDeck} • ${q.sourceSlide}
+              <div><span>📄</span> <strong>Slide Reference:</strong> ${q.sourceDeck} • ${q.sourceSlide}</div>
+              ${!isCorrect ? `<button class="retry-single-btn" onclick="retrySingleQuestion(${q.id})">🔁 Re-attempt Question</button>` : ''}
             </div>
           </div>
         `;
@@ -2053,6 +2162,7 @@
             <div class="card-badges">
               <span class="session-badge" title="${q.session}">${q.session}</span>
               <span class="slide-badge" title="Source Slide">${q.sourceSlide}</span>
+              ${isWrong ? '<span class="mistake-badge">⚠️ Wrong Answer</span>' : ''}
             </div>
             <span class="track-tag">${q.track}</span>
           </div>
@@ -2116,6 +2226,30 @@
       }
     }
 
+    // Re-attempt a Single Question (Clears answer for this question so user can retry)
+    window.retrySingleQuestion = function(questionId) {
+      delete userAnswers[questionId];
+      saveLocalSession();
+      renderJumpGrid();
+      renderCurrentCard();
+      updateScoreboard();
+      updateMistakesCount();
+    };
+
+    // Re-attempt All Mistakes (Clears answers only for incorrect questions)
+    retryAllMistakesBtn.addEventListener('click', () => {
+      const wrongs = getMistakeQuestions();
+      if (wrongs.length === 0) return;
+      if (confirm(`Do you want to clear your previous attempts for all ${wrongs.length} incorrect questions so you can retry them?`)) {
+        wrongs.forEach(q => {
+          delete userAnswers[q.id];
+        });
+        currentIndex = 0;
+        saveLocalSession();
+        applyFilters();
+      }
+    });
+
     // Handle Option Click
     function handleAnswerSelect(questionId, selectedIdx) {
       if (userAnswers[questionId] !== undefined) return;
@@ -2124,6 +2258,7 @@
       saveLocalSession();
 
       updateScoreboard();
+      updateMistakesCount();
       renderJumpGrid();
       renderCurrentCard();
     }
@@ -2163,6 +2298,7 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFilter = btn.getAttribute('data-filter');
+        currentIndex = 0;
         saveLocalSession();
         applyFilters();
       });
@@ -2170,6 +2306,7 @@
 
     sessionSelect.addEventListener('change', (e) => {
       currentSessionFilter = e.target.value;
+      currentIndex = 0;
       saveLocalSession();
       applyFilters();
     });
@@ -2196,6 +2333,7 @@
         userAnswers = {};
         currentIndex = 0;
         updateScoreboard();
+        updateMistakesCount();
         renderJumpGrid();
         renderCurrentCard();
         flashStorageStatus();
