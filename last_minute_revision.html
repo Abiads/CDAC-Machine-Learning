@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Last-Minute Revision & Cheat Sheet | CDAC ML & Statistics</title>
+  <meta name="description" content="High-yield last minute revision guide for Machine Learning and Statistics containing comprehensive decision tables, concrete worked examples, formula sheets, and common exam pitfalls.">
+  
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Vercel Speed Insights -->
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #273549;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --success-border: #059669;
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --error: #ef4444;
+      --error-bg: rgba(239, 68, 68, 0.15);
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    html.light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --surface-border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --card-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem 1rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Jump Navigation Bar */
+    .jump-nav {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .jump-nav-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .jump-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .jump-pill {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .jump-pill:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Section styling */
+    .revision-section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 5rem;
+    }
+
+    .section-title-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(245, 158, 11, 0.08));
+      border: 1.5px solid rgba(99, 102, 241, 0.25);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 1.15rem 1.35rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Tables */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+    }
+
+    table.rev-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    table.rev-table th, table.rev-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--surface-border);
+      vertical-align: top;
+    }
+
+    table.rev-table th {
+      background-color: var(--surface-hover);
+      color: var(--text);
+      font-weight: 700;
+      white-space: nowrap;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    table.rev-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.rev-table tbody tr:hover {
+      background-color: rgba(99, 102, 241, 0.04);
+    }
+
+    /* Example Box */
+    .example-box {
+      background-color: var(--surface-hover);
+      border: 1.5px solid var(--surface-border);
+      border-left: 4px solid var(--success);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .example-title {
+      font-weight: 700;
+      color: var(--success);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .trap-box {
+      background-color: var(--error-bg);
+      border: 1.5px solid var(--error-border);
+      border-left: 4px solid var(--error);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .trap-title {
+      font-weight: 700;
+      color: var(--error);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-blue { background: rgba(99, 102, 241, 0.15); color: var(--accent); border: 1px solid var(--accent); }
+    .badge-green { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+    .badge-amber { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+    .badge-red { background: var(--error-bg); color: var(--error); border: 1px solid var(--error-border); }
+
+    pre.code-block {
+      background-color: #0f172a;
+      color: #38bdf8;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+      line-height: 1.5;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Print styles */
+    @media print {
+      header, .jump-nav, .btn { display: none !important; }
+      body { background: white; color: black; }
+      .card, .section-title-box { page-break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0.75rem; }
+      .container { padding: 1rem 0.5rem 2rem 0.5rem; }
+      .card { padding: 1rem; }
+      .logo-title { font-size: 1rem; }
+      .section-title { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo-area">
+        <span class="logo-badge">⚡ CRAM SHEET</span>
+        <h1 class="logo-title">ML & Stats Last-Minute Revision</h1>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-primary" title="Return to Interactive MCQ Quiz">
+          ← MCQ Quiz
+        </a>
+        <a href="fill_in_the_blanks.html" class="btn" title="View Standalone Fill-in-the-Blanks Guide">
+          📝 Fill-in-Blanks
+        </a>
+        <button id="themeToggleBtn" class="btn" title="Toggle Light / Dark Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Quick Jump Navigator -->
+    <nav class="jump-nav" aria-label="Last Minute Revision Quick Jump">
+      <div class="jump-nav-title">
+        <span>⚡</span> High-Yield Revision Jump (Click any topic to jump directly)
+      </div>
+      <div class="jump-pills">
+        <a href="#stats-measures" class="jump-pill">1. Descriptive Statistics</a>
+        <a href="#prob-distributions" class="jump-pill">2. Probability & Distributions</a>
+        <a href="#hypothesis-matrix" class="jump-pill">3. Hypothesis Testing Decision Matrix</a>
+        <a href="#sampling-features" class="jump-pill">4. Sampling & Feature Types</a>
+        <a href="#ml-algorithms" class="jump-pill">5. ML Algorithms Master Table</a>
+        <a href="#metrics-matrix" class="jump-pill">6. Metrics & Confusion Matrix</a>
+        <a href="#bias-variance" class="jump-pill">7. Bias-Variance & Overfitting</a>
+        <a href="#feature-engineering" class="jump-pill">8. 12-Step Feature Engineering</a>
+        <a href="#exam-traps" class="jump-pill">9. High-Yield Exam Traps</a>
+      </div>
+    </nav>
+
+    <!-- SECTION 1: DESCRIPTIVE STATISTICS -->
+    <section id="stats-measures" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>📊</span> 1. Descriptive Statistics & Summary Measures</div>
+        <div class="section-subtitle">Measures of Central Tendency, Dispersion & Shape</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Central Tendency & Dispersion Master Table</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Measure</th>
+                <th>Type</th>
+                <th>Mathematical Formula</th>
+                <th>Outlier Sensitivity</th>
+                <th>When to Use in Real-World</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mean (μ or x̄)</strong></td>
+                <td>Central Tendency</td>
+                <td><code>x̄ = (Σ x_i) / n</code></td>
+                <td><span class="badge badge-red">High</span></td>
+                <td>Symmetric, bell-shaped normal distributions without extreme anomalies.</td>
+              </tr>
+              <tr>
+                <td><strong>Median (Q2)</strong></td>
+                <td>Central Tendency</td>
+                <td>Middle value of sorted data</td>
+                <td><span class="badge badge-green">Robust</span></td>
+                <td>Skewed data (e.g., Salaries, House prices, Net worth).</td>
+              </tr>
+              <tr>
+                <td><strong>Mode</strong></td>
+                <td>Central Tendency</td>
+                <td>Most frequent observation</td>
+                <td><span class="badge badge-green">Robust</span></td>
+                <td>Categorical/Nominal data (e.g., most purchased shoe size).</td>
+              </tr>
+              <tr>
+                <td><strong>Variance (σ² / s²)</strong></td>
+                <td>Dispersion</td>
+                <td><code>s² = Σ(x_i - x̄)² / (n - 1)</code></td>
+                <td><span class="badge badge-red">Very High</span></td>
+                <td>Measures squared spread; note Bessel's correction <code>n - 1</code> for samples.</td>
+              </tr>
+              <tr>
+                <td><strong>Standard Deviation (s)</strong></td>
+                <td>Dispersion</td>
+                <td><code>s = √s²</code></td>
+                <td><span class="badge badge-red">High</span></td>
+                <td>Same unit as original data; essential for Z-scores and Normal distributions.</td>
+              </tr>
+              <tr>
+                <td><strong>Interquartile Range (IQR)</strong></td>
+                <td>Dispersion</td>
+                <td><code>IQR = Q3 - Q1</code></td>
+                <td><span class="badge badge-green">Robust</span></td>
+                <td>Middle 50% spread; foundation for Tukey box plots and outlier clipping.</td>
+              </tr>
+              <tr>
+                <td><strong>Skewness</strong></td>
+                <td>Distribution Shape</td>
+                <td><code>E[((X - μ) / σ)³]</code></td>
+                <td><span class="badge badge-amber">Moment 3</span></td>
+                <td>Right-skewed: Mean &gt; Median &gt; Mode. Left-skewed: Mean &lt; Median &lt; Mode.</td>
+              </tr>
+              <tr>
+                <td><strong>Kurtosis</strong></td>
+                <td>Distribution Shape</td>
+                <td><code>E[((X - μ) / σ)⁴] - 3</code></td>
+                <td><span class="badge badge-amber">Moment 4</span></td>
+                <td>Leptokurtic (&gt;0): Heavy tails / extreme risks; Platykurtic (&lt;0): Thin tails.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">💡 Worked Example: Manual IQR Outlier Boundaries</div>
+          <div>Given dataset: <code>[10, 12, 14, 15, 18, 20, 22, 25, 28, 90]</code> (n = 10)</div>
+          <div>• <strong>Q1 (25th percentile)</strong> = 13.5 &nbsp;|&nbsp; <strong>Q3 (75th percentile)</strong> = 23.5</div>
+          <div>• <strong>IQR</strong> = 23.5 - 13.5 = <strong>10.0</strong></div>
+          <div>• <strong>Lower Fence</strong> = Q1 - 1.5 * IQR = 13.5 - 15.0 = <strong>-1.5</strong></div>
+          <div>• <strong>Upper Fence</strong> = Q3 + 1.5 * IQR = 23.5 + 15.0 = <strong>38.5</strong></div>
+          <div>• <strong>Conclusion</strong>: Value <code>90</code> lies outside [ -1.5, 38.5 ] and is flagged as an <strong>Outlier</strong>!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: PROBABILITY & DISTRIBUTIONS -->
+    <section id="prob-distributions" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>🎲</span> 2. Probability & Distributions Cheat Sheet</div>
+        <div class="section-subtitle">Axioms, Bayes' Theorem & Distribution Parameters</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Distributions Quick-Reference Table</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Distribution</th>
+                <th>Type</th>
+                <th>Parameters</th>
+                <th>Mean (E[X])</th>
+                <th>Variance (Var[X])</th>
+                <th>Key Exam Property & Real-World Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Binomial</strong></td>
+                <td>Discrete</td>
+                <td>n (trials), p (prob)</td>
+                <td><code>n * p</code></td>
+                <td><code>n * p * (1 - p)</code></td>
+                <td>Fixed independent trials with 2 outcomes (pass/fail, heads/tails).</td>
+              </tr>
+              <tr>
+                <td><strong>Poisson</strong></td>
+                <td>Discrete</td>
+                <td>λ (arrival rate)</td>
+                <td><code>λ</code></td>
+                <td><code>λ</code></td>
+                <td><strong>Unique Property: Mean = Variance = λ</strong>. Models rare event counts in time/space.</td>
+              </tr>
+              <tr>
+                <td><strong>Uniform</strong></td>
+                <td>Continuous / Discrete</td>
+                <td>a (min), b (max)</td>
+                <td><code>(a + b) / 2</code></td>
+                <td><code>(b - a)² / 12</code></td>
+                <td>Every sub-interval of equal length has identical probability.</td>
+              </tr>
+              <tr>
+                <td><strong>Normal (Gaussian)</strong></td>
+                <td>Continuous</td>
+                <td>μ (mean), σ² (var)</td>
+                <td><code>μ</code></td>
+                <td><code>σ²</code></td>
+                <td>Bell-shaped curve; Empirical rule: 68% in ±1σ, 95% in ±2σ, 99.7% in ±3σ.</td>
+              </tr>
+              <tr>
+                <td><strong>Standard Normal (Z)</strong></td>
+                <td>Continuous</td>
+                <td>μ = 0, σ = 1</td>
+                <td><code>0</code></td>
+                <td><code>1</code></td>
+                <td><code>Z = (X - μ) / σ</code>; Used for hypothesis testing and p-values.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">💡 Worked Example: Bayes' Theorem Disease Detection</div>
+          <div><strong>Formula</strong>: <code>P(Disease | Positive) = [ P(Positive | Disease) * P(Disease) ] / P(Positive)</code></div>
+          <div>• Disease Prevalence <code>P(D) = 0.01</code> (1%) &rarr; <code>P(No D) = 0.99</code> (99%)</div>
+          <div>• Sensitivity <code>P(+ | D) = 0.95</code> (95%)</div>
+          <div>• False Positive Rate <code>P(+ | No D) = 0.05</code> (5%)</div>
+          <div>• Total Probability of Positive <code>P(+) = (0.95 * 0.01) + (0.05 * 0.99) = 0.0095 + 0.0495 = 0.0590</code></div>
+          <div>• <strong>Posterior Probability</strong> = <code>0.0095 / 0.0590 ≈ 0.1610 (16.1%)</code>!</div>
+          <div><em>(Intuition: Even with a 95% accurate test, a rare disease yields mostly false alarms due to the 99% healthy base population!)</em></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: HYPOTHESIS TESTING DECISION MATRIX -->
+    <section id="hypothesis-matrix" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>🧪</span> 3. Hypothesis Testing & A/B Decision Matrix</div>
+        <div class="section-subtitle">Selecting the Correct Statistical Test & Error Analysis</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Test Selection Decision Table</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Scenario / Question</th>
+                <th>Sample Size</th>
+                <th>Pop. Variance Known?</th>
+                <th>Test to Use</th>
+                <th>Test Statistic Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Single Mean vs Standard Value</td>
+                <td>n &ge; 30</td>
+                <td>Yes or No</td>
+                <td><span class="badge badge-blue">One-Sample Z-Test</span></td>
+                <td><code>Z = (x̄ - μ₀) / (σ / √n)</code></td>
+              </tr>
+              <tr>
+                <td>Single Mean vs Standard Value</td>
+                <td>n &lt; 30</td>
+                <td>No (Sample s used)</td>
+                <td><span class="badge badge-green">One-Sample T-Test</span></td>
+                <td><code>t = (x̄ - μ₀) / (s / √n)</code> (df = n - 1)</td>
+              </tr>
+              <tr>
+                <td>Comparing 2 Independent Group Means</td>
+                <td>n1, n2 &lt; 30</td>
+                <td>No (Unknown)</td>
+                <td><span class="badge badge-green">Independent 2-Sample T-Test</span></td>
+                <td><code>t = (x̄₁ - x̄₂) / SE_diff</code></td>
+              </tr>
+              <tr>
+                <td>Comparing Before vs After (Same Subjects)</td>
+                <td>Any</td>
+                <td>No</td>
+                <td><span class="badge badge-green">Paired Samples T-Test</span></td>
+                <td><code>t = d̄ / (s_d / √n)</code> on differences</td>
+              </tr>
+              <tr>
+                <td>Comparing Means Across 3+ Groups</td>
+                <td>k &ge; 3 groups</td>
+                <td>Assumes equal var</td>
+                <td><span class="badge badge-amber">One-Way ANOVA</span></td>
+                <td><code>F = MS_between / MS_within</code></td>
+              </tr>
+              <tr>
+                <td>Association Between 2 Categorical Variables</td>
+                <td>Contingency Table</td>
+                <td>Non-parametric</td>
+                <td><span class="badge badge-amber">Chi-Square (χ²) Test</span></td>
+                <td><code>χ² = Σ (Observed - Expected)² / Expected</code></td>
+              </tr>
+              <tr>
+                <td>Comparing 2 Conversion Rates (A/B Test)</td>
+                <td>n1, n2 large</td>
+                <td>Binomial Proportions</td>
+                <td><span class="badge badge-blue">Two-Proportion Z-Test</span></td>
+                <td><code>Z = (p̂₁ - p̂₂) / SE_pooled</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-container" style="margin-top: 1.5rem;">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Error Analysis</th>
+                <th>Null Hypothesis (H₀) is True in Reality</th>
+                <th>Null Hypothesis (H₀) is False in Reality</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Decision: Reject H₀</strong></td>
+                <td><span class="badge badge-red">Type I Error (α - False Positive)</span><br>Convicting an innocent person</td>
+                <td><span class="badge badge-green">Correct Decision (Power = 1 - β)</span><br>Convicting a guilty person</td>
+              </tr>
+              <tr>
+                <td><strong>Decision: Fail to Reject H₀</strong></td>
+                <td><span class="badge badge-green">Correct Decision (1 - α)</span><br>Acquitting an innocent person</td>
+                <td><span class="badge badge-amber">Type II Error (β - False Negative)</span><br>Acquitting a guilty person</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">💡 The 3-Step P-Value Decision Rule</div>
+          <div>1. <strong>Set Significance Level</strong>: Standard α = 0.05 (5% risk of Type I Error).</div>
+          <div>2. <strong>Compare P-Value to α</strong>:
+            <br>• If <strong>p &lt; 0.05</strong> &rarr; <strong>Reject H₀</strong> (Statistically Significant difference exists).
+            <br>• If <strong>p &ge; 0.05</strong> &rarr; <strong>Fail to Reject H₀</strong> (Insufficient evidence of effect).
+          </div>
+          <div>3. <strong>Confidence Interval Rule</strong>: If the baseline value μ₀ falls <strong>outside</strong> the 95% Confidence Interval, reject H₀!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: SAMPLING & FEATURE TYPES -->
+    <section id="sampling-features" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>📋</span> 4. Sampling Techniques & Data Feature Hierarchy</div>
+        <div class="section-subtitle">Probability vs Non-Probability Sampling & Encodings</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Sampling Methods Comparison</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Mechanism</th>
+                <th>Key Advantage</th>
+                <th>Main Limitation / Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Simple Random</strong></td>
+                <td>Every member has equal probability via random numbers (lottery).</td>
+                <td>Completely unbiased representation.</td>
+                <td>May under-represent small key minority subgroups.</td>
+              </tr>
+              <tr>
+                <td><strong>Stratified Sampling</strong></td>
+                <td>Divide population into homogeneous strata (e.g. Gender, Age), sample from each.</td>
+                <td>Guarantees proportional representation of all subgroups.</td>
+                <td>Requires advance demographic knowledge of strata sizes.</td>
+              </tr>
+              <tr>
+                <td><strong>Systematic Sampling</strong></td>
+                <td>Pick every k-th individual after a random start (k = N / n).</td>
+                <td>Extremely simple and easy to implement.</td>
+                <td>Hidden periodicity in data will severely bias results.</td>
+              </tr>
+              <tr>
+                <td><strong>Cluster Sampling</strong></td>
+                <td>Divide population into heterogeneous clusters (e.g. cities), pick whole clusters.</td>
+                <td>Cost-effective and logistically practical.</td>
+                <td>Higher sampling error if clusters differ systematically.</td>
+              </tr>
+              <tr>
+                <td><strong>Convenience Sampling</strong></td>
+                <td>Non-probability: Collect data from whoever is readily available.</td>
+                <td>Fast and zero cost.</td>
+                <td>High selection bias; cannot generalize findings statistically.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: ML ALGORITHMS MASTER TABLE -->
+    <section id="ml-algorithms" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>🤖</span> 5. Machine Learning Algorithms Master Reference</div>
+        <div class="section-subtitle">Mathematical Objectives, Assumptions, Pros/Cons & Hyperparameters</div>
+      </div>
+
+      <div class="card">
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Task</th>
+                <th>Core Mathematical Principle</th>
+                <th>Key Assumptions</th>
+                <th>Primary Hyperparameters</th>
+                <th>Pros & Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Linear Regression</strong></td>
+                <td>Regression</td>
+                <td>Ordinary Least Squares: min Σ(y_i - ŷ_i)²</td>
+                <td>Linearity, Homoscedasticity, Normality of residuals, No multicollinearity.</td>
+                <td><code>fit_intercept</code>, Regularization: L1 (Lasso), L2 (Ridge)</td>
+                <td><strong>Pros</strong>: Highly interpretable, fast. <strong>Cons</strong>: Struggles with non-linear relationships.</td>
+              </tr>
+              <tr>
+                <td><strong>Logistic Regression</strong></td>
+                <td>Classification</td>
+                <td>Sigmoid <code>σ(z) = 1 / (1 + e^-z)</code> minimizing Log-Loss</td>
+                <td>Linear relationship between log-odds and predictors.</td>
+                <td><code>C</code> (Inverse regularization), <code>penalty</code> (l1, l2), <code>solver</code></td>
+                <td><strong>Pros</strong>: Outputs calibrated probabilities. <strong>Cons</strong>: Linear decision boundary only.</td>
+              </tr>
+              <tr>
+                <td><strong>K-Nearest Neighbors (KNN)</strong></td>
+                <td>Classification / Regression</td>
+                <td>Instance-based distance vote: Euclidean <code>√Σ(x_i - y_i)²</code></td>
+                <td>Nearby instances share similar labels. Distance metrics are meaningful.</td>
+                <td><code>n_neighbors (k)</code>, <code>metric</code> (euclidean, manhattan), <code>weights</code></td>
+                <td><strong>Pros</strong>: No training phase, non-linear. <strong>Cons</strong>: Slow inference O(n*d), sensitive to feature scale!</td>
+              </tr>
+              <tr>
+                <td><strong>Decision Tree</strong></td>
+                <td>Classification / Regression</td>
+                <td>Recursive greedy partitioning via Gini Impurity or Entropy/Information Gain</td>
+                <td>Non-parametric. No distributional assumptions.</td>
+                <td><code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>, <code>criterion</code></td>
+                <td><strong>Pros</strong>: Interpretable rules, no feature scaling needed. <strong>Cons</strong>: Extremely prone to overfitting!</td>
+              </tr>
+              <tr>
+                <td><strong>Random Forest</strong></td>
+                <td>Classification / Regression</td>
+                <td>Ensemble bagging: B bootstrap trees + random feature subsets</td>
+                <td>Ensemble averaging reduces variance without increasing bias.</td>
+                <td><code>n_estimators</code>, <code>max_depth</code>, <code>max_features</code>, <code>bootstrap</code></td>
+                <td><strong>Pros</strong>: High accuracy, handles non-linearity, out-of-bag error. <strong>Cons</strong>: Black-box model, slower.</td>
+              </tr>
+              <tr>
+                <td><strong>Support Vector Machine (SVM)</strong></td>
+                <td>Classification / Regression</td>
+                <td>Max-margin hyperplane; Kernel trick <code>K(x, z)</code> for non-linear mapping</td>
+                <td>Data can be separated by a margin in transformed space.</td>
+                <td><code>C</code> (Margin penalty), <code>kernel</code> (linear, rbf, poly), <code>gamma</code></td>
+                <td><strong>Pros</strong>: Effective in high-dimensional spaces. <strong>Cons</strong>: Computationally expensive on large N.</td>
+              </tr>
+              <tr>
+                <td><strong>Naive Bayes</strong></td>
+                <td>Classification</td>
+                <td>Bayes Theorem + strong conditional independence assumption</td>
+                <td>All features are conditionally independent given class label.</td>
+                <td><code>var_smoothing</code> (GaussianNB), <code>alpha</code> (MultinomialNB Laplace)</td>
+                <td><strong>Pros</strong>: Ultra-fast training, great for NLP text/spam. <strong>Cons</strong>: Independence assumption rarely holds.</td>
+              </tr>
+              <tr>
+                <td><strong>K-Means Clustering</strong></td>
+                <td>Unsupervised Clustering</td>
+                <td>Minimizes Within-Cluster Sum of Squares (Inertia: Σ||x_i - μ_k||²)</td>
+                <td>Spherical, equal-variance clusters; sensitive to initialization.</td>
+                <td><code>n_clusters (k)</code>, <code>init='k-means++'</code>, <code>n_init</code></td>
+                <td><strong>Pros</strong>: Fast O(T*k*n). <strong>Cons</strong>: Must pick k in advance (Elbow Method), outlier sensitive.</td>
+              </tr>
+              <tr>
+                <td><strong>Principal Component Analysis (PCA)</strong></td>
+                <td>Dimensionality Reduction</td>
+                <td>Orthogonal projection maximizing variance via Eigenvalues of Covariance Matrix</td>
+                <td>Linear relationships among variables. Large variance = high information.</td>
+                <td><code>n_components</code></td>
+                <td><strong>Pros</strong>: Removes multicollinearity, compresses data. <strong>Cons</strong>: Components lose original interpretability.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: METRICS & CONFUSION MATRIX -->
+    <section id="metrics-matrix" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>🎯</span> 6. Evaluation Metrics & Confusion Matrix Cheat Sheet</div>
+        <div class="section-subtitle">Classification & Regression Performance Benchmarks</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2x2 Confusion Matrix Foundation</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Confusion Matrix</th>
+                <th>Predicted Positive (1)</th>
+                <th>Predicted Negative (0)</th>
+                <th>Row Totals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Actual Positive (1)</strong></td>
+                <td><span class="badge badge-green">True Positive (TP)</span></td>
+                <td><span class="badge badge-red">False Negative (FN)</span> <em>(Type II Error)</em></td>
+                <td>All Actual Positives (P = TP + FN)</td>
+              </tr>
+              <tr>
+                <td><strong>Actual Negative (0)</strong></td>
+                <td><span class="badge badge-red">False Positive (FP)</span> <em>(Type I Error)</em></td>
+                <td><span class="badge badge-green">True Negative (TN)</span></td>
+                <td>All Actual Negatives (N = FP + TN)</td>
+              </tr>
+              <tr>
+                <td><strong>Column Totals</strong></td>
+                <td>All Predicted Positives (TP + FP)</td>
+                <td>All Predicted Negatives (FN + TN)</td>
+                <td>Total Samples (N_total)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-title" style="margin-top: 1.5rem;">Metric Formulas & Optimization Scenarios</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Formula</th>
+                <th>When to Prioritize</th>
+                <th>Exam Trap to Remember</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Accuracy</strong></td>
+                <td><code>(TP + TN) / (TP + TN + FP + FN)</code></td>
+                <td>Balanced datasets where all classes are equally important.</td>
+                <td><strong>Useless on imbalanced data!</strong> 99% accuracy on 99:1 disease imbalance is trivial.</td>
+              </tr>
+              <tr>
+                <td><strong>Precision</strong></td>
+                <td><code>TP / (TP + FP)</code></td>
+                <td>When <strong>False Positives (FP)</strong> are costly (e.g. Email spam filter, YouTube copyright flags).</td>
+                <td>A high threshold gives high precision but may miss many true positives.</td>
+              </tr>
+              <tr>
+                <td><strong>Recall (Sensitivity)</strong></td>
+                <td><code>TP / (TP + FN)</code></td>
+                <td>When <strong>False Negatives (FN)</strong> are fatal (e.g. Cancer detection, Fraud detection, Airport security).</td>
+                <td>Predicting everything as Positive gives 100% Recall, but destroys Precision!</td>
+              </tr>
+              <tr>
+                <td><strong>Specificity</strong></td>
+                <td><code>TN / (TN + FP)</code></td>
+                <td>True Negative Rate: Proportion of actual negatives correctly identified.</td>
+                <td>False Positive Rate (FPR) = <code>1 - Specificity</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>F1-Score</strong></td>
+                <td><code>2 * (Precision * Recall) / (Precision + Recall)</code></td>
+                <td>Harmonic mean when you need a balanced trade-off between Precision and Recall.</td>
+                <td>Penalizes extreme imbalances much more harshly than arithmetic mean.</td>
+              </tr>
+              <tr>
+                <td><strong>ROC-AUC</strong></td>
+                <td>Area Under TPR vs FPR curve across all thresholds</td>
+                <td>Threshold-independent evaluation of classification separation power.</td>
+                <td>AUC = 0.5 means pure random coin toss; AUC = 1.0 means perfect separation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-title" style="margin-top: 1.5rem;">Regression Metrics Master Summary</div>
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Formula</th>
+                <th>Units</th>
+                <th>Key Property</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MAE</strong> (Mean Absolute Error)</td>
+                <td><code>(1/n) * Σ |y_i - ŷ_i|</code></td>
+                <td>Same as target y</td>
+                <td>Linear penalty; robust to extreme outliers.</td>
+              </tr>
+              <tr>
+                <td><strong>MSE</strong> (Mean Squared Error)</td>
+                <td><code>(1/n) * Σ (y_i - ŷ_i)²</code></td>
+                <td>Squared units (y²)</td>
+                <td>Penalizes large errors heavily; foundation of OLS calculus.</td>
+              </tr>
+              <tr>
+                <td><strong>RMSE</strong> (Root Mean Squared Error)</td>
+                <td><code>√MSE</code></td>
+                <td>Same as target y</td>
+                <td>Standard metric; directly comparable to target variable magnitude.</td>
+              </tr>
+              <tr>
+                <td><strong>R²</strong> (Coeff of Determination)</td>
+                <td><code>1 - (SS_res / SS_tot)</code></td>
+                <td>Unitless (&le; 1)</td>
+                <td>% of variance explained; <strong>always increases when adding new features</strong>!</td>
+              </tr>
+              <tr>
+                <td><strong>Adjusted R²</strong></td>
+                <td><code>1 - [(1 - R²)(n - 1) / (n - p - 1)]</code></td>
+                <td>Unitless (&le; 1)</td>
+                <td>Penalizes useless predictor features p; only increases if feature truly adds value!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: BIAS-VARIANCE TRADEOFF -->
+    <section id="bias-variance" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>⚖️</span> 7. Bias-Variance Tradeoff & Diagnostics</div>
+        <div class="section-subtitle">Identifying Underfitting vs Overfitting & Prescribing Exact Remedies</div>
+      </div>
+
+      <div class="card">
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Diagnostic Dimension</th>
+                <th>High Bias (Underfitting)</th>
+                <th>High Variance (Overfitting)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Model Complexity</strong></td>
+                <td>Too simple (e.g., straight line on quadratic data)</td>
+                <td>Too complex (e.g., degree-20 polynomial, unpruned tree)</td>
+              </tr>
+              <tr>
+                <td><strong>Training Error</strong></td>
+                <td><span class="badge badge-red">High</span></td>
+                <td><span class="badge badge-green">Very Low (Near zero)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Validation / Test Error</strong></td>
+                <td><span class="badge badge-red">High</span></td>
+                <td><span class="badge badge-red">High (Large gap with training)</span></td>
+              </tr>
+              <tr>
+                <td><strong>What the Model Learned</strong></td>
+                <td>Failed to capture underlying patterns/signal</td>
+                <td>Memorized training noise and random fluctuations</td>
+              </tr>
+              <tr>
+                <td><strong>Actionable Remedies</strong></td>
+                <td>
+                  • Increase model complexity (higher degree, deeper tree)<br>
+                  • Engineer and add new polynomial/interaction features<br>
+                  • Decrease regularization strength (decrease λ / increase C)
+                </td>
+                <td>
+                  • Gather more training data<br>
+                  • Apply Regularization: <strong>L1 Lasso</strong> (feature selection) or <strong>L2 Ridge</strong> (weight decay)<br>
+                  • Prune decision trees (limit <code>max_depth</code>, increase <code>min_samples_split</code>)<br>
+                  • Use Ensemble Dropout / Bagging (Random Forests)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">💡 Regularization Math: L1 (Lasso) vs L2 (Ridge)</div>
+          <div>• <strong>Ridge Regression (L2)</strong>: <code>Loss = MSE + λ * Σ (w_j)²</code></div>
+          <div>  Shrinks coefficients toward zero asymptotically, but <strong>never sets them exactly to zero</strong>. Great for handling multicollinear features.</div>
+          <div>• <strong>Lasso Regression (L1)</strong>: <code>Loss = MSE + λ * Σ |w_j|</code></div>
+          <div>  Forces coefficients of useless features to become <strong>exactly zero</strong>, performing automated <strong>sparse feature selection</strong>!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: 12-STEP FEATURE ENGINEERING -->
+    <section id="feature-engineering" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>⚙️</span> 8. The 12-Step Feature Engineering Playbook</div>
+        <div class="section-subtitle">Synthesized from CDAC Hands-on Labs (Day 5 & 6)</div>
+      </div>
+
+      <div class="card">
+        <div class="table-container">
+          <table class="rev-table">
+            <thead>
+              <tr>
+                <th>Step #</th>
+                <th>Technique</th>
+                <th>Why It Matters</th>
+                <th>Scikit-Learn / Pandas Implementation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1</strong></td>
+                <td>Zero-Variance Removal</td>
+                <td>Features with constant values carry zero information.</td>
+                <td><code>VarianceThreshold(threshold=0.0)</code></td>
+              </tr>
+              <tr>
+                <td><strong>2</strong></td>
+                <td>Quasi-Constant Removal</td>
+                <td>Features where &gt;99% of entries are identical add noise.</td>
+                <td><code>VarianceThreshold(threshold=0.01)</code></td>
+              </tr>
+              <tr>
+                <td><strong>3</strong></td>
+                <td>Multicollinearity Filtering</td>
+                <td>Redundant features inflate variance in linear coefficients.</td>
+                <td><code>df.corr().abs() &gt; 0.85</code> drop redundant col</td>
+              </tr>
+              <tr>
+                <td><strong>4</strong></td>
+                <td>Missing Value Imputation</td>
+                <td>Algorithms crash on NaN; preserve record integrity.</td>
+                <td><code>SimpleImputer(strategy='median')</code></td>
+              </tr>
+              <tr>
+                <td><strong>5</strong></td>
+                <td>Outlier Treatment</td>
+                <td>Extreme values distort gradient descent and mean.</td>
+                <td>IQR clipping: <code>np.clip(s, lower_fence, upper_fence)</code></td>
+              </tr>
+              <tr>
+                <td><strong>6</strong></td>
+                <td>One-Hot Encoding</td>
+                <td>Convert nominal categories to binary vectors.</td>
+                <td><code>pd.get_dummies(df, drop_first=True)</code></td>
+              </tr>
+              <tr>
+                <td><strong>7</strong></td>
+                <td>High-Cardinality Handling</td>
+                <td>Prevents dimensionality explosion for postcodes/IDs.</td>
+                <td>Frequency encoding: <code>df['zip'].map(df['zip'].value_counts())</code></td>
+              </tr>
+              <tr>
+                <td><strong>8</strong></td>
+                <td>Power Transformations</td>
+                <td>Normalizes heavily skewed continuous feature tails.</td>
+                <td><code>np.log1p(x)</code> or <code>PowerTransformer(method='yeo-johnson')</code></td>
+              </tr>
+              <tr>
+                <td><strong>9</strong></td>
+                <td>Scaling & Normalization</td>
+                <td>Equalizes gradient step sizes and distance metrics.</td>
+                <td><code>StandardScaler()</code> (Z-score) or <code>MinMaxScaler()</code> [0, 1]</td>
+              </tr>
+              <tr>
+                <td><strong>10</strong></td>
+                <td>Temporal Decomposition</td>
+                <td>Extracts cyclic signals from raw timestamps.</td>
+                <td><code>df['date'].dt.year, df['date'].dt.dayofweek</code></td>
+              </tr>
+              <tr>
+                <td><strong>11</strong></td>
+                <td>Binning & Discretization</td>
+                <td>Turns noisy continuous values into robust ranges.</td>
+                <td><code>pd.cut(df['age'], bins=[0, 18, 35, 60, 100])</code></td>
+              </tr>
+              <tr>
+                <td><strong>12</strong></td>
+                <td>Automated Feature Selection</td>
+                <td>Keeps only top K most predictive features.</td>
+                <td><code>SelectKBest(score_func=f_classif, k=10)</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: HIGH-YIELD EXAM TRAPS -->
+    <section id="exam-traps" class="revision-section">
+      <div class="section-title-box">
+        <div class="section-title"><span>⚠️</span> 9. High-Yield Exam Pitfalls & Examiner Traps</div>
+        <div class="section-subtitle">Top 5 Conceptual Traps Tested in CDAC Multiple Choice & Viva Exams</div>
+      </div>
+
+      <div class="card">
+        <div class="trap-box">
+          <div class="trap-title">🚨 Trap 1: The Accuracy Paradox on Imbalanced Datasets</div>
+          <div><strong>The Trap</strong>: A candidate builds a model for a credit card fraud dataset with 990 valid transactions and 10 fraud transactions (99:1 ratio). The model outputs 99% accuracy. Is it a great model?</div>
+          <div><strong>The Reality</strong>: <strong>NO!</strong> A dumb model that predicts "Valid" for every single transaction will achieve 99% accuracy while having a <strong>Recall of 0%</strong> (detecting zero frauds). Always evaluate with <strong>Precision, Recall, F1-Score, or PR-AUC</strong> on imbalanced datasets!</div>
+        </div>
+
+        <div class="trap-box">
+          <div class="trap-title">🚨 Trap 2: Data Leakage in Feature Scaling & Imputation</div>
+          <div><strong>The Trap</strong>: Calling <code>scaler.fit_transform(X)</code> on the entire dataset BEFORE doing <code>train_test_split(X, y)</code>.</div>
+          <div><strong>The Reality</strong>: This leaks test set mean and variance into the training process! Always perform <code>train_test_split</code> first. Then call <code>scaler.fit_transform(X_train)</code>, and only <code>scaler.transform(X_test)</code> on the test data!</div>
+        </div>
+
+        <div class="trap-box">
+          <div class="trap-title">🚨 Trap 3: The Dummy Variable Trap (Multicollinearity)</div>
+          <div><strong>The Trap</strong>: Converting a categorical column with 4 distinct categories into 4 one-hot columns without dropping one.</div>
+          <div><strong>The Reality</strong>: The 4th column is an exact linear combination of the first three (<code>col_4 = 1 - col_1 - col_2 - col_3</code>). This causes perfect multicollinearity, making the matrix <code>(X^T * X)</code> non-invertible for Linear and Logistic Regression. Always use <code>drop_first=True</code>!</div>
+        </div>
+
+        <div class="trap-box">
+          <div class="trap-title">🚨 Trap 4: Correlation Does NOT Imply Causation & r = 0 Trap</div>
+          <div><strong>The Trap</strong>: If Pearson correlation <code>r = 0</code>, does it mean the two variables are completely independent?</div>
+          <div><strong>The Reality</strong>: <strong>NO!</strong> Pearson's <code>r</code> only measures <strong>linear</strong> relationships. For a non-linear relationship like <code>y = x²</code> on a symmetric domain <code>[-5, 5]</code>, the Pearson correlation is exactly <code>0</code>, yet <code>y</code> is perfectly determined by <code>x</code>!</div>
+        </div>
+
+        <div class="trap-box">
+          <div class="trap-title">🚨 Trap 5: Misinterpreting P-Values as Probability of H₀ Being True</div>
+          <div><strong>The Trap</strong>: "A p-value of 0.03 means there is a 3% chance that the null hypothesis is true."</div>
+          <div><strong>The Reality</strong>: <strong>FALSE!</strong> A p-value is the probability of observing data at least as extreme as our sample, <strong>assuming that H₀ is already true</strong>: <code>P(Data | H₀)</code>, NOT <code>P(H₀ | Data)</code>.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Theme Toggle Functionality
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const STORAGE_KEY = 'cdac_ml_stats_quiz_session';
+
+    function initTheme() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const state = JSON.parse(saved);
+          if (state.theme === 'dark') {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+            if (themeIcon) themeIcon.textContent = '☀️';
+            return;
+          }
+        }
+      } catch (e) {}
+      document.documentElement.classList.add('light');
+      if (themeIcon) themeIcon.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const htmlEl = document.documentElement;
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        themeIcon.textContent = '🌙';
+      } else {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        themeIcon.textContent = '☀️';
+      }
+    });
+
+    initTheme();
+  </script>
+</body>
+</html>
