@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Learning & Statistics Interactive MCQ Quiz</title>
+  <meta name="description" content="Interactive MCQ quiz application covering 66 questions from Machine Learning and Statistics lectures with answers and detailed explanations.">
+  <meta name="vcp-identifier" content="vcp&#95;3xywY33XKDavhLqxYj218H11PPyubYJafxQ2zo4kIwRLgDnqtN0b5iar">
+  <!-- Tailwind CSS fallback & font -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #273549;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --success-border: #059669;
+      --error: #ef4444;
+      --error-bg: rgba(239, 68, 68, 0.15);
+      --error-border: #dc2626;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    html.light {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-hover: #f8fafc;
+      --surface-border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --error-border: #ef4444;
+      --card-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      line-height: 1.6;
+    }
+
+    /* Container */
+    .app-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem 1rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Header Bar */
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #6366f1, #3b82f6);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    /* Sticky Progress Header */
+    .progress-section {
+      background-color: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--surface-border);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stat-pill .val {
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+    }
+
+    .val-score { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+    .val-correct { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .val-wrong { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .val-acc { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-border);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #10b981);
+      border-radius: 9999px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Filters Bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.35rem;
+      background-color: var(--surface);
+      padding: 0.3rem;
+      border-radius: 10px;
+      border: 1px solid var(--surface-border);
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background-color: var(--accent);
+      color: white;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
+    }
+
+    .view-toggle-area {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    select.select-filter {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* Question Card */
+    .quiz-card {
+      background-color: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--surface-border);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.825rem;
+    }
+
+    .session-badge {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+
+    .track-tag {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-muted);
+      border: 1px solid var(--surface-border);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .question-prompt {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .option-btn {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 0.95rem 1.15rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      outline: none;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: var(--surface-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .option-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--surface-border);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .option-text {
+      flex: 1;
+      padding-top: 2px;
+    }
+
+    /* State styles for answered options */
+    .option-btn.correct {
+      background-color: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--text) !important;
+    }
+
+    .option-btn.correct .option-key {
+      background-color: var(--success) !important;
+      color: white !important;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--error-bg) !important;
+      border-color: var(--error) !important;
+      color: var(--text) !important;
+    }
+
+    .option-btn.wrong .option-key {
+      background-color: var(--error) !important;
+      color: white !important;
+    }
+
+    .option-btn.dimmed {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      display: none;
+      background-color: rgba(99, 102, 241, 0.08);
+      border: 1.5px solid rgba(99, 102, 241, 0.25);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .explanation-box.is-correct {
+      border-left-color: var(--success);
+      background-color: var(--success-bg);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .explanation-box.is-wrong {
+      border-left-color: var(--error);
+      background-color: var(--error-bg);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .explanation-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .explanation-body {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    /* Navigation footer inside card mode */
+    .card-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--surface-border);
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.55rem 1.15rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* Jump Grid Drawer */
+    .grid-toggle-box {
+      background-color: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--surface-border);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .grid-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .jump-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+      gap: 0.45rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 0.25rem 0.25rem 0.25rem 0;
+    }
+
+    .jump-btn {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .jump-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .jump-btn.current {
+      border-color: var(--accent);
+      color: var(--accent);
+      background-color: rgba(99, 102, 241, 0.15);
+      font-weight: 700;
+    }
+
+    .jump-btn.answered-correct {
+      background-color: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .jump-btn.answered-wrong {
+      background-color: var(--error-bg);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    /* Info / Metadata Drawer */
+    .meta-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .meta-title {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .meta-badge {
+      font-family: monospace;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      padding: 0.2rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 0.8rem;
+    }
+
+    .meta-list {
+      margin-left: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .meta-list li {
+      margin-bottom: 0.25rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .header-inner { padding: 0.75rem; }
+      .app-container { padding: 1rem 0.5rem 2rem 0.5rem; }
+      .quiz-card { padding: 1.25rem; border-radius: 12px; }
+      .question-prompt { font-size: 1.05rem; }
+      .option-btn { padding: 0.8rem 0.9rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header>
+    <div class="header-inner">
+      <div class="logo-area">
+        <span class="logo-badge">CDAC ML & STATS</span>
+        <h1 class="logo-title">Interactive MCQ Quiz</h1>
+      </div>
+      <div class="header-actions">
+        <button id="toggleInfoBtn" class="btn-icon" title="View Source Information & Metadata">
+          <span>ℹ️</span> Sources
+        </button>
+        <button id="themeToggleBtn" class="btn-icon" title="Toggle Light/Dark Theme">
+          <span id="themeIcon">☀️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Source Metadata Banner (Collapsible) -->
+    <div id="metaInfoPanel" class="meta-card" style="display: none;">
+      <div class="meta-title">
+        <span>📚</span> Source Files & Extraction Provenance
+        <span class="meta-badge">vcp&#95;3xywY33XKDavhLqxYj218H11PPyubYJafxQ2zo4kIwRLgDnqtN0b5iar</span>
+      </div>
+      <p>This quiz compiles <strong>66 verified MCQs</strong> extracted directly from the official CDAC presentation decks and notes:</p>
+      <ul class="meta-list">
+        <li><strong>Machine Learning Decks (Sessions 1-6)</strong>: <code>Session 1-ML-intro-fundamental-types</code>, <code>Session 2 - Data-Preprocessing</code>, <code>Session 3 - ML-Process-End-to-End</code>, <code>Session 4 - Supervised-learning</code>, <code>Session 5 - Unsupervised-learning</code>, <code>Session 6 - Semi-supervised-reinforcement</code>.</li>
+        <li><strong>Statistics Decks (Sessions 1-11)</strong>: <code>Session 1 Dataframes in Python</code>, <code>Session 2 Introduction to Descriptive Statistics</code>, <code>Session 3 Visualization</code>, <code>Session 4 Understanding Data Features</code>, <code>Session 5 Data Distributions</code>, <code>Session 6 Probability Theory</code>, <code>Session 7 Probability Distributions</code>, <code>Session 8 Types of sampling methods</code>, <code>Session 9 Hypotheiss testing formulation</code>, <code>Session 10 Hypothesis Testing using Statistical Tests</code>, <code>Session 11 A/B Testing in Python</code>.</li>
+        <li><strong>Repository Reference Files</strong>: <code>notes/ML/ML_MCQs_with_Answers_and_Explanations.txt</code>, <code>notes/statistics/Statistics_MCQs_with_Answers_and_Explanations.txt</code>, and <code>notes/All_MCQs_ML_and_Statistics_with_Answers.txt</code>.</li>
+      </ul>
+      <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
+        Author: <code>abs6187 &lt;23f2000876@ds.study.iitm.ac.in&gt;</code> • Workspace: <code>ML_CDAC_ALILOG</code>
+      </div>
+    </div>
+
+    <!-- Live Progress & Stats Dashboard -->
+    <div class="progress-section">
+      <div class="stats-row">
+        <div class="stat-pill">
+          <span>Question:</span>
+          <span id="currentQDisplay" class="val val-score">1 / 66</span>
+        </div>
+        <div class="stat-pill">
+          <span>Correct:</span>
+          <span id="correctScoreDisplay" class="val val-correct">0</span>
+        </div>
+        <div class="stat-pill">
+          <span>Incorrect:</span>
+          <span id="wrongScoreDisplay" class="val val-wrong">0</span>
+        </div>
+        <div class="stat-pill">
+          <span>Accuracy:</span>
+          <span id="accuracyDisplay" class="val val-acc">0%</span>
+        </div>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progressBarFill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Filter & View Controls -->
+    <div class="controls-bar">
+      <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">All (66)</button>
+        <button class="filter-btn" data-filter="Machine Learning">ML (38)</button>
+        <button class="filter-btn" data-filter="Statistics">Statistics (28)</button>
+      </div>
+
+      <div class="view-toggle-area">
+        <select id="sessionSelect" class="select-filter">
+          <option value="all">All Sessions</option>
+        </select>
+        <button id="shuffleBtn" class="btn-icon" title="Shuffle Questions">🔀 Shuffle</button>
+        <button id="resetQuizBtn" class="btn-icon" title="Reset all answers">🔄 Reset</button>
+      </div>
+    </div>
+
+    <!-- Question Jump Grid -->
+    <div class="grid-toggle-box">
+      <div class="grid-header">
+        <span>Question Navigator</span>
+        <span id="gridSummary" style="font-size: 0.8rem; color: var(--text-muted);">0 / 66 answered</span>
+      </div>
+      <div id="jumpGrid" class="jump-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Main Active Question Area (Card Mode) -->
+    <div id="quizCardContainer">
+      <!-- Injected by JavaScript -->
+    </div>
+
+  </div>
+
+  <script>
+    // Embedded Question Database (66 Verified Questions)
+    const rawQuestions = [
+  {
+    "id": 1,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "What is the primary characteristic that distinguishes Machine Learning from Traditional Programming?",
+    "options": [
+      "A) ML focuses on explicit rules, while Traditional Programming uses data-driven learning.",
+      "B) ML systems improve over time with more data, unlike Traditional Programming.",
+      "C) Traditional Programming is well-suited for complex tasks with large datasets.",
+      "D) ML is rigid and requires human experts to anticipate all scenarios."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) ML systems improve over time with more data, unlike Traditional Programming.",
+    "explanation": "Machine learning systems are designed to improve their performance as they are exposed to more data, a fundamental difference from traditional programs that maintain a consistent performance level unless explicitly updated with new hard-coded rules."
+  },
+  {
+    "id": 2,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "Which type of Machine Learning is characterized by training models on unlabeled data to discover hidden patterns and structures?",
+    "options": [
+      "A) Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Semi-Supervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Unsupervised Learning",
+    "explanation": "Unsupervised learning specifically deals with unlabeled data, aiming to find inherent structures, patterns, or groupings within it without any predefined output targets."
+  },
+  {
+    "id": 3,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "An agent learning to play a complex video game through trial and error, receiving points for good moves and penalties for bad ones, is an example of which type of machine learning?",
+    "options": [
+      "A) Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Semi-Supervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Reinforcement Learning",
+    "explanation": "Reinforcement learning involves an agent interacting with an environment, learning through rewards and penalties to determine optimal actions in a sequence of decisions, which perfectly describes the scenario of an agent playing a game."
+  },
+  {
+    "id": 4,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "Which of the following is NOT a primary goal of data preprocessing in machine learning?",
+    "options": [
+      "a) To ensure data is in a suitable format for model training.",
+      "b) To reduce the computational cost of model deployment.",
+      "c) To improve the accuracy and robustness of machine learning models.",
+      "d) To handle inconsistencies and errors within the dataset."
+    ],
+    "correctIndex": 1,
+    "answerText": "b) To reduce the computational cost of model deployment.",
+    "explanation": "While some preprocessing steps like dimensionality reduction can indirectly help reduce deployment costs by simplifying models, the primary goals of preprocessing are focused on data quality, cleaning, and format before deployment, directly impacting model training and performance."
+  },
+  {
+    "id": 5,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "A dataset for a credit risk model contains numerous missing values in the 'Income' column. Which of the following imputation methods would typically introduce the least bias if the income distribution is skewed and contains outliers?",
+    "options": [
+      "a) Replacing missing values with the mean income.",
+      "b) Removing all rows with missing income values.",
+      "c) Replacing missing values with the median income.",
+      "d) Using a constant value like 0 for all missing incomes."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Replacing missing values with the median income.",
+    "explanation": "If the data distribution is skewed or contains outliers, the mean can be heavily influenced by these extreme values, leading to a biased imputation. The median is a more robust measure of central tendency in such cases, making it a better choice than the mean. Removing rows (b) can lead to significant data loss, and using a constant (d) can distort the distribution and introduce artificial patterns."
+  },
+  {
+    "id": 6,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "You are preparing a dataset for a house price prediction model. One feature, 'Square Footage', shows a few extremely large values compared to the rest. Which action is generally recommended for handling these potential outliers?",
+    "options": [
+      "a) Always remove the rows containing these extreme values.",
+      "b) Transform the 'Square Footage' feature using a logarithmic scale.",
+      "c) Replace the extreme values with the mean of the 'Square Footage' column.",
+      "d) Do nothing, as machine learning models can inherently handle outliers."
+    ],
+    "correctIndex": 1,
+    "answerText": "b) Transform the 'Square Footage' feature using a logarithmic scale.",
+    "explanation": "Transforming skewed features like 'Square Footage' with a logarithmic scale can effectively reduce the impact of large outliers, making the distribution more symmetric and suitable for many machine learning models without discarding valuable data points (a) or introducing potential bias with mean replacement (c)."
+  },
+  {
+    "id": 7,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "You have a categorical feature 'Country' with 150 unique values in a customer dataset. Which encoding method would be most appropriate to prevent a drastic increase in the dataset's dimensionality while capturing the categorical information?",
+    "options": [
+      "a) One-Hot Encoding.",
+      "b) Ordinal Encoding (assigning a random integer to each country).",
+      "c) Label Encoding (assigning integers based on alphabetical order).",
+      "d) Binary Encoding."
+    ],
+    "correctIndex": 3,
+    "answerText": "d) Binary Encoding.",
+    "explanation": "One-Hot Encoding (a) would create 150 new columns, significantly increasing dimensionality and potentially leading to sparsity issues. Ordinal/Label encoding (b, c) would impose an artificial order on nominal data, which can negatively affect model performance. Binary encoding converts integers to binary codes and splits them into separate columns, significantly reducing the dimensionality compared to one-hot encoding while avoiding false ordinality."
+  },
+  {
+    "id": 8,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "Which of the following scenarios is an example of feature construction?",
+    "options": [
+      "a) Applying StandardScaler to normalize a numerical feature.",
+      "b) Imputing missing values in a column using the KNN imputer.",
+      "c) Deriving 'age_in_years' from a 'date_of_birth' column.",
+      "d) Removing a feature that has a low correlation with the target variable."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Deriving 'age_in_years' from a 'date_of_birth' column.",
+    "explanation": "Feature construction involves creating new features from existing data to provide more relevant information to the model. Deriving 'age_in_years' from 'date_of_birth' is a classic example. Scaling (a) is feature transformation, imputation (b) is data cleaning, and removing features (d) is feature selection."
+  },
+  {
+    "id": 9,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "What is the primary motivation for applying Principal Component Analysis (PCA) during data preprocessing?",
+    "options": [
+      "a) To transform non-linear relationships into linear ones.",
+      "b) To handle missing values in a high-dimensional dataset.",
+      "c) To reduce the number of features while retaining most of the data's variance.",
+      "d) To encode categorical variables into numerical values."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) To reduce the number of features while retaining most of the data's variance.",
+    "explanation": "PCA is a linear dimensionality reduction technique. Its main goal is to project high-dimensional data onto a lower-dimensional space, capturing the maximum variance in the data with fewer orthogonal components. This helps combat the curse of dimensionality, reduces computational complexity, and can mitigate multicollinearity."
+  },
+  {
+    "id": 10,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "In a dataset used to train a fraud detection model, 99% of transactions are legitimate and only 1% are fraudulent. What is this common data preprocessing challenge called, and which technique is commonly used to address it?",
+    "options": [
+      "a) High Dimensionality; addressed using PCA.",
+      "b) Outlier Presence; addressed by removing extreme values.",
+      "c) Imbalanced data; addressed using techniques like SMOTE (Synthetic Minority Over-sampling Technique).",
+      "d) Missing Data; addressed using mean imputation."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Imbalanced data; addressed using techniques like SMOTE (Synthetic Minority Over-sampling Technique).",
+    "explanation": "A significant difference in the number of instances of different classes (99% vs. 1%) is known as class imbalance. It can lead to models that perform poorly on the minority class. Techniques like SMOTE (Synthetic Minority Over-sampling Technique), random over-sampling, or under-sampling are commonly used during preprocessing to balance the class distribution."
+  },
+  {
+    "id": 11,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "In the Problem Formulation stage of a machine learning project, which of the following is the least likely primary consideration?",
+    "options": [
+      "A) Defining clear and measurable business goals.",
+      "B) Determining if machine learning is the appropriate solution.",
+      "C) Identifying specific algorithms for model training.",
+      "D) Establishing key performance indicators (KPIs) for project success."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Identifying specific algorithms for model training.",
+    "explanation": "The Problem Formulation stage focuses on the high-level business understanding, defining goals, determining project feasibility with ML, and establishing KPIs. Algorithm selection is premature at this stage and typically occurs later during the Model Training and Evaluation phase."
+  },
+  {
+    "id": 12,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "Which of the following activities is primarily associated with the \"Data Exploration\" phase rather than \"Data Collection\" or \"Feature Engineering\"?",
+    "options": [
+      "A) Sourcing data from various databases and APIs.",
+      "B) Creating new features by combining existing ones.",
+      "C) Visualizing data distributions and relationships to understand underlying patterns.",
+      "D) Handling missing values and outliers in the dataset."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Visualizing data distributions and relationships to understand underlying patterns.",
+    "explanation": "Data Exploration (EDA) primarily involves understanding the dataset's structure, summary statistics, data distributions, and correlations, often through visualization. Sourcing data is part of Data Collection (A). Creating new features (B) and handling missing values/outliers (D) are core activities of Feature Engineering and Data Preprocessing, respectively."
+  },
+  {
+    "id": 13,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "During the Model Training and Evaluation stage, why is \"Hyperparameter Tuning\" distinct from \"Model Training\"?",
+    "options": [
+      "A) Model training optimizes internal model parameters, while hyperparameter tuning optimizes external algorithm settings.",
+      "B) Hyperparameter tuning occurs after the model has been deployed, while model training happens beforehand.",
+      "C) Model training involves selecting evaluation metrics, while hyperparameter tuning evaluates model performance.",
+      "D) Hyperparameter tuning is only applicable to unsupervised learning models, unlike model training."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Model training optimizes internal model parameters, while hyperparameter tuning optimizes external algorithm settings.",
+    "explanation": "Model training is the process where the algorithm learns its internal parameters (e.g., weights in neural networks, split points in decision trees) directly from the training data. Hyperparameter tuning involves finding the best values for settings that control the learning process itself (e.g., learning rate, number of trees) and are set before training begins."
+  },
+  {
+    "id": 14,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "What is the primary purpose of implementing \"continuous monitoring\" after a machine learning model has been deployed?",
+    "options": [
+      "A) To continuously retrain the model on the original training data.",
+      "B) To detect model drift and ensure the model remains accurate over time in a live environment.",
+      "C) To generate explanations for all individual predictions made by the model.",
+      "D) To automate the problem formulation process for future projects."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) To detect model drift and ensure the model remains accurate over time in a live environment.",
+    "explanation": "Continuous monitoring is crucial in the Model Deployment and Maintenance stage to track the model's performance in the real world. Over time, changes in input data distribution (data drift) or the relationship between inputs and outputs (concept drift) can degrade performance, necessitating monitoring to trigger retraining or updates."
+  },
+  {
+    "id": 15,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "In which stage of the machine learning process would \"assembling a multidisciplinary team\" be most critical for establishing a solid foundation?",
+    "options": [
+      "A) Model Training and Evaluation",
+      "B) Problem Formulation",
+      "C) Feature Engineering",
+      "D) Model Deployment"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Problem Formulation",
+    "explanation": "Assembling a team with diverse expertise (domain experts, data scientists, engineers, business stakeholders) is vital right at the beginning during Problem Formulation to ensure business alignment, technical feasibility, and realistic goal setting."
+  },
+  {
+    "id": 16,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "A data scientist notices that their trained model performs exceptionally well on the training data but poorly on the validation data. Which action, commonly part of the Model Training and Evaluation stage, is most appropriate to address this issue?",
+    "options": [
+      "A) Collecting more training data with similar distribution.",
+      "B) Immediately deploying the model to production to test on real-world data.",
+      "C) Conducting hyperparameter tuning or exploring ensemble methods to reduce overfitting.",
+      "D) Re-evaluating the business objectives in the Problem Formulation stage."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Conducting hyperparameter tuning or exploring ensemble methods to reduce overfitting.",
+    "explanation": "High performance on training data coupled with poor performance on validation data is a classic sign of overfitting. Techniques like regularization (tuned via hyperparameters) and ensemble methods are standard approaches to mitigate overfitting during the Model Training and Evaluation stage. Deploying an overfitted model (B) is risky."
+  },
+  {
+    "id": 17,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "Which of the following is a key consideration during the Model Deployment stage to ensure the solution can handle real-world demands?",
+    "options": [
+      "A) Exploratory Data Analysis to identify anomalies in new data.",
+      "B) Detailed documentation of the business problem formulation.",
+      "C) Ensuring scalability to handle varying workloads.",
+      "D) Selecting the optimal loss function for algorithm training."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Ensuring scalability to handle varying workloads.",
+    "explanation": "Model Deployment requires addressing non-functional requirements such as scalability (handling varying user request volumes), latency (response time), reliability, and integration into existing production systems. Loss function selection (D) occurs during training, EDA (A) occurs earlier, and business problem documentation (B) is finalized during formulation."
+  },
+  {
+    "id": 18,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "Which of the following best describes the fundamental characteristic of data used in supervised learning?",
+    "options": [
+      "A) Data is completely unlabeled and used to find hidden patterns.",
+      "B) Data includes a mix of labeled and unlabeled instances.",
+      "C) Data is labeled, meaning each input is paired with a known target output.",
+      "D) Data consists of an agent interacting with an environment through rewards."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Data is labeled, meaning each input is paired with a known target output.",
+    "explanation": "Supervised learning fundamentally relies on labeled datasets, where the algorithm learns a mapping function from input features to known target outputs (labels)."
+  },
+  {
+    "id": 19,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A financial institution wants to develop a model to predict the credit score (a numerical value between 300 and 850) of loan applicants based on their financial history. What type of supervised learning task is this, and which algorithm could be a suitable initial choice?",
+    "options": [
+      "A) Classification; Logistic Regression",
+      "B) Regression; Linear Regression",
+      "C) Clustering; K-Means",
+      "D) Dimensionality Reduction; PCA"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Regression; Linear Regression",
+    "explanation": "Predicting a continuous numerical value (credit score between 300 and 850) is a regression task. Linear Regression is a fundamental and common algorithm suitable as an initial choice for regression problems."
+  },
+  {
+    "id": 20,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "In the context of evaluating supervised learning algorithms, if a model's decision-making process needs to be clearly understood and explained to stakeholders (e.g., in medical diagnosis), which factor would be prioritized?",
+    "options": [
+      "A) Computational Complexity",
+      "B) Scalability",
+      "C) Interpretability",
+      "D) Robustness"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Interpretability",
+    "explanation": "Interpretability refers to the ease with which a human can understand how a model makes its predictions. In high-stakes applications like healthcare or finance, interpretability is often prioritized to ensure trust, transparency, and regulatory compliance."
+  },
+  {
+    "id": 21,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A supervised learning model is being developed to distinguish between benign and malignant tumors based on patient data. This involves assigning each case to one of two distinct categories. Which of the following algorithms is not typically used for such a classification task?",
+    "options": [
+      "A) Logistic Regression",
+      "B) Support Vector Machines (SVM)",
+      "C) Linear Regression",
+      "D) Random Forest"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Linear Regression",
+    "explanation": "Linear Regression is designed for predicting continuous numerical values, not categorical outcomes. While it could theoretically be thresholded, Logistic Regression (A), SVM (B), and Random Forest (D) are specifically designed and well-suited for classification tasks like binary tumor categorization."
+  },
+  {
+    "id": 22,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A company is building a spam email detector. They have a dataset of millions of emails, many of which are unlabeled, but a smaller subset has been manually labeled as 'spam' or 'not spam'. If the goal is to make use of both labeled and unlabeled data for training, which learning paradigm would involve combining supervised and unsupervised elements, but is not the focus of section 2.1?",
+    "options": [
+      "A) Pure Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Reinforcement Learning",
+      "D) Semi-Supervised Learning"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Semi-Supervised Learning",
+    "explanation": "Semi-Supervised Learning specifically addresses situations where a small amount of labeled data is combined with a large amount of unlabeled data during training, bridging the gap between pure supervised and unsupervised learning."
+  },
+  {
+    "id": 23,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "When selecting a supervised learning algorithm, considering whether it performs well in the presence of missing or incorrect input values relates to which factor?",
+    "options": [
+      "A) Interpretability",
+      "B) Scalability",
+      "C) Robustness",
+      "D) Computational Complexity"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Robustness",
+    "explanation": "Robustness refers to an algorithm's ability to maintain good performance even when the input data contains noise, missing values, outliers, or other imperfections."
+  },
+  {
+    "id": 24,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A data scientist is working on a project to automatically classify news articles into predefined topics (e.g., 'Politics', 'Sports', 'Technology'). They have a large dataset of articles, each with a known topic label. Which supervised learning task and a commonly associated algorithm would be most appropriate for this problem?",
+    "options": [
+      "A) Regression; Decision Trees",
+      "B) Classification; Naive Bayes",
+      "C) Dimensionality Reduction; t-SNE",
+      "D) Clustering; K-Means"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Classification; Naive Bayes",
+    "explanation": "Assigning articles to predefined categories (topics) is a classification task. Naive Bayes is a well-established and efficient algorithm commonly used for text classification tasks due to its effectiveness with high-dimensional text data."
+  },
+  {
+    "id": 25,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following scenarios would most appropriately utilize a DBSCAN algorithm?",
+    "options": [
+      "A) Predicting house prices based on size and location.",
+      "B) Grouping customers into 3 distinct segments based on purchase frequency.",
+      "C) Identifying unusually shaped clusters of network traffic that might indicate an intrusion.",
+      "D) Classifying emails as spam or not spam based on labeled examples."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Identifying unusually shaped clusters of network traffic that might indicate an intrusion.",
+    "explanation": "DBSCAN is a density-based clustering algorithm that excels at finding arbitrarily shaped clusters and identifying outliers (noise). This makes it highly suitable for detecting complex, non-linear patterns often associated with network intrusions, where the number of clusters is not known beforehand. Options A, B, and D are better suited for regression, K-Means clustering, and supervised classification, respectively."
+  },
+  {
+    "id": 26,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "A data scientist is working with a large dataset of patient medical records, where a small fraction of records are labeled with a rare disease diagnosis, but most are unlabeled. The goal is to identify potential new subtypes of the disease. Which learning approach would be most effective?",
+    "options": [
+      "A) Pure Supervised Learning (e.g., Logistic Regression)",
+      "B) Pure Unsupervised Learning (e.g., K-Means Clustering)",
+      "C) A Hybrid Approach combining Supervised and Unsupervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) A Hybrid Approach combining Supervised and Unsupervised Learning",
+    "explanation": "The presence of a small amount of labeled data for the rare disease suggests supervised components, but the vast majority of unlabeled data and the goal of discovering \"new subtypes\" points strongly towards leveraging unsupervised learning. A hybrid approach would use the labeled data to understand known disease characteristics and the unlabeled data to find novel patterns, making it the most effective strategy."
+  },
+  {
+    "id": 27,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "When considering the interpretability of a machine learning model for a critical application like credit scoring, which of the following is generally preferred?",
+    "options": [
+      "A) Deep Neural Networks (often less interpretable) for their high accuracy.",
+      "B) Isolation Forest for its efficiency in anomaly detection.",
+      "C) Supervised models like Logistic Regression or Random Forests for their transparency.",
+      "D) t-SNE for its ability to visualize high-dimensional data."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Supervised models like Logistic Regression or Random Forests for their transparency.",
+    "explanation": "In applications like credit scoring, where understanding why a decision was made is crucial for regulatory compliance and user trust, interpretability is paramount. Supervised models such as Logistic Regression and even certain tree-based methods like Random Forests (when analyzed for feature importance) offer higher transparency and explainability compared to complex models like deep neural networks or purely exploratory tools like t-SNE. Isolation Forest is for anomaly detection, not primarily for credit scoring decisions requiring interpretability."
+  },
+  {
+    "id": 28,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following unsupervised learning techniques would be most appropriate for reducing the computational load and storage requirements of a large image dataset while striving to retain as much variance as possible?",
+    "options": [
+      "A) t-Distributed Stochastic Neighbor Embedding (t-SNE)",
+      "B) DBSCAN",
+      "C) Principal Component Analysis (PCA)",
+      "D) Hierarchical Clustering"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Principal Component Analysis (PCA)",
+    "explanation": "PCA is a dimensionality reduction technique specifically designed to project data into a lower-dimensional space while maximizing the preserved variance. This reduces computational requirements and storage for large datasets like images. t-SNE (A) is primarily for visualization in 2D or 3D and does not preserve global variance well. DBSCAN (B) and Hierarchical Clustering (D) are clustering methods, not dimensionality reduction techniques."
+  },
+  {
+    "id": 29,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "A retail company has a massive dataset of customer transactions with no predefined labels indicating customer segments. They want to group customers based on their purchasing behavior to tailor marketing strategies. Which of the following decision criteria and corresponding approach is most suitable?",
+    "options": [
+      "A) Availability of Labeled Data: Supervised Learning (e.g., Support Vector Machines)",
+      "B) Task Objectives: Supervised Learning (e.g., Linear Regression)",
+      "C) Availability of Labeled Data: Unsupervised Learning (e.g., K-Means Clustering)",
+      "D) Interpretability: Supervised Learning (e.g., Decision Trees)"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Availability of Labeled Data: Unsupervised Learning (e.g., K-Means Clustering)",
+    "explanation": "The problem explicitly states \"no predefined labels\" for customer segments, immediately ruling out pure supervised learning. The objective is to \"group customers based on their purchasing behavior,\" which is a classic clustering task, a subset of unsupervised learning. K-Means Clustering is a common and effective algorithm for such segmentation."
+  },
+  {
+    "id": 30,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "In the context of unsupervised learning, what is the primary advantage of DBSCAN over K-Means when the data might contain noise and clusters of irregular shapes?",
+    "options": [
+      "A) DBSCAN is faster than K-Means for large datasets.",
+      "B) DBSCAN requires specifying the number of clusters (K) beforehand.",
+      "C) DBSCAN can automatically discover the number of clusters and is robust to noise and irregular shapes.",
+      "D) DBSCAN produces a hierarchical structure (dendrogram) that K-Means does not."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) DBSCAN can automatically discover the number of clusters and is robust to noise and irregular shapes.",
+    "explanation": "A key advantage of DBSCAN is its ability to find clusters of arbitrary shapes and identify outliers (noise) as points that don't belong to any cluster. Unlike K-Means, DBSCAN does not require the user to pre-specify the number of clusters (K), which can be a significant benefit when the true number of clusters is unknown. DBSCAN's speed depends on implementation and data; it doesn't generally produce dendrograms (that's Hierarchical Clustering)."
+  },
+  {
+    "id": 31,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following statements accurately describes the role of \"exploration vs. exploitation\" in the context of choosing between supervised and unsupervised learning?",
+    "options": [
+      "A) It is primarily a dilemma in Reinforcement Learning, not directly applicable to supervised or unsupervised choices.",
+      "B) Exploration refers to trying supervised models, while exploitation refers to using unsupervised models.",
+      "C) It refers to the trade-off of collecting more labeled data (exploration) versus using existing unlabeled data (exploitation).",
+      "D) It describes the balance between exploring new data patterns (unsupervised) and exploiting known relationships (supervised) when limited labeled data is available."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) It is primarily a dilemma in Reinforcement Learning, not directly applicable to supervised or unsupervised choices.",
+    "explanation": "The concept of \"exploration vs. exploitation\" is a fundamental dilemma in Reinforcement Learning, where an agent must decide whether to try new actions to discover potentially better rewards (exploration) or stick with actions known to yield good rewards (exploitation). While there are analogous trade-offs in general ML, the specific term \"exploration vs. exploitation\" is most directly and prominently associated with Reinforcement Learning principles."
+  },
+  {
+    "id": 32,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "Which of the following best describes the primary advantage of Semi-Supervised Learning over pure Supervised Learning?",
+    "options": [
+      "A) It achieves perfect accuracy without needing any labeled data.",
+      "B) It operates entirely without feedback or training data.",
+      "C) It effectively leverages a combination of limited labeled data and abundant unlabeled data to improve model performance.",
+      "D) It eliminates the need for computational resources during training."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) It effectively leverages a combination of limited labeled data and abundant unlabeled data to improve model performance.",
+    "explanation": "Semi-Supervised Learning bridges the gap between supervised and unsupervised learning. In many real-world scenarios, obtaining labels is expensive and time-consuming, but unlabeled data is abundant. By using a small set of labeled data alongside a large pool of unlabeled data, SSL improves generalization and accuracy without the massive labeling cost of pure supervised learning."
+  },
+  {
+    "id": 33,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "In Reinforcement Learning, what is the core dilemma an agent faces when interacting with its environment?",
+    "options": [
+      "A) Deciding whether to use labeled or unlabeled data.",
+      "B) Choosing between linear and non-linear regression models.",
+      "C) Balancing the need to explore new actions against exploiting known high-reward actions.",
+      "D) Determining the optimal number of clusters for grouping states."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Balancing the need to explore new actions against exploiting known high-reward actions.",
+    "explanation": "The Exploration vs. Exploitation trade-off is the central challenge in RL. The agent must balance exploring unvisited states/actions to discover higher potential rewards versus exploiting its current knowledge to take actions already known to yield positive rewards."
+  },
+  {
+    "id": 34,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "A healthcare organization has a small dataset of accurately diagnosed patient medical images (labeled) and a vast collection of unanalyzed medical images (unlabeled). Which machine learning paradigm would be most suitable for building an effective diagnostic tool, and why?",
+    "options": [
+      "A) Pure Supervised Learning, relying solely on the small set of labeled images.",
+      "B) Pure Unsupervised Learning, relying only on finding patterns in the unlabeled data.",
+      "C) Reinforcement Learning, to optimize the diagnostic process through trial and error.",
+      "D) Semi-Supervised Learning, as it can combine the limited labeled data with the abundant unlabeled data to enhance diagnostic accuracy."
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Semi-Supervised Learning, as it can combine the limited labeled data with the abundant unlabeled data to enhance diagnostic accuracy.",
+    "explanation": "Given the scenario of limited labeled data and abundant unlabeled data, Semi-Supervised Learning is the ideal choice. It can leverage the existing accurate diagnoses while gaining broader understanding and generalization from the large pool of unlabeled images, improving the overall diagnostic tool beyond what pure supervised learning (A) or unsupervised learning (B) alone could achieve, and RL (C) is not suitable for this kind of static classification task."
+  },
+  {
+    "id": 35,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "Which of the following is NOT an application area where Reinforcement Learning has shown significant success?",
+    "options": [
+      "A) Autonomous systems like self-driving cars.",
+      "B) Playing complex strategy games like Go.",
+      "C) Training robots for dexterous manipulation tasks.",
+      "D) Automatically segmenting medical images based on pre-defined anatomical labels."
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Automatically segmenting medical images based on pre-defined anatomical labels.",
+    "explanation": "Image segmentation with pre-defined labels is a classic supervised learning task (classification/regression at pixel level). Autonomous systems, game playing, and robotics involve sequential decision-making and interaction with dynamic environments, which are core strengths of Reinforcement Learning."
+  },
+  {
+    "id": 36,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "What role does \"transfer of knowledge\" play in the principles of Semi-Supervised Learning?",
+    "options": [
+      "A) It refers to the agent transferring its learned policy to a new environment.",
+      "B) It's the process of converting unlabeled data into labeled data.",
+      "C) It means leveraging insights gained from limited labeled data to improve predictions across the larger unlabeled dataset.",
+      "D) It describes the process of moving a model from a supervised task to an unsupervised task."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) It means leveraging insights gained from limited labeled data to improve predictions across the larger unlabeled dataset.",
+    "explanation": "In Semi-Supervised Learning, the foundational understanding derived from the small labeled dataset is \"transferred\" or applied to the abundant unlabeled data, allowing the model to make more informed predictions and generalize better."
+  },
+  {
+    "id": 37,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "When Reinforcement Learning is used to complement Unsupervised Learning in a recommendation system, what is the primary benefit?",
+    "options": [
+      "A) It eliminates the need for clustering users or items.",
+      "B) It helps define the clear objective and optimize recommendations to maximize user engagement.",
+      "C) It makes the entire system purely data-driven without any human input.",
+      "D) It converts the unsupervised patterns into fully labeled training data for supervised models."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) It helps define the clear objective and optimize recommendations to maximize user engagement.",
+    "explanation": "Unsupervised learning can cluster users and items (finding patterns), but RL provides the goal-oriented framework to then optimize the recommendations iteratively by selecting items that maximize metrics like user engagement or satisfaction, adding a crucial layer of decision-making and optimization."
+  },
+  {
+    "id": 38,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "A manufacturing company wants to identify subtle anomalies in sensor data from machinery to predict failures before they occur. They have a massive amount of historical sensor data, but very few instances of actual machine failures are explicitly logged and labeled. Which approach is most likely to be effective?",
+    "options": [
+      "A) Pure Supervised Learning, focusing on the few labeled failure instances.",
+      "B) Pure Unsupervised Learning, to cluster normal operating data and identify outliers.",
+      "C) Semi-Supervised Learning, leveraging both the few labeled failure instances and the vast unlabeled historical data.",
+      "D) Reinforcement Learning, to train an agent to predict failures in real-time."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Semi-Supervised Learning, leveraging both the few labeled failure instances and the vast unlabeled historical data.",
+    "explanation": "Given the scarcity of labeled failure data but abundance of unlabeled operational data, Semi-Supervised Learning is ideal. It can learn from the few known failures while also understanding the normal operational patterns from the extensive unlabeled data, leading to a more robust anomaly detection system than pure supervised (A) or unsupervised (B). Reinforcement Learning (D) is less suitable for this prediction/classification type of task."
+  },
+  {
+    "id": 39,
+    "track": "Statistics",
+    "session": "Session 1: DataFrames in Python (Pandas)",
+    "question": "What is the primary difference between a Python list and a Pandas DataFrame?",
+    "options": [
+      "A. Lists store only numbers, DataFrames store only text.",
+      "B. Lists are 1D, DataFrames are 2D.",
+      "C. Lists are used only in machine learning.",
+      "D. DataFrames cannot store numerical data."
+    ],
+    "correctIndex": 1,
+    "answerText": "B. Lists are 1D, DataFrames are 2D.",
+    "explanation": "A Python list is a one-dimensional (1D) sequential collection of items, whereas a Pandas DataFrame is a two-dimensional (2D) tabular data structure consisting of rows and columns with labeled axes."
+  },
+  {
+    "id": 40,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "What is the primary goal of descriptive statistics?",
+    "options": [
+      "A) To make inferences about a population",
+      "B) To describe and summarize data",
+      "C) To test hypotheses",
+      "D) To establish causality"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) To describe and summarize data",
+    "explanation": "Descriptive statistics aims to provide a summary of the main features of a dataset, making it easier to understand. Inferential statistics, hypothesis testing, and causal inference deal with drawing generalized conclusions about broader populations."
+  },
+  {
+    "id": 41,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "Which measure of central tendency is most affected by outliers?",
+    "options": [
+      "A) Median",
+      "B) Mode",
+      "C) Mean",
+      "D) Range"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Mean",
+    "explanation": "The arithmetic mean incorporates the exact magnitude of every single value in the dataset (sum divided by count). As a result, extreme outliers pull the mean heavily toward them. The median and mode are positional measures and remain unaffected by extreme outliers."
+  },
+  {
+    "id": 42,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "What does a standard deviation of 0 indicate?",
+    "options": [
+      "A) All values are different",
+      "B) Data is widely spread",
+      "C) All values are the same",
+      "D) There are outliers in the data"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) All values are the same",
+    "explanation": "Standard deviation quantifies the dispersion of values around the mean. If standard deviation = 0, there is zero variability around the mean, which guarantees that every single value in the dataset is identical."
+  },
+  {
+    "id": 43,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "If the mean and median are equal, the data is likely:",
+    "options": [
+      "A) Skewed right",
+      "B) Symmetrical",
+      "C) Skewed left",
+      "D) Uniform"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Symmetrical",
+    "explanation": "In a symmetrical distribution (such as the standard normal distribution), the left and right halves are mirror images, causing the Mean, Median, and Mode to coincide at the central axis (Mean = Median = Mode)."
+  },
+  {
+    "id": 44,
+    "track": "Statistics",
+    "session": "Session 3: Data Visualization",
+    "question": "A data scientist wants to show the monthly trend of website traffic over a year. Which visualization is most appropriate?",
+    "options": [
+      "A. Scatter Plot",
+      "B. Line Chart",
+      "C. Pie Chart",
+      "D. Bar Plot"
+    ],
+    "correctIndex": 1,
+    "answerText": "B. Line Chart",
+    "explanation": "A line chart connects sequential continuous data points over time, making it the most effective visualization for observing trends, seasonal variations, and temporal progression (time series data)."
+  },
+  {
+    "id": 45,
+    "track": "Statistics",
+    "session": "Session 3: Data Visualization",
+    "question": "A researcher wants to examine the relationship between students’ study hours and their exam scores. Which visualization should be used?",
+    "options": [
+      "A. Pie Chart",
+      "B. Line Chart",
+      "C. Scatter Plot",
+      "D. Bar Plot"
+    ],
+    "correctIndex": 2,
+    "answerText": "C. Scatter Plot",
+    "explanation": "A scatter plot plots individual bivariate data points along two continuous quantitative axes, making it the standard choice for discovering relationships, correlations, and clusters between two continuous variables (study hours vs. exam scores)."
+  },
+  {
+    "id": 46,
+    "track": "Statistics",
+    "session": "Session 4: Understanding Data Features",
+    "question": "Which feature type is used to represent customer feedback: \"Satisfied\", \"Neutral\", \"Dissatisfied\"?",
+    "options": [
+      "A) Categorical",
+      "B) Discrete",
+      "C) Continuous",
+      "D) Ordinal"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Categorical (specifically Ordinal Categorical)",
+    "explanation": "Customer feedback consists of qualitative category labels with a meaningful internal hierarchy or order (\"Satisfied\" > \"Neutral\" > \"Dissatisfied\"), classifying it as an ordinal categorical feature."
+  },
+  {
+    "id": 47,
+    "track": "Statistics",
+    "session": "Session 4: Understanding Data Features",
+    "question": "The number of books a person owns is an example of which feature type?",
+    "options": [
+      "A) Categorical",
+      "B) Discrete",
+      "C) Continuous",
+      "D) Ordinal"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Discrete",
+    "explanation": "Discrete features represent countable numeric quantities that take distinct, isolated integer values (0, 1, 2, ...). You cannot own 2.7 books, unlike continuous features which can assume any value along a continuum."
+  },
+  {
+    "id": 48,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "What does a right-skewed distribution indicate?",
+    "options": [
+      "A) The majority of values are low, with a few high values",
+      "B) The majority of values are high, with a few low values",
+      "C) The data is perfectly symmetrical",
+      "D) The data has no variation"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) The majority of values are low, with a few high values",
+    "explanation": "In a right-skewed (positively skewed) distribution, the bulk of observations are clustered at the lower end (left), while a long tail of infrequent, extreme high values stretches out to the right. In this case, Mean > Median > Mode."
+  },
+  {
+    "id": 49,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "Which measure is best for skewed data?",
+    "options": [
+      "A) Mean",
+      "B) Median",
+      "C) Mode",
+      "D) Standard deviation"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Median",
+    "explanation": "The median represents the 50th percentile (exact middle value) and is robust to extreme values, unlike the mean and standard deviation which are disproportionately distorted by skewness and outliers."
+  },
+  {
+    "id": 50,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "What does a high positive kurtosis (leptokurtic distribution) indicate about a dataset?",
+    "options": [
+      "A) The data has lighter tails and fewer extreme outliers than a normal distribution.",
+      "B) The distribution is skewed heavily to the right.",
+      "C) The data has heavy tails and a higher risk of extreme outliers.",
+      "D) The mean, median, and mode are all equal."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) The data has heavy tails and a higher risk of extreme outliers.",
+    "explanation": "Leptokurtic distributions possess positive excess kurtosis (> 0), characterized by a sharper central peak and fat, heavy tails. This indicates a significantly higher probability of extreme outlier events compared to a standard normal bell curve."
+  },
+  {
+    "id": 51,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "In a negatively skewed (left-skewed) distribution, which of the following relationships generally holds true?",
+    "options": [
+      "A) Mean > Median > Mode",
+      "B) Mean < Median < Mode",
+      "C) Mean = Median = Mode",
+      "D) Median > Mean > Mode"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Mean < Median < Mode",
+    "explanation": "In a negatively skewed (left-skewed) distribution, the long tail extends toward the left due to extreme low values. These low values drag the mean down below the median, leading to the general ordering: Mean < Median < Mode."
+  },
+  {
+    "id": 52,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "How does Winsorizing handle extreme outliers in a dataset?",
+    "options": [
+      "A) It completely deletes the outlier observations from the dataset.",
+      "B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).",
+      "C) It transforms the entire dataset using a logarithmic scale.",
+      "D) It replaces all missing and extreme values with the dataset mean."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).",
+    "explanation": "Winsorization limits the influence of outliers by capping values beyond specified percentiles (e.g., values below the 5th percentile are set to the 5th percentile value, and values above the 95th percentile are set to the 95th percentile value) instead of trimming/removing records."
+  },
+  {
+    "id": 53,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "How is the Interquartile Range (IQR) calculated, and why is it preferred over standard deviation for skewed data?",
+    "options": [
+      "A) IQR = Q3 - Q1; it is robust to extreme outliers.",
+      "B) IQR = Q4 - Q1; it covers 100% of the dataset.",
+      "C) IQR = Q3 + Q1; it measures the total variance of the sample.",
+      "D) IQR = Mean - Median; it measures the symmetry of the data."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) IQR = Q3 - Q1; it is robust to extreme outliers.",
+    "explanation": "The Interquartile Range is computed as the difference between the 75th percentile (Q3) and the 25th percentile (Q1). By focusing strictly on the middle 50% of the dataset, it completely filters out extreme tail values, providing a robust measure of statistical dispersion for skewed distributions."
+  },
+  {
+    "id": 54,
+    "track": "Statistics",
+    "session": "Session 6: Probability Theory",
+    "question": "If events A and B are independent, P(A ∩ B) is:",
+    "options": [
+      "A) P(A) + P(B)",
+      "B) P(A) - P(B)",
+      "C) P(A) * P(B)",
+      "D) None of the above"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) P(A) * P(B)",
+    "explanation": "By the fundamental multiplication rule of probability, when two events A and B are independent (the occurrence of one does not affect the probability of the other), their joint probability is the product of their individual probabilities: P(A ∩ B) = P(A) * P(B)."
+  },
+  {
+    "id": 55,
+    "track": "Statistics",
+    "session": "Session 6: Probability Theory",
+    "question": "What is the sample space for a coin toss?",
+    "options": [
+      "A) {H, T}",
+      "B) {1, 2}",
+      "C) {Red, Black}"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) {H, T}",
+    "explanation": "The sample space S represents the set of all possible distinct outcomes resulting from a random experiment. Tossing a coin has two elementary outcomes: Head (H) and Tail (T), so S = {H, T}."
+  },
+  {
+    "id": 56,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "What is a Random Variable?",
+    "options": [
+      "a) A variable that takes deterministic values.",
+      "b) A variable that always takes integer values.",
+      "c) A constant that never changes.",
+      "d) A variable that assigns numerical values to the outcomes of a random process."
+    ],
+    "correctIndex": 3,
+    "answerText": "d) A variable that assigns numerical values to the outcomes of a random process.",
+    "explanation": "A random variable is a formal mathematical rule/function that associates a unique numerical real value with each elementary outcome in the sample space of a random experiment."
+  },
+  {
+    "id": 57,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "Which distribution has mean = variance?",
+    "options": [
+      "A) Normal",
+      "B) Binomial",
+      "C) Poisson"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Poisson",
+    "explanation": "A unique defining characteristic of the Poisson distribution is that both its expected value (mean) and variance are equal to its single rate parameter lambda (E[X] = Var(X) = lambda)."
+  },
+  {
+    "id": 58,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "Which is used for yes/no trials?",
+    "options": [
+      "A) Poisson",
+      "B) Binomial"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Binomial",
+    "explanation": "The Binomial distribution models the number of successes in n repeated, independent Bernoulli trials, where each trial has strictly two possible complementary outcomes (success/failure, yes/no)."
+  },
+  {
+    "id": 59,
+    "track": "Statistics",
+    "session": "Session 8: Types of Sampling Methods",
+    "question": "Which sampling ensures proportional representation?",
+    "options": [
+      "A) Random",
+      "B) Stratified",
+      "C) Cluster"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Stratified",
+    "explanation": "Stratified sampling partitions the population into non-overlapping subgroups (strata) based on known characteristics (e.g., gender, grade, income) and selects proportional random samples from each stratum, guaranteeing representation across all segments."
+  },
+  {
+    "id": 60,
+    "track": "Statistics",
+    "session": "Session 8: Types of Sampling Methods",
+    "question": "Which method selects every k-th item?",
+    "options": [
+      "A) Random",
+      "B) Systematic",
+      "C) Cluster"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Systematic",
+    "explanation": "Systematic sampling selects elements from an ordered population list at regular intervals of size k (e.g., every 10th customer) starting from a randomly determined initial point."
+  },
+  {
+    "id": 61,
+    "track": "Statistics",
+    "session": "Session 9: Hypothesis Testing Formulation",
+    "question": "What is H0 usually about?",
+    "options": [
+      "A) No change",
+      "B) New discovery",
+      "C) 5% significance"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) No change",
+    "explanation": "The null hypothesis (H0) posits the baseline claim of no effect, no difference, or no relationship. It represents status quo that requires strong empirical evidence to be refuted."
+  },
+  {
+    "id": 62,
+    "track": "Statistics",
+    "session": "Session 9: Hypothesis Testing Formulation",
+    "question": "Which error occurs when H0 is wrongly rejected?",
+    "options": [
+      "A) Type I",
+      "B) Type II",
+      "C) Type III"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Type I",
+    "explanation": "A Type I error (false positive) occurs when the researcher rejects a null hypothesis that is actually true in reality. The probability of committing a Type I error is controlled by the significance level alpha."
+  },
+  {
+    "id": 63,
+    "track": "Statistics",
+    "session": "Session 10: Hypothesis Testing using Statistical Tests",
+    "question": "Which test is appropriate for testing a sample mean when the sample size is less than 30 and the population standard deviation is known?",
+    "options": [
+      "A) F-test",
+      "B) T-test",
+      "C) Chi-square test",
+      "D) Z-test"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Z-test",
+    "explanation": "Even though the sample size is small (< 30), if the population standard deviation (sigma) is known and the underlying population is approximately normally distributed, a Z-test can still be used. If the population standard deviation were unknown, a Student's T-test would be required."
+  },
+  {
+    "id": 64,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "p = 0.03 -> ? (assuming standard alpha = 0.05)",
+    "options": [
+      "A) Accept H0",
+      "B) Reject H0"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Reject H0",
+    "explanation": "Because the p-value (0.03) is less than the significance threshold alpha (0.05), the observed test statistic is unlikely to have occurred under H0 alone, leading us to reject the null hypothesis."
+  },
+  {
+    "id": 65,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "CI = (48, 52), mu0 = 53 -> ?",
+    "options": [
+      "A) Reject H0",
+      "B) Accept H0"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Reject H0 (when hypothesized mean is outside the CI, reject the null hypothesis)",
+    "explanation": "The hypothesized value mu0 = 53 falls completely outside the 95% Confidence Interval (48, 52). A value outside the confidence interval is statistically incompatible with the observed sample at that confidence level, leading to the rejection of H0."
+  },
+  {
+    "id": 66,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "p = 0.07, alpha = 0.05 -> ?",
+    "options": [
+      "A) Reject H0",
+      "B) Fail to reject H0"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Fail to reject H0",
+    "explanation": "Because the p-value (0.07) is greater than alpha (0.05), the difference could reasonably be attributed to random sampling variability. Therefore, there is insufficient evidence against H0, and we fail to reject the null hypothesis."
+  }
+];
+
+    // State Variables
+    let currentQuestions = [...rawQuestions];
+    let currentIndex = 0;
+    let userAnswers = {}; // questionId -> selectedIndex
+    let currentFilter = 'all';
+    let currentSessionFilter = 'all';
+
+    // DOM Elements
+    const quizCardContainer = document.getElementById('quizCardContainer');
+    const currentQDisplay = document.getElementById('currentQDisplay');
+    const correctScoreDisplay = document.getElementById('correctScoreDisplay');
+    const wrongScoreDisplay = document.getElementById('wrongScoreDisplay');
+    const accuracyDisplay = document.getElementById('accuracyDisplay');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const jumpGrid = document.getElementById('jumpGrid');
+    const gridSummary = document.getElementById('gridSummary');
+    const sessionSelect = document.getElementById('sessionSelect');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const toggleInfoBtn = document.getElementById('toggleInfoBtn');
+    const metaInfoPanel = document.getElementById('metaInfoPanel');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const resetQuizBtn = document.getElementById('resetQuizBtn');
+
+    // Populate Session Filter Dropdown
+    function populateSessionDropdown() {
+      const sessions = [...new Set(rawQuestions.map(q => q.session))];
+      sessionSelect.innerHTML = '<option value="all">All Sessions (17 total)</option>';
+      sessions.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        sessionSelect.appendChild(opt);
+      });
+    }
+
+    // Filter Logic
+    function applyFilters() {
+      currentQuestions = rawQuestions.filter(q => {
+        const trackMatch = (currentFilter === 'all') || (q.track === currentFilter);
+        const sessionMatch = (currentSessionFilter === 'all') || (q.session === currentSessionFilter);
+        return trackMatch && sessionMatch;
+      });
+
+      if (currentQuestions.length === 0) {
+        quizCardContainer.innerHTML = '<div class="quiz-card" style="text-align: center; color: var(--text-muted);">No questions match the selected filter.</div>';
+        return;
+      }
+
+      if (currentIndex >= currentQuestions.length) {
+        currentIndex = 0;
+      }
+
+      renderJumpGrid();
+      renderCurrentCard();
+      updateScoreboard();
+    }
+
+    // Render Question Navigator Jump Grid
+    function renderJumpGrid() {
+      jumpGrid.innerHTML = '';
+      currentQuestions.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'jump-btn';
+        btn.textContent = idx + 1;
+        btn.title = `Question ${idx + 1}: ${q.session}`;
+
+        if (idx === currentIndex) {
+          btn.classList.add('current');
+        }
+
+        if (userAnswers[q.id] !== undefined) {
+          const isCorrect = userAnswers[q.id] === q.correctIndex;
+          btn.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+        }
+
+        btn.addEventListener('click', () => {
+          currentIndex = idx;
+          renderJumpGrid();
+          renderCurrentCard();
+        });
+
+        jumpGrid.appendChild(btn);
+      });
+
+      const answeredCount = currentQuestions.filter(q => userAnswers[q.id] !== undefined).length;
+      gridSummary.textContent = `${answeredCount} / ${currentQuestions.length} answered`;
+    }
+
+    // Render Current Question Card
+    function renderCurrentCard() {
+      if (currentQuestions.length === 0) return;
+
+      const q = currentQuestions[currentIndex];
+      const hasAnswered = userAnswers[q.id] !== undefined;
+      const selectedIdx = userAnswers[q.id];
+
+      let optionsHtml = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, optIdx) => {
+        let extraClass = '';
+        let optLetter = letters[optIdx] || opt.charAt(0);
+        let optText = opt;
+
+        // Clean option text if it starts with A) or A.
+        const match = opt.match(/^[A-Da-d][\)\.]\s*(.*)$/);
+        if (match) {
+          optText = match[1];
+        }
+
+        if (hasAnswered) {
+          if (optIdx === q.correctIndex) {
+            extraClass = 'correct';
+          } else if (optIdx === selectedIdx) {
+            extraClass = 'wrong';
+          } else {
+            extraClass = 'dimmed';
+          }
+        }
+
+        optionsHtml += `
+          <button class="option-btn ${extraClass}" 
+                  data-index="${optIdx}" 
+                  ${hasAnswered ? 'disabled' : ''}>
+            <span class="option-key">${optLetter}</span>
+            <span class="option-text">${optText}</span>
+          </button>
+        `;
+      });
+
+      // Explanation Box
+      let explanationHtml = '';
+      if (hasAnswered) {
+        const isCorrect = selectedIdx === q.correctIndex;
+        explanationHtml = `
+          <div class="explanation-box ${isCorrect ? 'is-correct' : 'is-wrong'}" style="display: block;">
+            <div class="explanation-header">
+              <span>${isCorrect ? '✅ Correct Answer!' : '❌ Incorrect'}</span>
+              <span style="font-weight: 500; opacity: 0.85;">(Correct: ${q.answerText})</span>
+            </div>
+            <div class="explanation-body">
+              <strong>Explanation:</strong> ${q.explanation}
+            </div>
+          </div>
+        `;
+      }
+
+      quizCardContainer.innerHTML = `
+        <div class="quiz-card">
+          <div class="card-top">
+            <span class="session-badge" title="${q.session}">${q.session}</span>
+            <span class="track-tag">${q.track}</span>
+          </div>
+
+          <div class="question-prompt">
+            <span style="color: var(--accent); font-weight: 700; margin-right: 0.35rem;">Q${currentIndex + 1}.</span>
+            ${q.question}
+          </div>
+
+          <div class="options-grid" id="optionsContainer">
+            ${optionsHtml}
+          </div>
+
+          ${explanationHtml}
+
+          <div class="card-nav">
+            <button id="prevBtn" class="nav-btn" ${currentIndex === 0 ? 'disabled' : ''}>
+              ← Previous
+            </button>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+              ${currentIndex + 1} of ${currentQuestions.length}
+            </span>
+            <button id="nextBtn" class="nav-btn" ${currentIndex === currentQuestions.length - 1 ? 'disabled' : ''}>
+              Next →
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Attach option click handlers
+      const optionButtons = quizCardContainer.querySelectorAll('.option-btn');
+      optionButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pickedIdx = parseInt(btn.getAttribute('data-index'), 10);
+          handleAnswerSelect(q.id, pickedIdx);
+        });
+      });
+
+      // Attach Navigation Buttons
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          if (currentIndex > 0) {
+            currentIndex--;
+            renderJumpGrid();
+            renderCurrentCard();
+          }
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          if (currentIndex < currentQuestions.length - 1) {
+            currentIndex++;
+            renderJumpGrid();
+            renderCurrentCard();
+          }
+        });
+      }
+    }
+
+    // Handle Option Click
+    function handleAnswerSelect(questionId, selectedIdx) {
+      if (userAnswers[questionId] !== undefined) return;
+
+      userAnswers[questionId] = selectedIdx;
+
+      updateScoreboard();
+      renderJumpGrid();
+      renderCurrentCard();
+    }
+
+    // Update Scoreboard & Progress Bar
+    function updateScoreboard() {
+      const totalFiltered = currentQuestions.length;
+      let correct = 0;
+      let wrong = 0;
+      let answered = 0;
+
+      currentQuestions.forEach(q => {
+        if (userAnswers[q.id] !== undefined) {
+          answered++;
+          if (userAnswers[q.id] === q.correctIndex) {
+            correct++;
+          } else {
+            wrong++;
+          }
+        }
+      });
+
+      currentQDisplay.textContent = `${currentIndex + 1} / ${totalFiltered}`;
+      correctScoreDisplay.textContent = correct;
+      wrongScoreDisplay.textContent = wrong;
+
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+      accuracyDisplay.textContent = `${accuracy}%`;
+
+      const progressPercent = totalFiltered > 0 ? (answered / totalFiltered) * 100 : 0;
+      progressBarFill.style.width = `${progressPercent}%`;
+    }
+
+    // Filter Buttons Handlers
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
+        applyFilters();
+      });
+    });
+
+    sessionSelect.addEventListener('change', (e) => {
+      currentSessionFilter = e.target.value;
+      applyFilters();
+    });
+
+    // Shuffle Quiz
+    shuffleBtn.addEventListener('click', () => {
+      for (let i = currentQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
+      }
+      currentIndex = 0;
+      renderJumpGrid();
+      renderCurrentCard();
+      updateScoreboard();
+    });
+
+    // Reset Quiz
+    resetQuizBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset all answers and scores?')) {
+        userAnswers = {};
+        currentIndex = 0;
+        updateScoreboard();
+        renderJumpGrid();
+        renderCurrentCard();
+      }
+    });
+
+    // Theme Toggle (Dark / Light)
+    themeToggleBtn.addEventListener('click', () => {
+      const htmlEl = document.documentElement;
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        themeIcon.textContent = '🌙';
+      } else {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        themeIcon.textContent = '☀️';
+      }
+    });
+
+    // Metadata Panel Toggle
+    toggleInfoBtn.addEventListener('click', () => {
+      if (metaInfoPanel.style.display === 'none') {
+        metaInfoPanel.style.display = 'block';
+      } else {
+        metaInfoPanel.style.display = 'none';
+      }
+    });
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+      if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderJumpGrid();
+          renderCurrentCard();
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (currentIndex < currentQuestions.length - 1) {
+          currentIndex++;
+          renderJumpGrid();
+          renderCurrentCard();
+        }
+      } else if (['1', '2', '3', '4'].includes(e.key)) {
+        const optIdx = parseInt(e.key, 10) - 1;
+        const q = currentQuestions[currentIndex];
+        if (q && userAnswers[q.id] === undefined && optIdx < q.options.length) {
+          handleAnswerSelect(q.id, optIdx);
+        }
+      } else if (['a', 'b', 'c', 'd', 'A', 'B', 'C', 'D'].includes(e.key)) {
+        const optIdx = e.key.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
+        const q = currentQuestions[currentIndex];
+        if (q && userAnswers[q.id] === undefined && optIdx < q.options.length) {
+          handleAnswerSelect(q.id, optIdx);
+        }
+      }
+    });
+
+    // Initialize App
+    populateSessionDropdown();
+    applyFilters();
+  </script>
+</body>
+</html>
