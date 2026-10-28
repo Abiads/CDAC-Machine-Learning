@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Machine Learning & Statistics Interactive MCQ Quiz</title>
   <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with slide references, local session persistence, mistake retry mode, fill-in-the-blanks review, and responsive hamburger navigation.">
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Vercel Speed Insights -->
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
@@ -2391,11 +2403,21 @@
     const guideSearchInput = document.getElementById('guideSearchInput');
     const guideCardsContainer = document.getElementById('guideCardsContainer');
 
+    // Vercel Analytics Custom Event Tracker
+    function trackVercelEvent(eventName, eventData = {}) {
+      if (typeof window.va === 'function') {
+        try {
+          window.va('event', { name: eventName, data: eventData });
+        } catch (err) {}
+      }
+    }
+
     // Drawer Open / Close Functions
     function openDrawer() {
       navDrawer.classList.add('open');
       drawerBackdrop.classList.add('active');
       document.body.style.overflow = 'hidden';
+      trackVercelEvent('open_drawer');
     }
 
     function closeDrawer() {
@@ -2416,6 +2438,7 @@
       closeDrawer();
       blanksModal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      trackVercelEvent('open_guide_modal');
       if (!guideCardsContainer.innerHTML.trim()) {
         buildGuideCards();
       }
@@ -2800,6 +2823,14 @@
 
       userAnswers[questionId] = selectedIdx;
       saveLocalSession();
+
+      const q = rawQuestions.find(item => item.id === questionId);
+      if (q) {
+        trackVercelEvent('answer_submitted', {
+          track: q.track,
+          is_correct: selectedIdx === q.correctIndex
+        });
+      }
 
       updateScoreboard();
       updateMistakesCount();
