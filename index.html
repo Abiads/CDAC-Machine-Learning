@@ -174,6 +174,12 @@
     .val-correct { background: rgba(16, 185, 129, 0.2); color: #34d399; }
     .val-wrong { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     .val-acc { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .val-storage {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      cursor: help;
+    }
 
     .progress-bar-bg {
       width: 100%;
@@ -658,6 +664,9 @@
           <span>Accuracy:</span>
           <span id="accuracyDisplay" class="val val-acc">0%</span>
         </div>
+        <div class="stat-pill" title="Quiz progress is automatically preserved in your browser's local session storage (no database needed)">
+          <span id="storageStatusBadge" class="val val-storage">💾 Session Saved</span>
+        </div>
       </div>
       <div class="progress-bar-bg">
         <div id="progressBarFill" class="progress-bar-fill"></div>
@@ -677,7 +686,7 @@
           <option value="all">All Sessions</option>
         </select>
         <button id="shuffleBtn" class="btn-icon" title="Shuffle Questions">🔀 Shuffle</button>
-        <button id="resetQuizBtn" class="btn-icon" title="Reset all answers">🔄 Reset</button>
+        <button id="resetQuizBtn" class="btn-icon" title="Reset all answers & local session">🔄 Reset</button>
       </div>
     </div>
 
@@ -1819,6 +1828,9 @@
     let currentFilter = 'all';
     let currentSessionFilter = 'all';
 
+    // Local Session Storage Key
+    const STORAGE_KEY = 'cdac_ml_stats_quiz_session';
+
     // DOM Elements
     const quizCardContainer = document.getElementById('quizCardContainer');
     const currentQDisplay = document.getElementById('currentQDisplay');
@@ -1835,6 +1847,78 @@
     const metaInfoPanel = document.getElementById('metaInfoPanel');
     const shuffleBtn = document.getElementById('shuffleBtn');
     const resetQuizBtn = document.getElementById('resetQuizBtn');
+    const storageStatusBadge = document.getElementById('storageStatusBadge');
+
+    // Local Storage Helper: Save Session
+    function saveLocalSession() {
+      try {
+        const state = {
+          userAnswers: userAnswers,
+          currentIndex: currentIndex,
+          currentFilter: currentFilter,
+          currentSessionFilter: currentSessionFilter,
+          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        flashStorageStatus();
+      } catch (err) {
+        console.warn('Local session storage unavailable:', err);
+      }
+    }
+
+    // Local Storage Helper: Flash Badge on update
+    function flashStorageStatus() {
+      if (!storageStatusBadge) return;
+      const count = Object.keys(userAnswers).length;
+      storageStatusBadge.textContent = count > 0 ? `💾 ${count}/66 Saved` : '💾 Session Saved';
+    }
+
+    // Local Storage Helper: Restore Session on load
+    function restoreLocalSession() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+        const state = JSON.parse(saved);
+
+        if (state.userAnswers && typeof state.userAnswers === 'object') {
+          userAnswers = state.userAnswers;
+        }
+
+        if (state.currentFilter) {
+          currentFilter = state.currentFilter;
+          document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.getAttribute('data-filter') === currentFilter) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          });
+        }
+
+        if (state.currentSessionFilter) {
+          currentSessionFilter = state.currentSessionFilter;
+          if (sessionSelect) sessionSelect.value = currentSessionFilter;
+        }
+
+        if (typeof state.currentIndex === 'number' && state.currentIndex >= 0) {
+          currentIndex = state.currentIndex;
+        }
+
+        if (state.theme === 'dark') {
+          document.documentElement.classList.remove('light');
+          document.documentElement.classList.add('dark');
+          if (themeIcon) themeIcon.textContent = '☀️';
+        } else if (state.theme === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+          if (themeIcon) themeIcon.textContent = '🌙';
+        }
+
+        flashStorageStatus();
+      } catch (err) {
+        console.warn('Could not restore local session:', err);
+      }
+    }
 
     // Populate Session Filter Dropdown
     function populateSessionDropdown() {
@@ -1890,6 +1974,7 @@
 
         btn.addEventListener('click', () => {
           currentIndex = idx;
+          saveLocalSession();
           renderJumpGrid();
           renderCurrentCard();
         });
@@ -2013,6 +2098,7 @@
         prevBtn.addEventListener('click', () => {
           if (currentIndex > 0) {
             currentIndex--;
+            saveLocalSession();
             renderJumpGrid();
             renderCurrentCard();
           }
@@ -2022,6 +2108,7 @@
         nextBtn.addEventListener('click', () => {
           if (currentIndex < currentQuestions.length - 1) {
             currentIndex++;
+            saveLocalSession();
             renderJumpGrid();
             renderCurrentCard();
           }
@@ -2034,6 +2121,7 @@
       if (userAnswers[questionId] !== undefined) return;
 
       userAnswers[questionId] = selectedIdx;
+      saveLocalSession();
 
       updateScoreboard();
       renderJumpGrid();
@@ -2075,12 +2163,14 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFilter = btn.getAttribute('data-filter');
+        saveLocalSession();
         applyFilters();
       });
     });
 
     sessionSelect.addEventListener('change', (e) => {
       currentSessionFilter = e.target.value;
+      saveLocalSession();
       applyFilters();
     });
 
@@ -2091,19 +2181,24 @@
         [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
       }
       currentIndex = 0;
+      saveLocalSession();
       renderJumpGrid();
       renderCurrentCard();
       updateScoreboard();
     });
 
-    // Reset Quiz
+    // Reset Quiz & Local Session
     resetQuizBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset all answers and scores?')) {
+      if (confirm('Are you sure you want to reset all answers, scores, and your saved local session?')) {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch(e) {}
         userAnswers = {};
         currentIndex = 0;
         updateScoreboard();
         renderJumpGrid();
         renderCurrentCard();
+        flashStorageStatus();
       }
     });
 
@@ -2119,6 +2214,7 @@
         htmlEl.classList.add('dark');
         themeIcon.textContent = '☀️';
       }
+      saveLocalSession();
     });
 
     // Metadata Panel Toggle
@@ -2137,12 +2233,14 @@
       if (e.key === 'ArrowLeft') {
         if (currentIndex > 0) {
           currentIndex--;
+          saveLocalSession();
           renderJumpGrid();
           renderCurrentCard();
         }
       } else if (e.key === 'ArrowRight') {
         if (currentIndex < currentQuestions.length - 1) {
           currentIndex++;
+          saveLocalSession();
           renderJumpGrid();
           renderCurrentCard();
         }
@@ -2163,6 +2261,7 @@
 
     // Initialize App
     populateSessionDropdown();
+    restoreLocalSession();
     applyFilters();
   </script>
 </body>
