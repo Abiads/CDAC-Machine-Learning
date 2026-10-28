@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Machine Learning & Statistics Interactive MCQ Quiz</title>
-  <meta name="description" content="Interactive MCQ quiz application covering 66 questions from Machine Learning and Statistics lectures with answers and detailed explanations.">
-  <meta name="vcp-identifier" content="vcp&#95;3xywY33XKDavhLqxYj218H11PPyubYJafxQ2zo4kIwRLgDnqtN0b5iar">
+  <meta name="description" content="Interactive MCQ quiz application covering 66 verified questions from Machine Learning and Statistics lectures with answers, slide references, and detailed explanations.">
   <!-- Tailwind CSS fallback & font -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
@@ -63,7 +62,6 @@
       line-height: 1.6;
     }
 
-    /* Container */
     .app-container {
       max-width: 960px;
       margin: 0 auto;
@@ -72,7 +70,6 @@
       flex: 1;
     }
 
-    /* Header Bar */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--surface-border);
@@ -141,7 +138,6 @@
       border-color: var(--accent);
     }
 
-    /* Sticky Progress Header */
     .progress-section {
       background-color: var(--surface);
       border-radius: 12px;
@@ -196,7 +192,6 @@
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Filters Bar */
     .controls-bar {
       display: flex;
       align-items: center;
@@ -250,7 +245,6 @@
       outline: none;
     }
 
-    /* Question Card */
     .quiz-card {
       background-color: var(--surface);
       border-radius: 16px;
@@ -266,22 +260,35 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
       gap: 0.5rem;
       margin-bottom: 1rem;
       font-size: 0.825rem;
+    }
+
+    .card-badges {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.45rem;
     }
 
     .session-badge {
       background: rgba(99, 102, 241, 0.15);
       color: #818cf8;
       border: 1px solid rgba(99, 102, 241, 0.3);
-      padding: 0.25rem 0.75rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 9999px;
       font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 70%;
+    }
+
+    .slide-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-weight: 600;
     }
 
     .track-tag {
@@ -351,7 +358,6 @@
       padding-top: 2px;
     }
 
-    /* State styles for answered options */
     .option-btn.correct {
       background-color: var(--success-bg) !important;
       border-color: var(--success) !important;
@@ -383,7 +389,6 @@
       cursor: default;
     }
 
-    /* Explanation Box */
     .explanation-box {
       display: none;
       background-color: rgba(99, 102, 241, 0.08);
@@ -421,9 +426,19 @@
       font-size: 0.92rem;
       color: var(--text);
       line-height: 1.55;
+      margin-bottom: 0.75rem;
     }
 
-    /* Navigation footer inside card mode */
+    .explanation-source {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      border-top: 1px dashed var(--surface-border);
+      padding-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
     .card-nav {
       display: flex;
       align-items: center;
@@ -460,7 +475,6 @@
       cursor: not-allowed;
     }
 
-    /* Jump Grid Drawer */
     .grid-toggle-box {
       background-color: var(--surface);
       border-radius: 12px;
@@ -527,7 +541,6 @@
       color: var(--error);
     }
 
-    /* Info / Metadata Drawer */
     .meta-card {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
       border: 1px solid var(--surface-border);
@@ -549,16 +562,6 @@
       gap: 0.5rem;
     }
 
-    .meta-badge {
-      font-family: monospace;
-      background: rgba(99, 102, 241, 0.2);
-      color: #a5b4fc;
-      padding: 0.2rem 0.45rem;
-      border-radius: 6px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      font-size: 0.8rem;
-    }
-
     .meta-list {
       margin-left: 1.25rem;
       margin-top: 0.5rem;
@@ -568,13 +571,11 @@
       margin-bottom: 0.25rem;
     }
 
-    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Responsive */
     @media (max-width: 640px) {
       .header-inner { padding: 0.75rem; }
       .app-container { padding: 1rem 0.5rem 2rem 0.5rem; }
@@ -595,7 +596,7 @@
       </div>
       <div class="header-actions">
         <button id="toggleInfoBtn" class="btn-icon" title="View Source Information & Metadata">
-          <span>ℹ️</span> Sources
+          <span>📚</span> Sources
         </button>
         <button id="themeToggleBtn" class="btn-icon" title="Toggle Light/Dark Theme">
           <span id="themeIcon">☀️</span>
@@ -611,13 +612,30 @@
     <div id="metaInfoPanel" class="meta-card" style="display: none;">
       <div class="meta-title">
         <span>📚</span> Source Files & Extraction Provenance
-        <span class="meta-badge">vcp&#95;3xywY33XKDavhLqxYj218H11PPyubYJafxQ2zo4kIwRLgDnqtN0b5iar</span>
       </div>
-      <p>This quiz compiles <strong>66 verified MCQs</strong> extracted directly from the official CDAC presentation decks and notes:</p>
+      <p>This quiz compiles <strong>66 verified MCQs</strong> extracted directly from the official CDAC presentation decks and notes. Each question is individually mapped to its presentation deck and original slide numbers:</p>
       <ul class="meta-list">
-        <li><strong>Machine Learning Decks (Sessions 1-6)</strong>: <code>Session 1-ML-intro-fundamental-types</code>, <code>Session 2 - Data-Preprocessing</code>, <code>Session 3 - ML-Process-End-to-End</code>, <code>Session 4 - Supervised-learning</code>, <code>Session 5 - Unsupervised-learning</code>, <code>Session 6 - Semi-supervised-reinforcement</code>.</li>
-        <li><strong>Statistics Decks (Sessions 1-11)</strong>: <code>Session 1 Dataframes in Python</code>, <code>Session 2 Introduction to Descriptive Statistics</code>, <code>Session 3 Visualization</code>, <code>Session 4 Understanding Data Features</code>, <code>Session 5 Data Distributions</code>, <code>Session 6 Probability Theory</code>, <code>Session 7 Probability Distributions</code>, <code>Session 8 Types of sampling methods</code>, <code>Session 9 Hypotheiss testing formulation</code>, <code>Session 10 Hypothesis Testing using Statistical Tests</code>, <code>Session 11 A/B Testing in Python</code>.</li>
-        <li><strong>Repository Reference Files</strong>: <code>notes/ML/ML_MCQs_with_Answers_and_Explanations.txt</code>, <code>notes/statistics/Statistics_MCQs_with_Answers_and_Explanations.txt</code>, and <code>notes/All_MCQs_ML_and_Statistics_with_Answers.txt</code>.</li>
+        <li><strong>Machine Learning Decks (Sessions 1-6)</strong>:
+          <br>• <code>Session 1-ML-intro-fundamental-types.pptx</code> (Slides 12-17)
+          <br>• <code>Session 2 - Data-Preprocessing.pptx</code> (Slides 13-26)
+          <br>• <code>Session 3 - ML-Process-End-to-End.pptx</code> (Slides 15-28)
+          <br>• <code>Session 4 - Supervised-learning.pptx</code> (Slides 16-29)
+          <br>• <code>Session 5 - Unsupervised-learning.pptx</code> (Slides 15-28)
+          <br>• <code>Session 6 - Semi-supervised-reinforcement.pptx</code> (Slides 13-26)
+        </li>
+        <li><strong>Statistics Decks (Sessions 1-11)</strong>:
+          <br>• <code>Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx</code> (Slides 7-8)
+          <br>• <code>Session 2 Introduction to Descriptive Statistics Tuned.pptx</code> (Slides 3-4, 24-25)
+          <br>• <code>Session 3 Visualization -Tuned.pptx</code> (Slide 12)
+          <br>• <code>Session 4 Understanding Data Features -Tuned.pptx</code> (Slides 18-19)
+          <br>• <code>Session 5 Data Distributions - Tuned.pptx</code> (Slides 23-32)
+          <br>• <code>Session 6 Probability Theory - Tuned.pptx</code> (Slides 29-30)
+          <br>• <code>Session 7 Probability Distributions Tuned.pptx</code> (Slides 24-27)
+          <br>• <code>Session 8 Types of sampling methods tuned.pptx</code> (Slides 13-14)
+          <br>• <code>Session 9 Hypotheiss testing formulation tuned.pptx</code> (Slides 18-19)
+          <br>• <code>Session 10 Hypothesis Testing using Statistical Tests - Tuned.pptx</code> (Slides 12-13)
+          <br>• <code>Session 11 A B Testing in python - Tuned.pptx</code> (Slides 18-19)
+        </li>
       </ul>
       <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
         Author: <code>abs6187 &lt;23f2000876@ds.study.iitm.ac.in&gt;</code> • Workspace: <code>ML_CDAC_ALILOG</code>
@@ -685,7 +703,7 @@
   </div>
 
   <script>
-    // Embedded Question Database (66 Verified Questions)
+    // Embedded Question Database (66 Verified Questions with Slide References)
     const rawQuestions = [
   {
     "id": 1,
@@ -700,7 +718,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) ML systems improve over time with more data, unlike Traditional Programming.",
-    "explanation": "Machine learning systems are designed to improve their performance as they are exposed to more data, a fundamental difference from traditional programs that maintain a consistent performance level unless explicitly updated with new hard-coded rules."
+    "explanation": "Machine learning systems are designed to improve their performance as they are exposed to more data, a fundamental difference from traditional programs that maintain a consistent performance level unless explicitly updated with new hard-coded rules.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 12-13"
   },
   {
     "id": 2,
@@ -715,7 +735,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Unsupervised Learning",
-    "explanation": "Unsupervised learning specifically deals with unlabeled data, aiming to find inherent structures, patterns, or groupings within it without any predefined output targets."
+    "explanation": "Unsupervised learning specifically deals with unlabeled data, aiming to find inherent structures, patterns, or groupings within it without any predefined output targets.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 14-15"
   },
   {
     "id": 3,
@@ -730,7 +752,9 @@
     ],
     "correctIndex": 3,
     "answerText": "D) Reinforcement Learning",
-    "explanation": "Reinforcement learning involves an agent interacting with an environment, learning through rewards and penalties to determine optimal actions in a sequence of decisions, which perfectly describes the scenario of an agent playing a game."
+    "explanation": "Reinforcement learning involves an agent interacting with an environment, learning through rewards and penalties to determine optimal actions in a sequence of decisions, which perfectly describes the scenario of an agent playing a game.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 16-17"
   },
   {
     "id": 4,
@@ -745,7 +769,9 @@
     ],
     "correctIndex": 1,
     "answerText": "b) To reduce the computational cost of model deployment.",
-    "explanation": "While some preprocessing steps like dimensionality reduction can indirectly help reduce deployment costs by simplifying models, the primary goals of preprocessing are focused on data quality, cleaning, and format before deployment, directly impacting model training and performance."
+    "explanation": "While some preprocessing steps like dimensionality reduction can indirectly help reduce deployment costs by simplifying models, the primary goals of preprocessing are focused on data quality, cleaning, and format before deployment, directly impacting model training and performance.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 13-14"
   },
   {
     "id": 5,
@@ -760,7 +786,9 @@
     ],
     "correctIndex": 2,
     "answerText": "c) Replacing missing values with the median income.",
-    "explanation": "If the data distribution is skewed or contains outliers, the mean can be heavily influenced by these extreme values, leading to a biased imputation. The median is a more robust measure of central tendency in such cases, making it a better choice than the mean. Removing rows (b) can lead to significant data loss, and using a constant (d) can distort the distribution and introduce artificial patterns."
+    "explanation": "If the data distribution is skewed or contains outliers, the mean can be heavily influenced by these extreme values, leading to a biased imputation. The median is a more robust measure of central tendency in such cases, making it a better choice than the mean. Removing rows (b) can lead to significant data loss, and using a constant (d) can distort the distribution and introduce artificial patterns.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 15-16"
   },
   {
     "id": 6,
@@ -775,7 +803,9 @@
     ],
     "correctIndex": 1,
     "answerText": "b) Transform the 'Square Footage' feature using a logarithmic scale.",
-    "explanation": "Transforming skewed features like 'Square Footage' with a logarithmic scale can effectively reduce the impact of large outliers, making the distribution more symmetric and suitable for many machine learning models without discarding valuable data points (a) or introducing potential bias with mean replacement (c)."
+    "explanation": "Transforming skewed features like 'Square Footage' with a logarithmic scale can effectively reduce the impact of large outliers, making the distribution more symmetric and suitable for many machine learning models without discarding valuable data points (a) or introducing potential bias with mean replacement (c).",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 17-18"
   },
   {
     "id": 7,
@@ -790,7 +820,9 @@
     ],
     "correctIndex": 3,
     "answerText": "d) Binary Encoding.",
-    "explanation": "One-Hot Encoding (a) would create 150 new columns, significantly increasing dimensionality and potentially leading to sparsity issues. Ordinal/Label encoding (b, c) would impose an artificial order on nominal data, which can negatively affect model performance. Binary encoding converts integers to binary codes and splits them into separate columns, significantly reducing the dimensionality compared to one-hot encoding while avoiding false ordinality."
+    "explanation": "One-Hot Encoding (a) would create 150 new columns, significantly increasing dimensionality and potentially leading to sparsity issues. Ordinal/Label encoding (b, c) would impose an artificial order on nominal data, which can negatively affect model performance. Binary encoding converts integers to binary codes and splits them into separate columns, significantly reducing the dimensionality compared to one-hot encoding while avoiding false ordinality.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 19-20"
   },
   {
     "id": 8,
@@ -805,7 +837,9 @@
     ],
     "correctIndex": 2,
     "answerText": "c) Deriving 'age_in_years' from a 'date_of_birth' column.",
-    "explanation": "Feature construction involves creating new features from existing data to provide more relevant information to the model. Deriving 'age_in_years' from 'date_of_birth' is a classic example. Scaling (a) is feature transformation, imputation (b) is data cleaning, and removing features (d) is feature selection."
+    "explanation": "Feature construction involves creating new features from existing data to provide more relevant information to the model. Deriving 'age_in_years' from 'date_of_birth' is a classic example. Scaling (a) is feature transformation, imputation (b) is data cleaning, and removing features (d) is feature selection.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 21-22"
   },
   {
     "id": 9,
@@ -820,7 +854,9 @@
     ],
     "correctIndex": 2,
     "answerText": "c) To reduce the number of features while retaining most of the data's variance.",
-    "explanation": "PCA is a linear dimensionality reduction technique. Its main goal is to project high-dimensional data onto a lower-dimensional space, capturing the maximum variance in the data with fewer orthogonal components. This helps combat the curse of dimensionality, reduces computational complexity, and can mitigate multicollinearity."
+    "explanation": "PCA is a linear dimensionality reduction technique. Its main goal is to project high-dimensional data onto a lower-dimensional space, capturing the maximum variance in the data with fewer orthogonal components. This helps combat the curse of dimensionality, reduces computational complexity, and can mitigate multicollinearity.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 23-24"
   },
   {
     "id": 10,
@@ -835,7 +871,9 @@
     ],
     "correctIndex": 2,
     "answerText": "c) Imbalanced data; addressed using techniques like SMOTE (Synthetic Minority Over-sampling Technique).",
-    "explanation": "A significant difference in the number of instances of different classes (99% vs. 1%) is known as class imbalance. It can lead to models that perform poorly on the minority class. Techniques like SMOTE (Synthetic Minority Over-sampling Technique), random over-sampling, or under-sampling are commonly used during preprocessing to balance the class distribution."
+    "explanation": "A significant difference in the number of instances of different classes (99% vs. 1%) is known as class imbalance. It can lead to models that perform poorly on the minority class. Techniques like SMOTE (Synthetic Minority Over-sampling Technique), random over-sampling, or under-sampling are commonly used during preprocessing to balance the class distribution.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 25-26"
   },
   {
     "id": 11,
@@ -850,7 +888,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Identifying specific algorithms for model training.",
-    "explanation": "The Problem Formulation stage focuses on the high-level business understanding, defining goals, determining project feasibility with ML, and establishing KPIs. Algorithm selection is premature at this stage and typically occurs later during the Model Training and Evaluation phase."
+    "explanation": "The Problem Formulation stage focuses on the high-level business understanding, defining goals, determining project feasibility with ML, and establishing KPIs. Algorithm selection is premature at this stage and typically occurs later during the Model Training and Evaluation phase.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 15-16"
   },
   {
     "id": 12,
@@ -865,7 +905,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Visualizing data distributions and relationships to understand underlying patterns.",
-    "explanation": "Data Exploration (EDA) primarily involves understanding the dataset's structure, summary statistics, data distributions, and correlations, often through visualization. Sourcing data is part of Data Collection (A). Creating new features (B) and handling missing values/outliers (D) are core activities of Feature Engineering and Data Preprocessing, respectively."
+    "explanation": "Data Exploration (EDA) primarily involves understanding the dataset's structure, summary statistics, data distributions, and correlations, often through visualization. Sourcing data is part of Data Collection (A). Creating new features (B) and handling missing values/outliers (D) are core activities of Feature Engineering and Data Preprocessing, respectively.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 17-18"
   },
   {
     "id": 13,
@@ -880,7 +922,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) Model training optimizes internal model parameters, while hyperparameter tuning optimizes external algorithm settings.",
-    "explanation": "Model training is the process where the algorithm learns its internal parameters (e.g., weights in neural networks, split points in decision trees) directly from the training data. Hyperparameter tuning involves finding the best values for settings that control the learning process itself (e.g., learning rate, number of trees) and are set before training begins."
+    "explanation": "Model training is the process where the algorithm learns its internal parameters (e.g., weights in neural networks, split points in decision trees) directly from the training data. Hyperparameter tuning involves finding the best values for settings that control the learning process itself (e.g., learning rate, number of trees) and are set before training begins.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 19-20"
   },
   {
     "id": 14,
@@ -895,7 +939,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) To detect model drift and ensure the model remains accurate over time in a live environment.",
-    "explanation": "Continuous monitoring is crucial in the Model Deployment and Maintenance stage to track the model's performance in the real world. Over time, changes in input data distribution (data drift) or the relationship between inputs and outputs (concept drift) can degrade performance, necessitating monitoring to trigger retraining or updates."
+    "explanation": "Continuous monitoring is crucial in the Model Deployment and Maintenance stage to track the model's performance in the real world. Over time, changes in input data distribution (data drift) or the relationship between inputs and outputs (concept drift) can degrade performance, necessitating monitoring to trigger retraining or updates.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 21-22"
   },
   {
     "id": 15,
@@ -910,7 +956,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Problem Formulation",
-    "explanation": "Assembling a team with diverse expertise (domain experts, data scientists, engineers, business stakeholders) is vital right at the beginning during Problem Formulation to ensure business alignment, technical feasibility, and realistic goal setting."
+    "explanation": "Assembling a team with diverse expertise (domain experts, data scientists, engineers, business stakeholders) is vital right at the beginning during Problem Formulation to ensure business alignment, technical feasibility, and realistic goal setting.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 23-24"
   },
   {
     "id": 16,
@@ -925,7 +973,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Conducting hyperparameter tuning or exploring ensemble methods to reduce overfitting.",
-    "explanation": "High performance on training data coupled with poor performance on validation data is a classic sign of overfitting. Techniques like regularization (tuned via hyperparameters) and ensemble methods are standard approaches to mitigate overfitting during the Model Training and Evaluation stage. Deploying an overfitted model (B) is risky."
+    "explanation": "High performance on training data coupled with poor performance on validation data is a classic sign of overfitting. Techniques like regularization (tuned via hyperparameters) and ensemble methods are standard approaches to mitigate overfitting during the Model Training and Evaluation stage. Deploying an overfitted model (B) is risky.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 25-26"
   },
   {
     "id": 17,
@@ -940,7 +990,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Ensuring scalability to handle varying workloads.",
-    "explanation": "Model Deployment requires addressing non-functional requirements such as scalability (handling varying user request volumes), latency (response time), reliability, and integration into existing production systems. Loss function selection (D) occurs during training, EDA (A) occurs earlier, and business problem documentation (B) is finalized during formulation."
+    "explanation": "Model Deployment requires addressing non-functional requirements such as scalability (handling varying user request volumes), latency (response time), reliability, and integration into existing production systems. Loss function selection (D) occurs during training, EDA (A) occurs earlier, and business problem documentation (B) is finalized during formulation.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 27-28"
   },
   {
     "id": 18,
@@ -955,7 +1007,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Data is labeled, meaning each input is paired with a known target output.",
-    "explanation": "Supervised learning fundamentally relies on labeled datasets, where the algorithm learns a mapping function from input features to known target outputs (labels)."
+    "explanation": "Supervised learning fundamentally relies on labeled datasets, where the algorithm learns a mapping function from input features to known target outputs (labels).",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 16-17"
   },
   {
     "id": 19,
@@ -970,7 +1024,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Regression; Linear Regression",
-    "explanation": "Predicting a continuous numerical value (credit score between 300 and 850) is a regression task. Linear Regression is a fundamental and common algorithm suitable as an initial choice for regression problems."
+    "explanation": "Predicting a continuous numerical value (credit score between 300 and 850) is a regression task. Linear Regression is a fundamental and common algorithm suitable as an initial choice for regression problems.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 18-19"
   },
   {
     "id": 20,
@@ -985,7 +1041,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Interpretability",
-    "explanation": "Interpretability refers to the ease with which a human can understand how a model makes its predictions. In high-stakes applications like healthcare or finance, interpretability is often prioritized to ensure trust, transparency, and regulatory compliance."
+    "explanation": "Interpretability refers to the ease with which a human can understand how a model makes its predictions. In high-stakes applications like healthcare or finance, interpretability is often prioritized to ensure trust, transparency, and regulatory compliance.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 20-21"
   },
   {
     "id": 21,
@@ -1000,7 +1058,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Linear Regression",
-    "explanation": "Linear Regression is designed for predicting continuous numerical values, not categorical outcomes. While it could theoretically be thresholded, Logistic Regression (A), SVM (B), and Random Forest (D) are specifically designed and well-suited for classification tasks like binary tumor categorization."
+    "explanation": "Linear Regression is designed for predicting continuous numerical values, not categorical outcomes. While it could theoretically be thresholded, Logistic Regression (A), SVM (B), and Random Forest (D) are specifically designed and well-suited for classification tasks like binary tumor categorization.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 22-23"
   },
   {
     "id": 22,
@@ -1015,7 +1075,9 @@
     ],
     "correctIndex": 3,
     "answerText": "D) Semi-Supervised Learning",
-    "explanation": "Semi-Supervised Learning specifically addresses situations where a small amount of labeled data is combined with a large amount of unlabeled data during training, bridging the gap between pure supervised and unsupervised learning."
+    "explanation": "Semi-Supervised Learning specifically addresses situations where a small amount of labeled data is combined with a large amount of unlabeled data during training, bridging the gap between pure supervised and unsupervised learning.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 24-25"
   },
   {
     "id": 23,
@@ -1030,7 +1092,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Robustness",
-    "explanation": "Robustness refers to an algorithm's ability to maintain good performance even when the input data contains noise, missing values, outliers, or other imperfections."
+    "explanation": "Robustness refers to an algorithm's ability to maintain good performance even when the input data contains noise, missing values, outliers, or other imperfections.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 26-27"
   },
   {
     "id": 24,
@@ -1045,7 +1109,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Classification; Naive Bayes",
-    "explanation": "Assigning articles to predefined categories (topics) is a classification task. Naive Bayes is a well-established and efficient algorithm commonly used for text classification tasks due to its effectiveness with high-dimensional text data."
+    "explanation": "Assigning articles to predefined categories (topics) is a classification task. Naive Bayes is a well-established and efficient algorithm commonly used for text classification tasks due to its effectiveness with high-dimensional text data.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 28-29"
   },
   {
     "id": 25,
@@ -1060,7 +1126,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Identifying unusually shaped clusters of network traffic that might indicate an intrusion.",
-    "explanation": "DBSCAN is a density-based clustering algorithm that excels at finding arbitrarily shaped clusters and identifying outliers (noise). This makes it highly suitable for detecting complex, non-linear patterns often associated with network intrusions, where the number of clusters is not known beforehand. Options A, B, and D are better suited for regression, K-Means clustering, and supervised classification, respectively."
+    "explanation": "DBSCAN is a density-based clustering algorithm that excels at finding arbitrarily shaped clusters and identifying outliers (noise). This makes it highly suitable for detecting complex, non-linear patterns often associated with network intrusions, where the number of clusters is not known beforehand. Options A, B, and D are better suited for regression, K-Means clustering, and supervised classification, respectively.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 15-16"
   },
   {
     "id": 26,
@@ -1075,7 +1143,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) A Hybrid Approach combining Supervised and Unsupervised Learning",
-    "explanation": "The presence of a small amount of labeled data for the rare disease suggests supervised components, but the vast majority of unlabeled data and the goal of discovering \"new subtypes\" points strongly towards leveraging unsupervised learning. A hybrid approach would use the labeled data to understand known disease characteristics and the unlabeled data to find novel patterns, making it the most effective strategy."
+    "explanation": "The presence of a small amount of labeled data for the rare disease suggests supervised components, but the vast majority of unlabeled data and the goal of discovering \"new subtypes\" points strongly towards leveraging unsupervised learning. A hybrid approach would use the labeled data to understand known disease characteristics and the unlabeled data to find novel patterns, making it the most effective strategy.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 17-18"
   },
   {
     "id": 27,
@@ -1090,7 +1160,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Supervised models like Logistic Regression or Random Forests for their transparency.",
-    "explanation": "In applications like credit scoring, where understanding why a decision was made is crucial for regulatory compliance and user trust, interpretability is paramount. Supervised models such as Logistic Regression and even certain tree-based methods like Random Forests (when analyzed for feature importance) offer higher transparency and explainability compared to complex models like deep neural networks or purely exploratory tools like t-SNE. Isolation Forest is for anomaly detection, not primarily for credit scoring decisions requiring interpretability."
+    "explanation": "In applications like credit scoring, where understanding why a decision was made is crucial for regulatory compliance and user trust, interpretability is paramount. Supervised models such as Logistic Regression and even certain tree-based methods like Random Forests (when analyzed for feature importance) offer higher transparency and explainability compared to complex models like deep neural networks or purely exploratory tools like t-SNE. Isolation Forest is for anomaly detection, not primarily for credit scoring decisions requiring interpretability.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 19-20"
   },
   {
     "id": 28,
@@ -1105,7 +1177,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Principal Component Analysis (PCA)",
-    "explanation": "PCA is a dimensionality reduction technique specifically designed to project data into a lower-dimensional space while maximizing the preserved variance. This reduces computational requirements and storage for large datasets like images. t-SNE (A) is primarily for visualization in 2D or 3D and does not preserve global variance well. DBSCAN (B) and Hierarchical Clustering (D) are clustering methods, not dimensionality reduction techniques."
+    "explanation": "PCA is a dimensionality reduction technique specifically designed to project data into a lower-dimensional space while maximizing the preserved variance. This reduces computational requirements and storage for large datasets like images. t-SNE (A) is primarily for visualization in 2D or 3D and does not preserve global variance well. DBSCAN (B) and Hierarchical Clustering (D) are clustering methods, not dimensionality reduction techniques.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 21-22"
   },
   {
     "id": 29,
@@ -1120,7 +1194,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Availability of Labeled Data: Unsupervised Learning (e.g., K-Means Clustering)",
-    "explanation": "The problem explicitly states \"no predefined labels\" for customer segments, immediately ruling out pure supervised learning. The objective is to \"group customers based on their purchasing behavior,\" which is a classic clustering task, a subset of unsupervised learning. K-Means Clustering is a common and effective algorithm for such segmentation."
+    "explanation": "The problem explicitly states \"no predefined labels\" for customer segments, immediately ruling out pure supervised learning. The objective is to \"group customers based on their purchasing behavior,\" which is a classic clustering task, a subset of unsupervised learning. K-Means Clustering is a common and effective algorithm for such segmentation.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 23-24"
   },
   {
     "id": 30,
@@ -1135,7 +1211,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) DBSCAN can automatically discover the number of clusters and is robust to noise and irregular shapes.",
-    "explanation": "A key advantage of DBSCAN is its ability to find clusters of arbitrary shapes and identify outliers (noise) as points that don't belong to any cluster. Unlike K-Means, DBSCAN does not require the user to pre-specify the number of clusters (K), which can be a significant benefit when the true number of clusters is unknown. DBSCAN's speed depends on implementation and data; it doesn't generally produce dendrograms (that's Hierarchical Clustering)."
+    "explanation": "A key advantage of DBSCAN is its ability to find clusters of arbitrary shapes and identify outliers (noise) as points that don't belong to any cluster. Unlike K-Means, DBSCAN does not require the user to pre-specify the number of clusters (K), which can be a significant benefit when the true number of clusters is unknown. DBSCAN's speed depends on implementation and data; it doesn't generally produce dendrograms (that's Hierarchical Clustering).",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 25-26"
   },
   {
     "id": 31,
@@ -1150,7 +1228,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) It is primarily a dilemma in Reinforcement Learning, not directly applicable to supervised or unsupervised choices.",
-    "explanation": "The concept of \"exploration vs. exploitation\" is a fundamental dilemma in Reinforcement Learning, where an agent must decide whether to try new actions to discover potentially better rewards (exploration) or stick with actions known to yield good rewards (exploitation). While there are analogous trade-offs in general ML, the specific term \"exploration vs. exploitation\" is most directly and prominently associated with Reinforcement Learning principles."
+    "explanation": "The concept of \"exploration vs. exploitation\" is a fundamental dilemma in Reinforcement Learning, where an agent must decide whether to try new actions to discover potentially better rewards (exploration) or stick with actions known to yield good rewards (exploitation). While there are analogous trade-offs in general ML, the specific term \"exploration vs. exploitation\" is most directly and prominently associated with Reinforcement Learning principles.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 27-28"
   },
   {
     "id": 32,
@@ -1165,7 +1245,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) It effectively leverages a combination of limited labeled data and abundant unlabeled data to improve model performance.",
-    "explanation": "Semi-Supervised Learning bridges the gap between supervised and unsupervised learning. In many real-world scenarios, obtaining labels is expensive and time-consuming, but unlabeled data is abundant. By using a small set of labeled data alongside a large pool of unlabeled data, SSL improves generalization and accuracy without the massive labeling cost of pure supervised learning."
+    "explanation": "Semi-Supervised Learning bridges the gap between supervised and unsupervised learning. In many real-world scenarios, obtaining labels is expensive and time-consuming, but unlabeled data is abundant. By using a small set of labeled data alongside a large pool of unlabeled data, SSL improves generalization and accuracy without the massive labeling cost of pure supervised learning.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 13-14"
   },
   {
     "id": 33,
@@ -1180,7 +1262,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Balancing the need to explore new actions against exploiting known high-reward actions.",
-    "explanation": "The Exploration vs. Exploitation trade-off is the central challenge in RL. The agent must balance exploring unvisited states/actions to discover higher potential rewards versus exploiting its current knowledge to take actions already known to yield positive rewards."
+    "explanation": "The Exploration vs. Exploitation trade-off is the central challenge in RL. The agent must balance exploring unvisited states/actions to discover higher potential rewards versus exploiting its current knowledge to take actions already known to yield positive rewards.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 15-16"
   },
   {
     "id": 34,
@@ -1195,7 +1279,9 @@
     ],
     "correctIndex": 3,
     "answerText": "D) Semi-Supervised Learning, as it can combine the limited labeled data with the abundant unlabeled data to enhance diagnostic accuracy.",
-    "explanation": "Given the scenario of limited labeled data and abundant unlabeled data, Semi-Supervised Learning is the ideal choice. It can leverage the existing accurate diagnoses while gaining broader understanding and generalization from the large pool of unlabeled images, improving the overall diagnostic tool beyond what pure supervised learning (A) or unsupervised learning (B) alone could achieve, and RL (C) is not suitable for this kind of static classification task."
+    "explanation": "Given the scenario of limited labeled data and abundant unlabeled data, Semi-Supervised Learning is the ideal choice. It can leverage the existing accurate diagnoses while gaining broader understanding and generalization from the large pool of unlabeled images, improving the overall diagnostic tool beyond what pure supervised learning (A) or unsupervised learning (B) alone could achieve, and RL (C) is not suitable for this kind of static classification task.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 17-18"
   },
   {
     "id": 35,
@@ -1210,7 +1296,9 @@
     ],
     "correctIndex": 3,
     "answerText": "D) Automatically segmenting medical images based on pre-defined anatomical labels.",
-    "explanation": "Image segmentation with pre-defined labels is a classic supervised learning task (classification/regression at pixel level). Autonomous systems, game playing, and robotics involve sequential decision-making and interaction with dynamic environments, which are core strengths of Reinforcement Learning."
+    "explanation": "Image segmentation with pre-defined labels is a classic supervised learning task (classification/regression at pixel level). Autonomous systems, game playing, and robotics involve sequential decision-making and interaction with dynamic environments, which are core strengths of Reinforcement Learning.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 19-20"
   },
   {
     "id": 36,
@@ -1225,7 +1313,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) It means leveraging insights gained from limited labeled data to improve predictions across the larger unlabeled dataset.",
-    "explanation": "In Semi-Supervised Learning, the foundational understanding derived from the small labeled dataset is \"transferred\" or applied to the abundant unlabeled data, allowing the model to make more informed predictions and generalize better."
+    "explanation": "In Semi-Supervised Learning, the foundational understanding derived from the small labeled dataset is \"transferred\" or applied to the abundant unlabeled data, allowing the model to make more informed predictions and generalize better.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 21-22"
   },
   {
     "id": 37,
@@ -1240,7 +1330,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) It helps define the clear objective and optimize recommendations to maximize user engagement.",
-    "explanation": "Unsupervised learning can cluster users and items (finding patterns), but RL provides the goal-oriented framework to then optimize the recommendations iteratively by selecting items that maximize metrics like user engagement or satisfaction, adding a crucial layer of decision-making and optimization."
+    "explanation": "Unsupervised learning can cluster users and items (finding patterns), but RL provides the goal-oriented framework to then optimize the recommendations iteratively by selecting items that maximize metrics like user engagement or satisfaction, adding a crucial layer of decision-making and optimization.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 23-24"
   },
   {
     "id": 38,
@@ -1255,7 +1347,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Semi-Supervised Learning, leveraging both the few labeled failure instances and the vast unlabeled historical data.",
-    "explanation": "Given the scarcity of labeled failure data but abundance of unlabeled operational data, Semi-Supervised Learning is ideal. It can learn from the few known failures while also understanding the normal operational patterns from the extensive unlabeled data, leading to a more robust anomaly detection system than pure supervised (A) or unsupervised (B). Reinforcement Learning (D) is less suitable for this prediction/classification type of task."
+    "explanation": "Given the scarcity of labeled failure data but abundance of unlabeled operational data, Semi-Supervised Learning is ideal. It can learn from the few known failures while also understanding the normal operational patterns from the extensive unlabeled data, leading to a more robust anomaly detection system than pure supervised (A) or unsupervised (B). Reinforcement Learning (D) is less suitable for this prediction/classification type of task.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 25-26"
   },
   {
     "id": 39,
@@ -1270,7 +1364,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B. Lists are 1D, DataFrames are 2D.",
-    "explanation": "A Python list is a one-dimensional (1D) sequential collection of items, whereas a Pandas DataFrame is a two-dimensional (2D) tabular data structure consisting of rows and columns with labeled axes."
+    "explanation": "A Python list is a one-dimensional (1D) sequential collection of items, whereas a Pandas DataFrame is a two-dimensional (2D) tabular data structure consisting of rows and columns with labeled axes.",
+    "sourceDeck": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx",
+    "sourceSlide": "Slide 7-8"
   },
   {
     "id": 40,
@@ -1285,7 +1381,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) To describe and summarize data",
-    "explanation": "Descriptive statistics aims to provide a summary of the main features of a dataset, making it easier to understand. Inferential statistics, hypothesis testing, and causal inference deal with drawing generalized conclusions about broader populations."
+    "explanation": "Descriptive statistics aims to provide a summary of the main features of a dataset, making it easier to understand. Inferential statistics, hypothesis testing, and causal inference deal with drawing generalized conclusions about broader populations.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 3-4"
   },
   {
     "id": 41,
@@ -1300,7 +1398,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Mean",
-    "explanation": "The arithmetic mean incorporates the exact magnitude of every single value in the dataset (sum divided by count). As a result, extreme outliers pull the mean heavily toward them. The median and mode are positional measures and remain unaffected by extreme outliers."
+    "explanation": "The arithmetic mean incorporates the exact magnitude of every single value in the dataset (sum divided by count). As a result, extreme outliers pull the mean heavily toward them. The median and mode are positional measures and remain unaffected by extreme outliers.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q1)"
   },
   {
     "id": 42,
@@ -1315,7 +1415,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) All values are the same",
-    "explanation": "Standard deviation quantifies the dispersion of values around the mean. If standard deviation = 0, there is zero variability around the mean, which guarantees that every single value in the dataset is identical."
+    "explanation": "Standard deviation quantifies the dispersion of values around the mean. If standard deviation = 0, there is zero variability around the mean, which guarantees that every single value in the dataset is identical.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q2)"
   },
   {
     "id": 43,
@@ -1330,7 +1432,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Symmetrical",
-    "explanation": "In a symmetrical distribution (such as the standard normal distribution), the left and right halves are mirror images, causing the Mean, Median, and Mode to coincide at the central axis (Mean = Median = Mode)."
+    "explanation": "In a symmetrical distribution (such as the standard normal distribution), the left and right halves are mirror images, causing the Mean, Median, and Mode to coincide at the central axis (Mean = Median = Mode).",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q3)"
   },
   {
     "id": 44,
@@ -1345,7 +1449,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B. Line Chart",
-    "explanation": "A line chart connects sequential continuous data points over time, making it the most effective visualization for observing trends, seasonal variations, and temporal progression (time series data)."
+    "explanation": "A line chart connects sequential continuous data points over time, making it the most effective visualization for observing trends, seasonal variations, and temporal progression (time series data).",
+    "sourceDeck": "Session 3 Visualization -Tuned.pptx",
+    "sourceSlide": "Slide 12 (Q1)"
   },
   {
     "id": 45,
@@ -1360,7 +1466,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C. Scatter Plot",
-    "explanation": "A scatter plot plots individual bivariate data points along two continuous quantitative axes, making it the standard choice for discovering relationships, correlations, and clusters between two continuous variables (study hours vs. exam scores)."
+    "explanation": "A scatter plot plots individual bivariate data points along two continuous quantitative axes, making it the standard choice for discovering relationships, correlations, and clusters between two continuous variables (study hours vs. exam scores).",
+    "sourceDeck": "Session 3 Visualization -Tuned.pptx",
+    "sourceSlide": "Slide 12 (Q2)"
   },
   {
     "id": 46,
@@ -1375,7 +1483,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) Categorical (specifically Ordinal Categorical)",
-    "explanation": "Customer feedback consists of qualitative category labels with a meaningful internal hierarchy or order (\"Satisfied\" > \"Neutral\" > \"Dissatisfied\"), classifying it as an ordinal categorical feature."
+    "explanation": "Customer feedback consists of qualitative category labels with a meaningful internal hierarchy or order (\"Satisfied\" > \"Neutral\" > \"Dissatisfied\"), classifying it as an ordinal categorical feature.",
+    "sourceDeck": "Session 4 Understanding Data Features -Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
   },
   {
     "id": 47,
@@ -1390,7 +1500,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Discrete",
-    "explanation": "Discrete features represent countable numeric quantities that take distinct, isolated integer values (0, 1, 2, ...). You cannot own 2.7 books, unlike continuous features which can assume any value along a continuum."
+    "explanation": "Discrete features represent countable numeric quantities that take distinct, isolated integer values (0, 1, 2, ...). You cannot own 2.7 books, unlike continuous features which can assume any value along a continuum.",
+    "sourceDeck": "Session 4 Understanding Data Features -Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
   },
   {
     "id": 48,
@@ -1405,7 +1517,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) The majority of values are low, with a few high values",
-    "explanation": "In a right-skewed (positively skewed) distribution, the bulk of observations are clustered at the lower end (left), while a long tail of infrequent, extreme high values stretches out to the right. In this case, Mean > Median > Mode."
+    "explanation": "In a right-skewed (positively skewed) distribution, the bulk of observations are clustered at the lower end (left), while a long tail of infrequent, extreme high values stretches out to the right. In this case, Mean > Median > Mode.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 23-24 (Q1)"
   },
   {
     "id": 49,
@@ -1420,7 +1534,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Median",
-    "explanation": "The median represents the 50th percentile (exact middle value) and is robust to extreme values, unlike the mean and standard deviation which are disproportionately distorted by skewness and outliers."
+    "explanation": "The median represents the 50th percentile (exact middle value) and is robust to extreme values, unlike the mean and standard deviation which are disproportionately distorted by skewness and outliers.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 23-24 (Q2)"
   },
   {
     "id": 50,
@@ -1435,7 +1551,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) The data has heavy tails and a higher risk of extreme outliers.",
-    "explanation": "Leptokurtic distributions possess positive excess kurtosis (> 0), characterized by a sharper central peak and fat, heavy tails. This indicates a significantly higher probability of extreme outlier events compared to a standard normal bell curve."
+    "explanation": "Leptokurtic distributions possess positive excess kurtosis (> 0), characterized by a sharper central peak and fat, heavy tails. This indicates a significantly higher probability of extreme outlier events compared to a standard normal bell curve.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 25-26 (Q3)"
   },
   {
     "id": 51,
@@ -1450,7 +1568,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Mean < Median < Mode",
-    "explanation": "In a negatively skewed (left-skewed) distribution, the long tail extends toward the left due to extreme low values. These low values drag the mean down below the median, leading to the general ordering: Mean < Median < Mode."
+    "explanation": "In a negatively skewed (left-skewed) distribution, the long tail extends toward the left due to extreme low values. These low values drag the mean down below the median, leading to the general ordering: Mean < Median < Mode.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 27-28"
   },
   {
     "id": 52,
@@ -1465,7 +1585,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).",
-    "explanation": "Winsorization limits the influence of outliers by capping values beyond specified percentiles (e.g., values below the 5th percentile are set to the 5th percentile value, and values above the 95th percentile are set to the 95th percentile value) instead of trimming/removing records."
+    "explanation": "Winsorization limits the influence of outliers by capping values beyond specified percentiles (e.g., values below the 5th percentile are set to the 5th percentile value, and values above the 95th percentile are set to the 95th percentile value) instead of trimming/removing records.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 29-30"
   },
   {
     "id": 53,
@@ -1480,7 +1602,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) IQR = Q3 - Q1; it is robust to extreme outliers.",
-    "explanation": "The Interquartile Range is computed as the difference between the 75th percentile (Q3) and the 25th percentile (Q1). By focusing strictly on the middle 50% of the dataset, it completely filters out extreme tail values, providing a robust measure of statistical dispersion for skewed distributions."
+    "explanation": "The Interquartile Range is computed as the difference between the 75th percentile (Q3) and the 25th percentile (Q1). By focusing strictly on the middle 50% of the dataset, it completely filters out extreme tail values, providing a robust measure of statistical dispersion for skewed distributions.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 31-32"
   },
   {
     "id": 54,
@@ -1495,7 +1619,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) P(A) * P(B)",
-    "explanation": "By the fundamental multiplication rule of probability, when two events A and B are independent (the occurrence of one does not affect the probability of the other), their joint probability is the product of their individual probabilities: P(A ∩ B) = P(A) * P(B)."
+    "explanation": "By the fundamental multiplication rule of probability, when two events A and B are independent (the occurrence of one does not affect the probability of the other), their joint probability is the product of their individual probabilities: P(A ∩ B) = P(A) * P(B).",
+    "sourceDeck": "Session 6 Probability Theory - Tuned.pptx",
+    "sourceSlide": "Slide 29-30 (Q1)"
   },
   {
     "id": 55,
@@ -1509,7 +1635,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) {H, T}",
-    "explanation": "The sample space S represents the set of all possible distinct outcomes resulting from a random experiment. Tossing a coin has two elementary outcomes: Head (H) and Tail (T), so S = {H, T}."
+    "explanation": "The sample space S represents the set of all possible distinct outcomes resulting from a random experiment. Tossing a coin has two elementary outcomes: Head (H) and Tail (T), so S = {H, T}.",
+    "sourceDeck": "Session 6 Probability Theory - Tuned.pptx",
+    "sourceSlide": "Slide 29-30 (Q2)"
   },
   {
     "id": 56,
@@ -1524,7 +1652,9 @@
     ],
     "correctIndex": 3,
     "answerText": "d) A variable that assigns numerical values to the outcomes of a random process.",
-    "explanation": "A random variable is a formal mathematical rule/function that associates a unique numerical real value with each elementary outcome in the sample space of a random experiment."
+    "explanation": "A random variable is a formal mathematical rule/function that associates a unique numerical real value with each elementary outcome in the sample space of a random experiment.",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 24-25"
   },
   {
     "id": 57,
@@ -1538,7 +1668,9 @@
     ],
     "correctIndex": 2,
     "answerText": "C) Poisson",
-    "explanation": "A unique defining characteristic of the Poisson distribution is that both its expected value (mean) and variance are equal to its single rate parameter lambda (E[X] = Var(X) = lambda)."
+    "explanation": "A unique defining characteristic of the Poisson distribution is that both its expected value (mean) and variance are equal to its single rate parameter lambda (E[X] = Var(X) = lambda).",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 26-27 (Q1)"
   },
   {
     "id": 58,
@@ -1551,7 +1683,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Binomial",
-    "explanation": "The Binomial distribution models the number of successes in n repeated, independent Bernoulli trials, where each trial has strictly two possible complementary outcomes (success/failure, yes/no)."
+    "explanation": "The Binomial distribution models the number of successes in n repeated, independent Bernoulli trials, where each trial has strictly two possible complementary outcomes (success/failure, yes/no).",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 26-27 (Q2)"
   },
   {
     "id": 59,
@@ -1565,7 +1699,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Stratified",
-    "explanation": "Stratified sampling partitions the population into non-overlapping subgroups (strata) based on known characteristics (e.g., gender, grade, income) and selects proportional random samples from each stratum, guaranteeing representation across all segments."
+    "explanation": "Stratified sampling partitions the population into non-overlapping subgroups (strata) based on known characteristics (e.g., gender, grade, income) and selects proportional random samples from each stratum, guaranteeing representation across all segments.",
+    "sourceDeck": "Session 8 Types of sampling methods tuned.pptx",
+    "sourceSlide": "Slide 13-14 (Q1)"
   },
   {
     "id": 60,
@@ -1579,7 +1715,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Systematic",
-    "explanation": "Systematic sampling selects elements from an ordered population list at regular intervals of size k (e.g., every 10th customer) starting from a randomly determined initial point."
+    "explanation": "Systematic sampling selects elements from an ordered population list at regular intervals of size k (e.g., every 10th customer) starting from a randomly determined initial point.",
+    "sourceDeck": "Session 8 Types of sampling methods tuned.pptx",
+    "sourceSlide": "Slide 13-14 (Q2)"
   },
   {
     "id": 61,
@@ -1593,7 +1731,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) No change",
-    "explanation": "The null hypothesis (H0) posits the baseline claim of no effect, no difference, or no relationship. It represents status quo that requires strong empirical evidence to be refuted."
+    "explanation": "The null hypothesis (H0) posits the baseline claim of no effect, no difference, or no relationship. It represents status quo that requires strong empirical evidence to be refuted.",
+    "sourceDeck": "Session 9 Hypotheiss testing formulation tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
   },
   {
     "id": 62,
@@ -1607,7 +1747,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) Type I",
-    "explanation": "A Type I error (false positive) occurs when the researcher rejects a null hypothesis that is actually true in reality. The probability of committing a Type I error is controlled by the significance level alpha."
+    "explanation": "A Type I error (false positive) occurs when the researcher rejects a null hypothesis that is actually true in reality. The probability of committing a Type I error is controlled by the significance level alpha.",
+    "sourceDeck": "Session 9 Hypotheiss testing formulation tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
   },
   {
     "id": 63,
@@ -1622,7 +1764,9 @@
     ],
     "correctIndex": 3,
     "answerText": "D) Z-test",
-    "explanation": "Even though the sample size is small (< 30), if the population standard deviation (sigma) is known and the underlying population is approximately normally distributed, a Z-test can still be used. If the population standard deviation were unknown, a Student's T-test would be required."
+    "explanation": "Even though the sample size is small (< 30), if the population standard deviation (sigma) is known and the underlying population is approximately normally distributed, a Z-test can still be used. If the population standard deviation were unknown, a Student's T-test would be required.",
+    "sourceDeck": "Session 10 Hypothesis Testing using Statistical Tests - Tuned.pptx",
+    "sourceSlide": "Slide 12-13"
   },
   {
     "id": 64,
@@ -1635,7 +1779,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Reject H0",
-    "explanation": "Because the p-value (0.03) is less than the significance threshold alpha (0.05), the observed test statistic is unlikely to have occurred under H0 alone, leading us to reject the null hypothesis."
+    "explanation": "Because the p-value (0.03) is less than the significance threshold alpha (0.05), the observed test statistic is unlikely to have occurred under H0 alone, leading us to reject the null hypothesis.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
   },
   {
     "id": 65,
@@ -1648,7 +1794,9 @@
     ],
     "correctIndex": 0,
     "answerText": "A) Reject H0 (when hypothesized mean is outside the CI, reject the null hypothesis)",
-    "explanation": "The hypothesized value mu0 = 53 falls completely outside the 95% Confidence Interval (48, 52). A value outside the confidence interval is statistically incompatible with the observed sample at that confidence level, leading to the rejection of H0."
+    "explanation": "The hypothesized value mu0 = 53 falls completely outside the 95% Confidence Interval (48, 52). A value outside the confidence interval is statistically incompatible with the observed sample at that confidence level, leading to the rejection of H0.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
   },
   {
     "id": 66,
@@ -1661,7 +1809,9 @@
     ],
     "correctIndex": 1,
     "answerText": "B) Fail to reject H0",
-    "explanation": "Because the p-value (0.07) is greater than alpha (0.05), the difference could reasonably be attributed to random sampling variability. Therefore, there is insufficient evidence against H0, and we fail to reject the null hypothesis."
+    "explanation": "Because the p-value (0.07) is greater than alpha (0.05), the difference could reasonably be attributed to random sampling variability. Therefore, there is insufficient evidence against H0, and we fail to reject the null hypothesis.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q3)"
   }
 ];
 
@@ -1730,7 +1880,7 @@
         const btn = document.createElement('button');
         btn.className = 'jump-btn';
         btn.textContent = idx + 1;
-        btn.title = `Question ${idx + 1}: ${q.session}`;
+        btn.title = `Question ${idx + 1}: ${q.session} (${q.sourceSlide})`;
 
         if (idx === currentIndex) {
           btn.classList.add('current');
@@ -1770,7 +1920,6 @@
         let optLetter = letters[optIdx] || opt.charAt(0);
         let optText = opt;
 
-        // Clean option text if it starts with A) or A.
         const match = opt.match(/^[A-Da-d][\)\.]\s*(.*)$/);
         if (match) {
           optText = match[1];
@@ -1809,6 +1958,9 @@
             <div class="explanation-body">
               <strong>Explanation:</strong> ${q.explanation}
             </div>
+            <div class="explanation-source">
+              <span>📄</span> <strong>Slide Reference:</strong> ${q.sourceDeck} • ${q.sourceSlide}
+            </div>
           </div>
         `;
       }
@@ -1816,7 +1968,10 @@
       quizCardContainer.innerHTML = `
         <div class="quiz-card">
           <div class="card-top">
-            <span class="session-badge" title="${q.session}">${q.session}</span>
+            <div class="card-badges">
+              <span class="session-badge" title="${q.session}">${q.session}</span>
+              <span class="slide-badge" title="Source Slide">${q.sourceSlide}</span>
+            </div>
             <span class="track-tag">${q.track}</span>
           </div>
 
