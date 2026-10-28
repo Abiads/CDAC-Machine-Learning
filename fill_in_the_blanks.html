@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fill-in-the-Blanks & Conceptual Review Guide | CDAC ML & Stats</title>
+  <meta name="description" content="Complete Fill-in-the-Blanks, numerical problems, and conceptual review guide for CDAC Machine Learning & Statistics lectures with in-depth explanations and slide references.">
+  
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Vercel Speed Insights -->
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #273549;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --success-border: #059669;
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    html.light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --surface-border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --card-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #6366f1, #3b82f6);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .container {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem 1rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Jump Navigation Bar */
+    .jump-nav {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .jump-nav-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .jump-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .jump-pill {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .jump-pill:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Section Cards */
+    .section-block {
+      margin-bottom: 2.5rem;
+      scroll-margin-top: 5rem;
+    }
+
+    .section-header-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(59, 130, 246, 0.06));
+      border: 1.5px solid rgba(99, 102, 241, 0.25);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 1.15rem 1.35rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .source-badge {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Question Cards */
+    .q-card {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.2s;
+    }
+
+    .q-card:hover {
+      border-color: var(--accent);
+    }
+
+    .q-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .q-id-badge {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.825rem;
+    }
+
+    .q-prompt {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.55;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .blank-spot {
+      background-color: rgba(99, 102, 241, 0.15);
+      border-bottom: 2px dashed var(--accent);
+      color: var(--accent);
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .ans-container {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .ans-label {
+      font-weight: 700;
+      color: var(--success);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ans-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .explanation-box {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      border-radius: 10px;
+      padding: 1.15rem;
+      font-size: 0.925rem;
+      line-height: 1.65;
+    }
+
+    .explanation-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .explanation-body {
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    pre.code-block {
+      background-color: rgba(15, 23, 42, 0.9);
+      color: #38bdf8;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+      line-height: 1.5;
+    }
+
+    html.light pre.code-block {
+      background-color: #0f172a;
+      color: #38bdf8;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.875rem;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--surface-border);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background-color: var(--surface-hover);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Print styles */
+    @media print {
+      header, .jump-nav, .btn { display: none !important; }
+      body { background: white; color: black; }
+      .q-card { page-break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0.75rem; }
+      .container { padding: 1rem 0.5rem 2rem 0.5rem; }
+      .q-card { padding: 1.15rem; }
+      .logo-title { font-size: 1rem; }
+      .section-title { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo-area">
+        <span class="logo-badge">CDAC GUIDE</span>
+        <h1 class="logo-title">Fill-in-the-Blanks & Review Guide</h1>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-primary" title="Return to Interactive MCQ Quiz">
+          ← Back to Quiz
+        </a>
+        <button id="toggleAnswersBtn" class="btn" title="Toggle Visibility of All Key Answers">
+          👁️ <span id="toggleAnswersText">Hide Answers</span>
+        </button>
+        <button id="themeToggleBtn" class="btn" title="Toggle Light / Dark Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Quick Jump Navigator -->
+    <nav class="jump-nav" aria-label="Sections Quick Jump">
+      <div class="jump-nav-title">
+        <span>⚡</span> Direct Section Jump (No search needed — all items directly visible below)
+      </div>
+      <div class="jump-pills">
+        <a href="#sec-1" class="jump-pill">Session 1: DataFrames (8)</a>
+        <a href="#sec-2" class="jump-pill">Session 4: Data Features (3)</a>
+        <a href="#sec-3" class="jump-pill">Session 5: Distributions & Skewness (3)</a>
+        <a href="#sec-4" class="jump-pill">Session 6: Probability & Dice</a>
+        <a href="#sec-5" class="jump-pill">Session 7: Binomial & Poisson Problems</a>
+        <a href="#sec-6" class="jump-pill">Sessions 9-11: Hypothesis Testing</a>
+        <a href="#sec-7" class="jump-pill">ML Comparison Matrices</a>
+      </div>
+    </nav>
+
+    <!-- SECTION 1 -->
+    <section id="sec-1" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 1: DataFrames in Python (Pandas)</div>
+        <div class="source-badge">📄 Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)</div>
+      </div>
+
+      <!-- Item 1.1 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.1</span>
+          <span class="source-badge">Slide 9</span>
+        </div>
+        <p class="q-prompt">
+          "A DataFrame is a <span class="blank-spot">two-dimensional (2D)</span> data structure used for data manipulation in Python."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">two-dimensional (2D)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• In Pandas, the two foundational data structures are the Series and the DataFrame.
+• A Series is a 1-dimensional labeled array capable of holding data of any type.
+• A DataFrame is a 2-dimensional labeled data structure with columns of potentially different types. It is structured like a spreadsheet or SQL table with both row labels (index) and column labels.
+• Mathematical representation: A DataFrame can be modeled as a matrix M of size m x n, where m is the number of rows (observations) and n is the number of columns (variables/features).
+          </div>
+          <pre class="code-block">import pandas as pd
+df = pd.DataFrame({'Age': [25, 30], 'Salary': [50000, 75000]})
+print(df.ndim)  # Outputs: 2 (Two-dimensional)</pre>
+        </div>
+      </article>
+
+      <!-- Item 1.2 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.2</span>
+          <span class="source-badge">Slide 9</span>
+        </div>
+        <p class="q-prompt">
+          "In a Data Table, the horizontal sections are called <span class="blank-spot">rows</span>, and the vertical sections are called <span class="blank-spot">columns</span>."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">rows, columns</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Rows (Horizontal): Represent individual records, observations, samples, or instances. In machine learning, each row corresponds to a single data point vector x_i.
+• Columns (Vertical): Represent attributes, features, variables, or dimensions measured for each observation.
+• Cross-Domain Terminology Equivalence:
+  - Relational Databases: Row = Record / Tuple; Column = Attribute / Field
+  - Machine Learning: Row = Instance / Sample / Vector; Column = Feature / Predictor
+  - Statistics: Row = Observation / Case; Column = Variable / Measurement
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.3 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.3</span>
+          <span class="source-badge">Slide 9</span>
+        </div>
+        <p class="q-prompt">
+          "A dictionary in Python stores data as <span class="blank-spot">key-value</span> pairs."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">key-value</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• A Python dictionary (dict) is an associative array data structure.
+• Each item consists of a unique, immutable 'key' (such as a string, integer, or tuple) mapped to a 'value' (which can be any arbitrary Python object).
+• Time Complexity: Key lookups, insertions, and deletions have an average time complexity of O(1) due to underlying hash table implementation.
+• Relation to Pandas: A Pandas DataFrame is internally implemented as a dictionary-like container for Series objects, where keys correspond to column names.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.4 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.4</span>
+          <span class="source-badge">Slide 9</span>
+        </div>
+        <p class="q-prompt">
+          "A tuple is similar to a list, but it is <span class="blank-spot">immutable</span>, meaning its values cannot be changed."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">immutable</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Mutability distinguishes lists from tuples in Python:
+  - Lists ([...]): Mutable. Elements can be added, removed, or modified in-place.
+  - Tuples ((...)): Immutable. Once created, their size and element bindings cannot be altered.
+• Why Immutability Matters:
+  1. Data Integrity: Guarantees write-protection for sensitive, constant configuration data.
+  2. Hashability: Because tuples are immutable, they are hashable and can serve as dictionary keys or set elements, whereas lists cannot.
+  3. Memory Efficiency: Tuples have smaller memory overhead and slightly faster allocation times compared to dynamic lists.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.5 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.5</span>
+          <span class="source-badge">Slide 10</span>
+        </div>
+        <p class="q-prompt">
+          "The process of summarizing and organizing data to extract useful insights is called <span class="blank-spot">data analysis (or Exploratory Data Analysis - EDA)</span>."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">data analysis (or EDA)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Data analysis is the systematic process of applying statistical and logical techniques to describe, condense, illustrate, and evaluate data.
+• Core stages of modern Data Analysis:
+  1. Descriptive: What happened? (Summary statistics: Mean, Median, Mode, Variance, IQR).
+  2. Exploratory (EDA): What patterns exist? (Visualizations, correlation heatmaps, box plots).
+  3. Diagnostic: Why did it happen? (Root cause analysis, ANOVA, Chi-Square).
+  4. Predictive: What will happen next? (Regression, Classification, Time-series).
+  5. Prescriptive: What action should be taken? (Optimization algorithms, Decision science).
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.6 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.6</span>
+          <span class="source-badge">Slide 10</span>
+        </div>
+        <p class="q-prompt">
+          "In a DataFrame, the columns represent <span class="blank-spot">attributes / features / variables</span> of the data."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">attributes / features / variables</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• In data modeling:
+  - Rows represent instances (e.g., individual patients in a clinical trial).
+  - Columns represent features/attributes (e.g., Blood Pressure, Cholesterol, Age, Dosage).
+• In mathematical modeling: The feature space is formed by the span of these column vectors. A dataset with d columns exists in a d-dimensional feature space R^d.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.7 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.7</span>
+          <span class="source-badge">Slide 10</span>
+        </div>
+        <p class="q-prompt">
+          "A <span class="blank-spot">database</span> is an organized collection of data, generally stored and accessed electronically from a computer system."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">database (or DBMS)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• A database provides persistent, structured, secure, and ACID-compliant (Atomicity, Consistency, Isolation, Durability) storage for enterprise data.
+• Main categories:
+  1. Relational Databases (RDBMS): PostgreSQL, MySQL, SQLite, Oracle (tabular, strict schemas, SQL).
+  2. NoSQL Databases: MongoDB (Document), Redis (Key-Value), Cassandra (Columnar), Neo4j (Graph).
+• Integration with Python: Analysts query databases using SQL and ingest result sets directly into Pandas via pd.read_sql().
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 1.8 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 1.8</span>
+          <span class="source-badge">Slide 10</span>
+        </div>
+        <p class="q-prompt">
+          "The function used to remove missing values from a DataFrame is <span class="blank-spot">dropna()</span>."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">dropna()</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• In Pandas, missing or null values are represented by NaN (Not a Number) or None.
+• The dropna() method filters out rows or columns containing missing values.
+• Key Parameters:
+  - axis=0 (default): Drops rows containing NaN.
+  - axis=1: Drops columns containing NaN.
+  - how='any' (default): Drops if at least one NaN is present.
+  - how='all': Drops only if all entries in that row/column are NaN.
+  - subset=['col1', 'col2']: Restricts null-checking to designated columns.
+• Best Practice: If nulls exceed 5-10% of records, imputation (df.fillna(df.median())) is usually preferred over blanket row deletion to prevent massive data loss.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section id="sec-2" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 2: Understanding Data Features</div>
+        <div class="source-badge">📄 Session 4 Understanding Data Features -Tuned.pptx (Slide 21)</div>
+      </div>
+
+      <!-- Item 2.1 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 2.1</span>
+          <span class="source-badge">Slide 21</span>
+        </div>
+        <p class="q-prompt">
+          "<span class="blank-spot">Categorical (or Qualitative)</span> features represent categories or groups."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Categorical (or Qualitative)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Categorical variables represent qualitative characteristics that fall into distinct bins.
+• Subtypes:
+  1. Nominal Categorical: Categories without inherent mathematical ordering.
+     Examples: Gender (Male, Female, Other), City (Mumbai, Delhi, Bangalore), Blood Type (A, B, AB, O).
+  2. Ordinal Categorical: Categories with an intrinsic, meaningful hierarchy or order.
+     Examples: Education Level (High School < Bachelor's < Master's < PhD), Customer Satisfaction (Dissatisfied < Neutral < Satisfied).
+• Machine Learning Requirement: ML algorithms cannot natively compute weights on string labels; categorical variables must be encoded numerically via One-Hot Encoding (pd.get_dummies) or Ordinal Encoding.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 2.2 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 2.2</span>
+          <span class="source-badge">Slide 21</span>
+        </div>
+        <p class="q-prompt">
+          "A <span class="blank-spot">Continuous</span> feature can take any value within a range."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Continuous</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Continuous features are quantitative variables obtained through measurement.
+• Distinctive property: Between any two continuous values, there exist an infinite number of intermediate values along the real number line.
+• Examples: Height (e.g., 175.42 cm), Temperature (e.g., 36.65 °C), Stock Price (e.g., 2450.75 INR), Time elapsed.
+• Visual Representation: Continuous data is commonly visualized using histograms, KDE (Kernel Density Estimation) plots, and box plots.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 2.3 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 2.3</span>
+          <span class="source-badge">Slide 21</span>
+        </div>
+        <p class="q-prompt">
+          "The count of items purchased is an example of a <span class="blank-spot">Discrete</span> feature."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Discrete</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Discrete features are quantitative variables obtained through counting.
+• Distinctive property: They take distinct, separate numerical values—typically non-negative integers {0, 1, 2, 3, ...}.
+• Examples: Number of items in a shopping cart, number of customer support tickets, count of website clicks.
+• Modeling: Discrete count distributions are commonly modeled using Poisson or Negative Binomial distributions.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section id="sec-3" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 3: Data Distributions, Skewness & Kurtosis</div>
+        <div class="source-badge">📄 Session 5 Data Distributions - Tuned.pptx (Slides 33-34)</div>
+      </div>
+
+      <!-- Item 3.1 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 3.1</span>
+          <span class="source-badge">Slide 33</span>
+        </div>
+        <p class="q-prompt">
+          "<span class="blank-spot">Skewness</span> measures the asymmetry of a data distribution."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Skewness</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Skewness is the 3rd standardized moment of a probability distribution.
+• Formula: Skewness = E[((X - mu) / sigma)^3]
+• Classification:
+  - Symmetrical (Skewness ≈ 0): Normal bell curve where Mean = Median = Mode.
+  - Positive / Right-Skewed (Skewness > 0): The right tail is longer. The majority of points cluster at lower values, while a few extreme high values pull the mean rightward. Ordering: Mean > Median > Mode. Example: Household income, house prices.
+  - Negative / Left-Skewed (Skewness < 0): The left tail is longer. Extreme low values pull the mean to the left. Ordering: Mean < Median < Mode. Example: Human lifespan in developed countries.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 3.2 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 3.2</span>
+          <span class="source-badge">Slide 33</span>
+        </div>
+        <p class="q-prompt">
+          "The <span class="blank-spot">68-95-99.7 Rule (or Empirical Rule)</span> states that 95% of data falls within 2 standard deviations of the mean in a normal distribution."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">68-95-99.7 Rule (Empirical Rule)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• In any symmetrical, bell-shaped Gaussian (Normal) distribution N(mu, sigma^2):
+  - Approximately 68.27% of observations fall within mu ± 1 sigma.
+  - Approximately 95.45% of observations fall within mu ± 2 sigma.
+  - Approximately 99.73% of observations fall within mu ± 3 sigma.
+• Outlier Detection: Observations lying beyond 3 standard deviations (|z| > 3) represent only ~0.27% of data and are universally flagged as statistical anomalies/outliers.
+          </div>
+        </div>
+      </article>
+
+      <!-- Item 3.3 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Item 3.3</span>
+          <span class="source-badge">Slide 34</span>
+        </div>
+        <p class="q-prompt">
+          "If the tails of a distribution are heavier than normal, it is called <span class="blank-spot">Leptokurtic (or Positive Kurtosis)</span> kurtosis."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Leptokurtic (Positive Kurtosis)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & Intuition</div>
+          <div class="explanation-body">
+• Kurtosis measures the "tailedness" and peak sharpness of a distribution (the 4th standardized moment).
+• Reference: Standard Normal distribution has Excess Kurtosis = 0 (Mesokurtic).
+• Three Kurtosis Types:
+  1. Leptokurtic (Excess Kurtosis > 0): Sharp, high peak and fat, heavy tails. Critical implication: High "tail risk"—a significantly greater probability of extreme outlier events than predicted by a normal curve. Common in financial asset returns.
+  2. Mesokurtic (Excess Kurtosis = 0): Standard normal distribution.
+  3. Platykurtic (Excess Kurtosis < 0): Flat, broad peak with thin, light tails. Outliers are rare (e.g., Uniform distribution).
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section id="sec-4" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 4: Probability Theory Foundations & Dice Problems</div>
+        <div class="source-badge">📄 Session 6 Probability Theory - Tuned.pptx (Slides 5-6)</div>
+      </div>
+
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Problem 4.1</span>
+          <span class="source-badge">Slides 5-6</span>
+        </div>
+        <p class="q-prompt">
+          "What is the probability of rolling a number greater than 4 on a fair six-sided die?"
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Calculated Answer</span>
+          <span class="ans-value">1/3 (≈ 33.33% or 0.3333)</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 Step-by-Step Derivation & Axioms</div>
+          <div class="explanation-body">
+• Sample Space (S): The set of all possible outcomes for a fair 6-sided die:
+  S = {1, 2, 3, 4, 5, 6} -> Total outcomes n(S) = 6.
+• Event (E): Rolling a number strictly greater than 4:
+  E = {5, 6} -> Favorable outcomes n(E) = 2.
+• Classical Probability Formula:
+  P(E) = n(E) / n(S) = 2 / 6 = 1 / 3 ≈ 0.3333 (33.33%).
+
+• Foundational Probability Axioms:
+  1. Non-negativity: 0 <= P(E) <= 1 for any event E.
+  2. Certainty: P(S) = 1.
+  3. Complement Rule: P(E') = 1 - P(E) = 1 - 1/3 = 2/3 (Rolling <= 4).
+  4. Multiplication Rule for Independent Events: P(A and B) = P(A) * P(B).
+     Example: Rolling two sixes consecutively = (1/6) * (1/6) = 1/36.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section id="sec-5" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 5: Binomial & Poisson Probability Distributions</div>
+        <div class="source-badge">📄 Session 7 Probability Distributions Tuned.pptx (Slides 15-17, 26-27)</div>
+      </div>
+
+      <!-- Problem 5.1 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Problem 5.1</span>
+          <span class="source-badge">Slide 15</span>
+        </div>
+        <p class="q-prompt">
+          "In an inspection of cement companies, 60% of all industries had emissions that do not meet pollution requirements. For a random sample of 15 companies, compute the probability that all 15 fail, and the probability that exactly 8 fail."
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Calculated Answers</span>
+          <span class="ans-value">P(All 15 Fail) ≈ 0.047% &nbsp;|&nbsp; P(Exactly 8 Fail) ≈ 17.71%</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 Mathematical Derivation</div>
+          <div class="explanation-body">
+• Formula for Binomial Probability Mass Function:
+  P(X = k) = C(n, k) * (p^k) * ((1 - p)^(n - k))
+  where:
+  - n = 15 (sample size)
+  - p = 0.60 (probability of emission violation)
+  - q = 1 - p = 0.40 (probability of compliance)
+  - C(n, k) = n! / (k! * (n - k)!)
+
+• Calculation 1: All 15 Fail (k = 15)
+  P(X = 15) = C(15, 15) * (0.60^15) * (0.40^0)
+  C(15, 15) = 1, 0.40^0 = 1
+  P(X = 15) = 0.60^15 ≈ 0.000470 (0.047%)
+
+• Calculation 2: Exactly 8 Fail (k = 8)
+  C(15, 8) = 15! / (8! * 7!) = 6,435
+  0.60^8 ≈ 0.016796
+  0.40^7 ≈ 0.0016384
+  P(X = 8) = 6435 * 0.016796 * 0.0016384 ≈ 0.17708 (17.71%)
+          </div>
+        </div>
+      </article>
+
+      <!-- Problem 5.2 -->
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Concept 5.2</span>
+          <span class="source-badge">Slide 26</span>
+        </div>
+        <p class="q-prompt">
+          "Which probability distribution has its <span class="blank-spot">Mean equal to its Variance</span>?"
+        </p>
+        <div class="ans-container">
+          <span class="ans-label">Correct Key Answer</span>
+          <span class="ans-value">Poisson Distribution</span>
+        </div>
+        <div class="explanation-box">
+          <div class="explanation-title">💡 In-Depth Explanation & EDA Application</div>
+          <div class="explanation-body">
+• A Poisson process models the count of rare events occurring within a fixed interval of time, space, or area.
+• PMF: P(X = k) = (lambda^k * e^(-lambda)) / k!
+• Mathematical Equality:
+  - Mean E[X] = lambda
+  - Variance Var(X) = lambda
+• Practical Diagnostic Tip: In exploratory data analysis, when analyzing discrete counts (such as customer support calls or website errors), calculate the sample mean and variance. If mean ≈ variance, the Poisson distribution is the ideal choice. If variance is significantly greater than the mean, the data exhibits overdispersion, requiring a Negative Binomial model.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 6 -->
+    <section id="sec-6" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 6: Hypothesis Testing & A/B Testing Decision Rules</div>
+        <div class="source-badge">📄 Sessions 9, 10 & 11</div>
+      </div>
+
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">Summary Matrix</span>
+          <span class="source-badge">Statistical Tests Reference</span>
+        </div>
+        <p class="q-prompt">
+          Hypothesis Testing Decision Rules, Test Selection Matrix & Error Classifications:
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Parameter Tested</th>
+              <th>Sample Size (n)</th>
+              <th>Population SD Known?</th>
+              <th>Appropriate Test</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Single Population Mean</td>
+              <td>n &ge; 30</td>
+              <td>Yes or No</td>
+              <td><strong>Z-test</strong> (Central Limit Theorem holds)</td>
+            </tr>
+            <tr>
+              <td>Single Population Mean</td>
+              <td>n &lt; 30</td>
+              <td>Yes</td>
+              <td><strong>Z-test</strong></td>
+            </tr>
+            <tr>
+              <td>Single Population Mean</td>
+              <td>n &lt; 30</td>
+              <td>No</td>
+              <td><strong>Student's T-test</strong> (degrees of freedom = n - 1)</td>
+            </tr>
+            <tr>
+              <td>Two Independent Means</td>
+              <td>n1, n2 &lt; 30</td>
+              <td>No</td>
+              <td><strong>Two-sample Independent T-test</strong></td>
+            </tr>
+            <tr>
+              <td>Conversion Rates (A/B Testing)</td>
+              <td>n1, n2 large</td>
+              <td>Binomial</td>
+              <td><strong>Two-proportion Z-test</strong></td>
+            </tr>
+            <tr>
+              <td>Categorical Frequencies</td>
+              <td>Any</td>
+              <td>Contingency Table</td>
+              <td><strong>Chi-Square (&chi;&sup2;) Test of Independence</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="explanation-box" style="margin-top: 1.25rem;">
+          <div class="explanation-title">💡 Type I vs Type II Errors & Decision Thresholds</div>
+          <div class="explanation-body">
+• P-value Decision Benchmark (alpha = 0.05):
+  - p-value < 0.05: Reject H0 (Null Hypothesis). The observed effect is statistically significant.
+  - p-value >= 0.05: Fail to reject H0. Insufficient empirical evidence to dispute the baseline.
+
+• Error Classification:
+  - Type I Error (False Positive / alpha): Rejecting H0 when H0 is actually true. (Convicting an innocent person).
+  - Type II Error (False Negative / beta): Failing to reject H0 when H0 is actually false. (Acquitting a guilty person).
+  - Statistical Power = 1 - beta: The probability of correctly rejecting a false null hypothesis.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 7 -->
+    <section id="sec-7" class="section-block">
+      <div class="section-header-box">
+        <div class="section-title">Section 7: Machine Learning Core Conceptual Comparison Matrix</div>
+        <div class="source-badge">📄 ML Sessions 1 to 6</div>
+      </div>
+
+      <article class="q-card">
+        <div class="q-card-top">
+          <span class="q-id-badge">ML Core Comparison</span>
+          <span class="source-badge">Supervised vs Unsupervised vs Reinforcement</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Supervised Learning</th>
+              <th>Unsupervised Learning</th>
+              <th>Reinforcement Learning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Data Type</strong></td>
+              <td>Labeled Data (X, y)</td>
+              <td>Unlabeled Data (X only)</td>
+              <td>Environment States (S)</td>
+            </tr>
+            <tr>
+              <td><strong>Core Objective</strong></td>
+              <td>Learn mapping f(X) &rarr; y</td>
+              <td>Discover latent clusters & patterns</td>
+              <td>Maximize cumulative reward</td>
+            </tr>
+            <tr>
+              <td><strong>Typical Algorithms</strong></td>
+              <td>Linear Regression, Decision Trees, SVM</td>
+              <td>K-Means, PCA, DBSCAN, Hierarchical</td>
+              <td>Q-Learning, Policy Gradient, PPO</td>
+            </tr>
+            <tr>
+              <td><strong>Feedback Mechanism</strong></td>
+              <td>Direct ground truth error signal</td>
+              <td>None (Self-supervised patterns)</td>
+              <td>Delayed rewards / penalties</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="explanation-box" style="margin-top: 1.25rem;">
+          <div class="explanation-title">💡 Feature Scaling: Normalization vs Standardization</div>
+          <div class="explanation-body">
+1. Min-Max Normalization:
+   - Formula: X_scaled = (X - X_min) / (X_max - X_min)
+   - Scales values strictly into the bounded interval [0, 1].
+   - Recommended for: Neural networks, image pixel intensities [0, 255], and algorithms that do not assume any specific distribution.
+   - Drawback: Highly sensitive to outliers (an extreme maximum will compress inliers into a tiny range).
+
+2. Z-Score Standardization:
+   - Formula: X_standardized = (X - mu) / sigma
+   - Rescales data to have Mean = 0 and Standard Deviation = 1.
+   - Recommended for: PCA, SVM, Linear Regression, and algorithms assuming Gaussian distributed features.
+   - Advantage: Robust to outliers and preserves extreme signals without bounding values into a narrow ceiling.
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <script>
+    // Theme Toggle Functionality
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const STORAGE_KEY = 'cdac_ml_stats_quiz_session';
+
+    function initTheme() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const state = JSON.parse(saved);
+          if (state.theme === 'dark') {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+            if (themeIcon) themeIcon.textContent = '☀️';
+            return;
+          }
+        }
+      } catch (e) {}
+      document.documentElement.classList.add('light');
+      if (themeIcon) themeIcon.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const htmlEl = document.documentElement;
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        themeIcon.textContent = '🌙';
+      } else {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        themeIcon.textContent = '☀️';
+      }
+    });
+
+    // Toggle Answers Functionality (Show / Hide Answers)
+    const toggleAnswersBtn = document.getElementById('toggleAnswersBtn');
+    const toggleAnswersText = document.getElementById('toggleAnswersText');
+    let answersVisible = true;
+
+    toggleAnswersBtn.addEventListener('click', () => {
+      answersVisible = !answersVisible;
+      const ansBoxes = document.querySelectorAll('.ans-container');
+      const blankSpots = document.querySelectorAll('.blank-spot');
+
+      ansBoxes.forEach(box => {
+        box.style.display = answersVisible ? 'flex' : 'none';
+      });
+
+      blankSpots.forEach(spot => {
+        spot.style.color = answersVisible ? 'var(--accent)' : 'transparent';
+        spot.style.borderBottom = '2px dashed var(--accent)';
+      });
+
+      toggleAnswersText.textContent = answersVisible ? 'Hide Answers' : 'Show Answers';
+    });
+
+    initTheme();
+  </script>
+</body>
+</html>
