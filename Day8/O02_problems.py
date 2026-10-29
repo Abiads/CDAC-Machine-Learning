@@ -1,116 +1,87 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+from typing import Dict, Tuple
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.pipeline import make_pipeline
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score, root_mean_squared_error
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.model_selection import train_test_split
 
-# ==============================================================================
-# 1. Dataset Generation (Given in Lecture)
-# ==============================================================================
-n_samples = 200
-np.random.seed(2026)
 
-# Generate 200 random fertilizer amounts between 20 kg/ha and 250 kg/ha
-fertilizer = np.random.uniform(20, 250, size=n_samples)
+def generate_agricultural_data(n_samples: int = 200, seed: int = 2026) -> pd.DataFrame:
+    np.random.seed(seed)
+    fertilizer = np.random.uniform(20, 250, size=n_samples)
+    # Yield = 2.0 + 0.08*Fertilizer - 0.00028*(Fertilizer^2) + Noise
+    true_yield = 2.0 + 0.08 * fertilizer - 0.00028 * (fertilizer**2)
+    observed_yield = true_yield + np.random.normal(0, 0.8, size=n_samples)
+    df = pd.DataFrame({
+                "fertilizer_kg_ha": fertilizer.round(1),
+                "crop_yield_tons": observed_yield.round(2),
+            } )
+    print("Generated agricultural data:")
+    print(df.head())
+    print("=" * 60)
+    return df
 
-# True mathematical relation: inverted parabola (arch/bell curve)
-# Yield = 2.0 + 0.08*Fertilizer - 0.00028*(Fertilizer^2) + Noise
-true_yield = 2.0 + 0.08 * fertilizer - 0.00028 * (fertilizer**2)
-observed_yield = true_yield + np.random.normal(0, 0.8, size=n_samples)
+def train_polynomial_yield_model(df:pd.DataFrame,
+                                 feature_col:str = "fertilizer_kg_ha",
+                                 target_col: str = "crop_yield_tons",
+                                 degree: int = 2,
+                                 test_size: float = 0.2,
+                                 )-> Tuple[Pipeline,
+                                           pd.DataFrame,
+                                           pd.DataFrame,
+                                           pd.Series,
+                                           pd.Series,
+                                           Dict[str, float]]:
+    if feature_col not in df.columns or target_col not in df.columns:
+        raise ValueError("Specified feature or target column not found in the DataFrame.")
 
-# Create DataFrame
-df = pd.DataFrame(
-    {
-        "fertilizer_kg_ha": fertilizer.round(1),
-        "crop_yield_tons": observed_yield.round(2),
+    X = df[[feature_col]] # predictor variable(s) for the model
+    y = df[target_col] # target variable for the model
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=2026)
+    pipeline = make_pipeline(PolynomialFeatures(degree=degree), LinearRegression())
+    pipeline.fit(X_train, y_train)
+    y_pred = pipeline.predict(X_test)
+    metrics = {
+        "R2": r2_score(y_test, y_pred),
+        "RMSE": root_mean_squared_error(y_test, y_pred)
     }
-)
+    print("Polinomial model training completed")
+    return pipeline, X_train, X_test, y_train, y_test, metrics
 
-# New farm plots given for prediction
-new_farm_plots = pd.DataFrame(
-    {
-        "fertilizer_kg_ha": [50.0, 140.0, 220.0]
-    }
-)
-
-print("--- First 5 Rows of Dataset ---")
-print(df.head())
-print("=" * 60)
+def predict_farm_yields(
+    pipeline: Pipeline, new_farm_data: pd.DataFrame
+) -> pd.DataFrame:
+    predictions = pipeline.predict(new_farm_data)
+    results_df = new_farm_data.copy()
+    results_df["predicted_yield_tons"] = predictions.round(2)
+    return results_df
 
 
-# ==============================================================================
-# 2. Split Features (X) and Target (y)
-# ==============================================================================
-# X must be 2D DataFrame: df[["column_name"]]
-# y is 1D Series: df["column_name"]
-X = df[["fertilizer_kg_ha"]]
-y = df["crop_yield_tons"]
 
 
-# ==============================================================================
-# 3. Check Best Degree (Degrees 1, 2, 3, 4)
-# ==============================================================================
-print("--- Finding the Best Degree ---")
-for deg in [1, 2, 3, 4]:
-    model_deg = make_pipeline(PolynomialFeatures(degree=deg, include_bias=False), LinearRegression())
-    model_deg.fit(X, y)
-    y_pred = model_deg.predict(X)
-    rmse = np.sqrt(mean_squared_error(y, y_pred))
-    print(f"Degree {deg} RMSE: {rmse:.2f}")
 
-print("--> Degree 2 is best (parabola with 1 bend)!")
-print("=" * 60)
+def main():
+    # 1. Ingest Data
+    df_crop = generate_agricultural_data(n_samples=250)
 
+    # 2. Train Polynomial Model Pipeline (Degree 2)
+    pipeline, X_train, X_test, y_train, y_test, metrics = train_polynomial_yield_model(
+        df_crop, degree=2)
+    # 3. Model Performance Evaluation                                                                    df_crop, degree=2)
+    print("\n--- Model Performance Metrics (Test Set) ---")
+    print(f"Polynomial RMSE : {metrics['RMSE']:.4f} Tons/ha")
+    print(f"R² Score        : {metrics['R2']:.4f}")
 
-# ==============================================================================
-# 4. Train Degree 2 Polynomial Regression Model
-# ==============================================================================
-# Pipeline:
-#   Step 1: PolynomialFeatures turns [x] into [x, x^2]
-#   Step 2: LinearRegression fits y = b0 + b1*x + b2*(x^2)
-model = make_pipeline(PolynomialFeatures(degree=2, include_bias=False), LinearRegression())
-model.fit(X, y)
+    # for prediction 
+    new_farm_plots = pd.DataFrame( {
+            "fertilizer_kg_ha": [50.0, 140.0, 220.0,115.0,70.4]
+        } )
+    predicted_yields = predict_farm_yields(pipeline, new_farm_plots)
+    print("\n--- Predicted Yields for New Farm Plots ---")
+    print(predicted_yields.to_string(index = False))
+    print("=" * 60)
 
-# Print learned parameters: intercept (b0) and coefficients (b1, b2)
-lr = model.named_steps["linearregression"]
-print(f"Intercept (b0)          : {lr.intercept_:.2f}")
-print(f"Linear Coeff (b1)       : {lr.coef_[0]:.5f}")
-print(f"Quadratic Coeff (b2)    : {lr.coef_[1]:.7f}")
-print(f"Equation: Yield = {lr.intercept_:.2f} + ({lr.coef_[0]:.4f} * Fert) + ({lr.coef_[1]:.6f} * Fert^2)")
-print("=" * 60)
-
-
-# ==============================================================================
-# 5. Predict for New Farm Plots
-# ==============================================================================
-predicted_yield = model.predict(new_farm_plots)
-
-print("--- Predictions for New Farm Plots ---")
-for fert, pred in zip(new_farm_plots["fertilizer_kg_ha"], predicted_yield):
-    print(f"Fertilizer: {fert:>5.1f} kg/ha  -->  Predicted Crop Yield: {pred:.2f} tons")
-print("=" * 60)
-
-
-# ==============================================================================
-# 6. Visualize Results (Actual vs Fitted Bell Curve)
-# ==============================================================================
-# 300 points for a smooth curved line (same as lecture O02 and O04)
-x_smooth = pd.DataFrame({"fertilizer_kg_ha": np.linspace(df["fertilizer_kg_ha"].min(), df["fertilizer_kg_ha"].max(), 300)})
-y_smooth = model.predict(x_smooth)
-
-# Scatter plot: actual data (blue) and new predictions (red)
-plt.scatter(df["fertilizer_kg_ha"], df["crop_yield_tons"], color="blue", alpha=0.5, label="Actual Data")
-plt.scatter(new_farm_plots["fertilizer_kg_ha"], predicted_yield, color="red", marker="X", s=100, label="Predicted")
-
-# Fitted bell curve (green)
-plt.plot(x_smooth["fertilizer_kg_ha"], y_smooth, color="green", linewidth=2, label="Fitted Curve (Bell)")
-
-plt.xlabel("Fertilizer (kg/ha)")
-plt.ylabel("Crop Yield (tons)")
-plt.title("Fertilizer vs Crop Yield (Polynomial Regression)")
-plt.legend()
-plt.tight_layout()
-plt.savefig("fertilizer_crop_yield_polynomial_fit.png", dpi=150)
-plt.show()
+if __name__ == "__main__":
+    main()
