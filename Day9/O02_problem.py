@@ -39,4 +39,10 @@ plt.title("Hierarchical Clustering Dendrogram from DataFrame")
 plt.xlabel("Sample ID")
 plt.ylabel("Euclidean Distance")
 plt.grid(axis='y', linestyle='--', alpha=0.5)
-plt.show()
+plt.tight_layout()
+plt.savefig("Day9/dendrogram_plot.png", dpi=150)
+print("Dendrogram plot saved to Day9/dendrogram_plot.png")
+try:
+    plt.show()
+except Exception:
+    pass

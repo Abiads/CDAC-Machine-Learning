@@ -46,6 +46,7 @@ outputs/
 Day6/emails/
 emails/
 *.csv
+!Day9/dataset/*.csv
 *.tsv
 *.parquet
 *.feather
@@ -75,6 +76,7 @@ checkpoint/
 *.pkl
 *.pickle
 *.joblib
+!Day9/*.joblib
 *.pt
 *.pth
 *.onnx

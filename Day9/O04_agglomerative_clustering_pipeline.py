@@ -27,6 +27,8 @@ def load_config(config_path: str = "config.yaml") -> dict:
   """Load configuration parameters from YAML file safely with UTF-8 encoding."""
   path = Path(config_path)
   if not path.exists():
+    path = Path(__file__).parent / config_path
+  if not path.exists():
     raise FileNotFoundError(f"Configuration file not found at {config_path}")
   with open(path, "r", encoding="utf-8") as f:
     return yaml.safe_load(f)
@@ -65,6 +67,8 @@ def main():
 
     input_file = Path(data_cfg["input_path"])
     if not input_file.exists():
+        input_file = Path(__file__).parent / data_cfg["input_path"]
+    if not input_file.exists():
         raise FileNotFoundError(f"Input data file not found at {input_file}")
     df = pd.read_csv(input_file)
     feature_cols = data_cfg.get("features", [])
@@ -99,6 +103,8 @@ def main():
     print(profiles)
     print("=" * 60)
     output_path = Path(data_cfg["output_model_path"])
+    if not output_path.is_absolute() and not output_path.parent.name:
+        output_path = Path(__file__).parent / output_path
     if not output_path.parent.exists():
         output_path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(pipeline, output_path)
@@ -117,8 +123,14 @@ def main():
 
     df_viz = df[feature_cols].copy()
     df_viz["cluster_id"] = labels
-    sns.pairplot(df_viz, hue="cluster_id", palette="tab10")
-    plt.show()
+    pairplot = sns.pairplot(df_viz, hue="cluster_id", palette="tab10")
+    plot_path = Path(__file__).parent / "agglomerative_clusters_pairplot.png"
+    pairplot.savefig(plot_path, dpi=150)
+    print(f"Cluster pairplot saved to {plot_path}")
+    try:
+        plt.show()
+    except Exception:
+        pass
 
     # visualize the loaded model clustering using dendrogram
     # from scipy.cluster.hierarchy import dendrogram, linkage

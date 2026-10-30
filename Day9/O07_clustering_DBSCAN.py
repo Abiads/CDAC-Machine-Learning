@@ -60,4 +60,12 @@ plt.title('DBSCAN Customer Segmentation (Real Data)')
 plt.xlabel('Annual Income ($k)')
 plt.ylabel('Spending Score (1-100)')
 plt.grid(True, linestyle='--', alpha=0.6)
-plt.show()
+
+from pathlib import Path
+output_plot = Path(__file__).parent / 'dbscan_customer_segmentation.png'
+plt.savefig(output_plot, dpi=300, bbox_inches='tight')
+print(f'Plot saved successfully to: {output_plot}')
+try:
+    plt.show()
+except Exception:
+    pass

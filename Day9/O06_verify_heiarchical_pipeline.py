@@ -5,6 +5,8 @@ from pathlib import Path
 # 1. Load serialized pipeline artifact
 model_path = Path("hierarchical_pipeline.joblib")
 if not model_path.exists():
+    model_path = Path(__file__).parent / "hierarchical_pipeline.joblib"
+if not model_path.exists():
     raise FileNotFoundError(f"Model file not found at {model_path.resolve()}")
 
 pipeline = joblib.load(model_path)
