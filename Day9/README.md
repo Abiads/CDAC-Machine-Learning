@@ -183,8 +183,9 @@ jupyter nbconvert --to notebook --execute Day9/01_exercise_linkage_comparison.ip
 
 | Image File | Description |
 | :--- | :--- |
-| `Day9/dbscan_customer_segmentation.png` | Scatter plot of customer segments colored by DBSCAN cluster ID with black edges for noise points. |
+| `Day9/dbscan_customer_segmentation.png` | 4-panel comprehensive DBSCAN dashboard: (1) Scaled space with $\epsilon$-neighborhood circles and Core/Border/Noise differentiation, (2) Real-world persona segmentation with cluster callouts, (3) 3-NN distance knee/elbow curve for $\epsilon$ selection, and (4) Cluster distribution & diagnostic breakdown card. |
 | `Day9/agglomerative_clusters_pairplot.png` | Seaborn pairplot of features 1–4 showing clear multi-dimensional separation of clusters. |
 | `Day9/clustering_metrics_evaluation.png` | 3-panel line plot tracking DBI, Silhouette Score, and Calinski-Harabasz Index across $k \in [2, 6]$. |
 | `Day9/linkage_comparison_dendrograms.png` | 4-way dendrogram comparison showing cluster merging heights across Ward, Complete, Average, and Single linkage. |
 | `Day9/dendrogram_plot.png` | Dendrogram tree with horizontal threshold cut line separating sample groupings. |
+
