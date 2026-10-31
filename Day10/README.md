@@ -81,6 +81,7 @@ As demonstrated in [`Day10/O03_random_forest.ipynb`](./O03_random_forest.ipynb) 
 | [`O02_decissiontree.ipynb`](./O02_decissiontree.ipynb) | Theoretical derivations, mathematical curve plotting, and comparison table contrasting Gini Impurity vs. Shannon Entropy across binary class distributions. | Gini vs. Entropy curve plot, `1 - Σp²`, `-Σp log₂p` |
 | [`O03_random_forest.ipynb`](./O03_random_forest.ipynb) | 4-panel visual comparison comparing a single Decision Tree vs. Random Forests ($n \in \{1, 5, 20, 100\}$) on noisy synthetic 2D moons data, mapping decision surfaces and classification accuracies. | `make_moons`, `RandomForestClassifier`, contour meshgrid plots |
 | [`O04_problem.py`](./O04_problem.py) | **Real-World Case Study**: Cricket Scout & Coach Classification Challenge. Classifies players into `Batsman`, `Bowler`, `All-Rounder`, and `Wicket-Keeper` across `matches`, `runs`, `wickets`, `catches`, and `dominant_hand` using Decision Trees & Random Forests. | `RandomForestClassifier`, `DecisionTreeClassifier`, Feature Importance, `cricket_scout_classification.png` |
+| [`O04_problem_to_solve.py`](./O04_problem_to_solve.py) | **Instructor Classroom Script**: Complete end-to-end Random Forest classification on raw cricket statistics with `LabelEncoder`, `StandardScaler`, stratified split, single tree architecture visualization, and prospective player prediction. | `RandomForestClassifier`, `StandardScaler`, `plot_tree`, `cricket_rf_solution.png` |
 
 ---
 

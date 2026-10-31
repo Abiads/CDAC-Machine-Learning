@@ -23,13 +23,13 @@ CRICKET ANALYTICS APPROACH: MACHINE LEARNING WORKFLOW
 1. Business & Domain Understanding:
    - Raw counts (runs, wickets, catches) scale with career longevity.
    - Rate metrics (Runs/Match, Wickets/Match, Catches/Match) isolate true player skill.
-   - Categorical attributes like dominant_hand (Right vs Left) must be encoded and
-     analyzed for predictive value (demonstrates tree-based feature selection).
+   - Categorical attributes like dominant_hand (Right vs Left) and role
+     must be encoded using LabelEncoder and analyzed for predictive value.
 
 2. Problem Formulation:
    - Task: Multi-Class Supervised Classification.
    - Target (y): ['Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper']
-   - Features (X): ['matches', 'runs', 'wickets', 'catches', 'dominant_hand',
+   - Features (X): ['matches', 'runs', 'wickets', 'catches', 'hand_encoded',
                     'runs_per_match', 'wickets_per_match', 'catches_per_match']
 
 3. Feature Engineering & Preprocessing:
@@ -37,6 +37,7 @@ CRICKET ANALYTICS APPROACH: MACHINE LEARNING WORKFLOW
    - wickets_per_match = wickets / matches (Bowling efficiency)
    - catches_per_match = catches / matches (Fielding/keeping efficiency)
    - hand_encoded      = 0 for 'Right', 1 for 'Left' (Binary encoding)
+   - role_encoded      = LabelEncoder mapping roles to integer class IDs [0, 1, 2, 3]
 
 4. Model Architecture & Selection:
    - Baseline: Single Decision Tree (criterion='entropy', max_depth=4)
@@ -51,8 +52,8 @@ CRICKET ANALYTICS APPROACH: MACHINE LEARNING WORKFLOW
    - Metrics: Precision, Recall, F1-Score, Confusion Matrix, OOB Accuracy.
 
 6. Deployment / Scout Inference:
-   - Automated helper function scout_evaluate_player() predicting role, confidence,
-     and full probability distribution across all 4 roles.
+   - Automated helper function scout_evaluate_player() predicting role via
+     role_encoder.inverse_transform() and confidence via predict_proba().
 """
 
 from pathlib import Path
@@ -64,6 +65,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 from sklearn.tree import DecisionTreeClassifier, export_text
 
 # =====================================================================
@@ -112,15 +114,29 @@ df = pd.DataFrame({
 # =====================================================================
 # STEP 2: Feature Engineering & Preprocessing
 # =====================================================================
+# Domain efficiency rate metrics
 df['runs_per_match'] = np.round(df['runs'] / df['matches'], 2)
 df['wickets_per_match'] = np.round(df['wickets'] / df['matches'], 2)
 df['catches_per_match'] = np.round(df['catches'] / df['matches'], 2)
-df['hand_encoded'] = (df['dominant_hand'] == 'Left').astype(int)  # 0: Right, 1: Left
+
+# Categorical Feature Encoding (dominant_hand: 0 = Right, 1 = Left)
+df['hand_encoded'] = (df['dominant_hand'] == 'Left').astype(int)
+
+# Target Variable Encoding with LabelEncoder:
+# Maps string target roles into integers: 0, 1, 2, 3
+role_encoder = LabelEncoder()
+df['role_encoded'] = role_encoder.fit_transform(df['role'])
 
 print("=" * 80)
 print("CRICKET SCOUTING DATASET SAMPLE (Matches, Runs, Wickets, Catches, Hand, Role):")
 print("=" * 80)
-print(df[['matches', 'runs', 'wickets', 'catches', 'dominant_hand', 'role', 'runs_per_match', 'wickets_per_match', 'catches_per_match']].head(8))
+print(df[['matches', 'runs', 'wickets', 'catches', 'dominant_hand', 'role', 'role_encoded', 'runs_per_match', 'wickets_per_match', 'catches_per_match']].head(8))
+
+print("\n" + "=" * 80)
+print("LABEL ENCODER CLASS MAPPING:")
+print("=" * 80)
+for idx, label in enumerate(role_encoder.classes_):
+    print(f"  Class Index {idx} -> {label}")
 
 print("\n" + "=" * 80)
 print("CLASS PERFORMANCE PROFILE (Mean Ratios by Role):")
@@ -133,9 +149,9 @@ feature_cols = [
     'runs_per_match', 'wickets_per_match', 'catches_per_match'
 ]
 X = df[feature_cols]
-y = df['role']
+y = df['role_encoded']
 
-# Stratified Split
+# Stratified Split (guarantees balanced representation across all 4 roles)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.25, random_state=42, stratify=y
 )
@@ -153,7 +169,11 @@ dt_model.fit(X_train, y_train)
 print("\n" + "=" * 80)
 print("DECISION TREE SPLIT RULES (Human-Interpretable Scout Guidelines):")
 print("=" * 80)
-tree_rules = export_text(dt_model, feature_names=feature_cols)
+tree_rules = export_text(
+    dt_model,
+    feature_names=feature_cols,
+    class_names=list(role_encoder.classes_)
+)
 print(tree_rules)
 
 # =====================================================================
@@ -175,7 +195,7 @@ print("=" * 80)
 
 print("\nRANDOM FOREST CLASSIFICATION REPORT (Test Set):")
 print("-" * 80)
-print(classification_report(y_test, y_pred_rf, digits=4))
+print(classification_report(y_test, y_pred_rf, target_names=role_encoder.classes_, digits=4))
 
 print("FEATURE IMPORTANCE RANKINGS (Information Value Breakdown):")
 print("-" * 80)
@@ -203,6 +223,12 @@ def scout_evaluate_player(
     """
     Automated scouting function to classify any incoming player profile
     given matches, runs, wickets, catches, and dominant hand.
+    
+    Demonstrates:
+    1. Input feature formatting and domain ratio calculation
+    2. Model prediction returning numeric code: rf_model.predict(input_data)
+    3. Decoding numeric code back to text: role_encoder.inverse_transform(pred_code)
+    4. Probabilistic confidence estimation: rf_model.predict_proba(input_data)
     """
     rpm = runs / matches if matches > 0 else 0
     wpm = wickets / matches if matches > 0 else 0
@@ -219,11 +245,27 @@ def scout_evaluate_player(
         'wickets_per_match': wpm,
         'catches_per_match': cpm
     }])
-    
-    pred_role = rf_model.predict(input_data)[0]
+
+    # -----------------------------------------------------------------
+    # STEP 5.1: Predict Encoded Role (User's Change Implemented)
+    # -----------------------------------------------------------------
+    # The Random Forest outputs the predicted integer class ID [0, 1, 2, or 3]
+    predicted_code = rf_model.predict(input_data)
+
+    # -----------------------------------------------------------------
+    # STEP 5.2: Decode with role_encoder.inverse_transform()
+    # -----------------------------------------------------------------
+    # Decode the numeric ID back to the human-readable string role:
+    # 0 -> 'All-Rounder', 1 -> 'Batsman', 2 -> 'Bowler', 3 -> 'Wicket-Keeper'
+    pred_role = role_encoder.inverse_transform(predicted_code)[0]
+
+    # -----------------------------------------------------------------
+    # STEP 5.3: Compute Posterior Class Probabilities (predict_proba)
+    # -----------------------------------------------------------------
+    # predict_proba returns the array of probability estimates for each role
     probs = rf_model.predict_proba(input_data)[0]
-    classes = rf_model.classes_
-    prob_dict = {cls: round(prob * 100, 1) for cls, prob in zip(classes, probs)}
+    classes = role_encoder.classes_
+    prob_dict = {cls: round(float(prob) * 100, 1) for cls, prob in zip(classes, probs)}
     
     return {
         'Player': player_name,
@@ -273,7 +315,7 @@ color_map = {
 }
 
 # Subplot 1: Batting vs Bowling Impact
-for role in ['Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper']:
+for role in role_encoder.classes_:
     sub = df[df['role'] == role]
     ax1.scatter(
         sub['runs_per_match'],
@@ -291,7 +333,7 @@ ax1.legend(loc='upper right', framealpha=0.9)
 ax1.grid(True, linestyle='--', alpha=0.5)
 
 # Subplot 2: Fielding / Wicket-Keeping Specialization
-for role in ['Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper']:
+for role in role_encoder.classes_:
     sub = df[df['role'] == role]
     ax2.scatter(
         sub['catches_per_match'],
