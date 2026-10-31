@@ -31,16 +31,23 @@ from sklearn.model_selection import train_test_split
 # =====================================================================
 # STEP 1: Download & Load the PastHires Dataset
 # =====================================================================
-# Define target input file paths (handles ./assets/ and ./assests/ gracefully)
+# Define candidate input file paths (handles ./assets/, ./assests/, and relative execution)
 base_dir = Path(__file__).parent
-assets_dir = base_dir / "assets"
-assets_dir.mkdir(parents=True, exist_ok=True)
+candidate_paths = [
+    base_dir / "assets" / "PastHires.csv",
+    base_dir / "assests" / "PastHires.csv",
+    Path("./assets/PastHires.csv"),
+    Path("./assests/PastHires.csv"),
+    Path("Day10/assets/PastHires.csv"),
+    Path("Day10/assests/PastHires.csv")
+]
 
-input_file = assets_dir / "PastHires.csv"
+input_file = next((p for p in candidate_paths if p.exists()), base_dir / "assets" / "PastHires.csv")
 url = "https://raw.githubusercontent.com/ApnaClassroom/Dataset/main/PastHires.csv"
 
 # Download dataset if not already present locally
 if not input_file.exists():
+    input_file.parent.mkdir(parents=True, exist_ok=True)
     print(f"Downloading dataset from: {url}")
     urllib.request.urlretrieve(url, input_file)
     print(f"Saved dataset to: {input_file}")
