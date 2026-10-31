@@ -16,7 +16,7 @@ Comprehensive Machine Learning repository covering end-to-end data pipelines, su
 | [**Day 6**](./Day6/) | Support Vector Machines & Tuning | Hard vs. Soft Margin SVM, Kernel Trick (RBF, Polynomial, Sigmoid), Hyperparameter Optimization (`GridSearchCV`, `RandomizedSearchCV`), Cross-Validation. | Classification boundary visualization |
 | [**Day 7**](./Day7/) | Dimensionality Reduction | Principal Component Analysis (PCA), Eigenvalue decomposition, Scree plots, Explained Variance Ratio, t-SNE manifold learning. | Multi-dimensional projection |
 | [**Day 8**](./Day8/) | Unsupervised Part 1: K-Means | Centroid-based clustering, Lloyd's algorithm, Inertia & Elbow Method, Silhouette Analysis, Customer Segmentation. | `Day_8_Machine_Learning_Summary.pdf`, customer datasets |
-| [**Day 9**](./Day9/) | Unsupervised Part 2: Hierarchical & DBSCAN | Agglomerative Hierarchical Clustering, Linkage criteria (Ward, Complete, Average, Single), Dendrogram Cuts, Cophenetic Correlation, Metrics (DBI, Silhouette, CHI), DBSCAN (`eps`, `min_samples`), and Production Pipelines. | [`Day9/README.md`](./Day9/README.md), `hierarchical_pipeline.joblib`, `O07_clustering_DBSCAN.py` |
+| [**Day 9**](./Day9/) | Unsupervised Part 2: Hierarchical & DBSCAN | Agglomerative Hierarchical Clustering, Linkage criteria (Ward, Complete, Average, Single), Dendrogram Cuts, Cophenetic Correlation, Metrics (DBI, Silhouette, CHI), DBSCAN (`eps`, `min_samples`), and Automated Epsilon Optimization (`kneed.KneeLocator`). | [`Day9/README.md`](./Day9/README.md), `hierarchical_pipeline.joblib`, `O07_clustering_DBSCAN.py`, `O08_optimaleps.py` |
 
 ---
 
@@ -50,14 +50,20 @@ For detailed documentation, mathematical equations, and usage guides, refer to [
 ### 1. Prerequisites
 Ensure you have Python 3.10+ installed with the following packages:
 ```bash
-pip install numpy pandas scipy scikit-learn matplotlib seaborn pyyaml joblib
+pip install numpy pandas scipy scikit-learn matplotlib seaborn pyyaml joblib kneed
 ```
 
 ### 2. Running Day 9 Scripts
 
 ```bash
-# Run DBSCAN Customer Segmentation (with noise detection)
+# Run DBSCAN Customer Segmentation Dashboard (4-panel diagnostic)
 python Day9/O07_clustering_DBSCAN.py
+
+# Auto-Detect Optimal Epsilon using KneeLocator on Real Wine Data
+python Day9/O08_optimaleps.py
+
+# Run Density-Based Outlier Detection Notebook
+jupyter notebook Day9/02_exercise_density_based_outliers.ipynb
 
 # Run Production Agglomerative Pipeline (trains & serializes model)
 python Day9/O04_agglomerative_clustering_pipeline.py

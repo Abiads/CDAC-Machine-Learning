@@ -47,6 +47,7 @@ Day6/emails/
 emails/
 *.csv
 !Day9/dataset/*.csv
+!dataset/*.csv
 *.tsv
 *.parquet
 *.feather
