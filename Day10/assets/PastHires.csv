@@ -1,4 +1,4 @@
-Years Experience,Employed,Previous Employers,Level of Education,Top-tier School,Interned,Hired
+Years Experience,Employed?,Previous employers,Level of Education,Top-tier school,Interned,Hired
 10,Y,4,BS,N,N,Y
 0,N,0,BS,Y,Y,Y
 7,N,6,BS,N,N,N
@@ -12,4 +12,3 @@ Years Experience,Employed,Previous Employers,Level of Education,Top-tier School,
 1,N,1,PhD,Y,N,N
 4,Y,1,BS,N,Y,Y
 0,N,0,PhD,Y,N,Y
-
