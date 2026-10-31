@@ -17,6 +17,7 @@ Comprehensive Machine Learning repository covering end-to-end data pipelines, su
 | [**Day 7**](./Day7/) | Dimensionality Reduction | Principal Component Analysis (PCA), Eigenvalue decomposition, Scree plots, Explained Variance Ratio, t-SNE manifold learning. | Multi-dimensional projection |
 | [**Day 8**](./Day8/) | Unsupervised Part 1: K-Means | Centroid-based clustering, Lloyd's algorithm, Inertia & Elbow Method, Silhouette Analysis, Customer Segmentation. | `Day_8_Machine_Learning_Summary.pdf`, customer datasets |
 | [**Day 9**](./Day9/) | Unsupervised Part 2: Hierarchical & DBSCAN | Agglomerative Hierarchical Clustering, Linkage criteria (Ward, Complete, Average, Single), Dendrogram Cuts, Cophenetic Correlation, Metrics (DBI, Silhouette, CHI), DBSCAN (`eps`, `min_samples`), and Automated Epsilon Optimization (`kneed.KneeLocator`). | [`Day9/README.md`](./Day9/README.md), `hierarchical_pipeline.joblib`, `O07_clustering_DBSCAN.py`, `O08_optimaleps.py` |
+| [**Day 10**](./Day10/) | Advanced Trees & Random Forests | Information Theory, Shannon Entropy ($H(X) = -\sum p \log_2 p$), Gini Impurity ($1 - \sum p^2$), Decision Trees, Random Forest Ensembles, and Decision Boundary Smoothing across Estimators ($1, 5, 20, 100$). | `O01_entropy.ipynb`, `O02_decissiontree.ipynb`, `O03_random_forest.ipynb` |
 
 ---
 
