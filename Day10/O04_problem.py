@@ -25,6 +25,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
 from sklearn.tree import plot_tree
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 # =====================================================================
@@ -207,10 +209,4 @@ plt.tight_layout()
 plt.savefig("Day10/cricket_scout_classification.png", dpi=300, bbox_inches='tight')
 print("\n[+] Plot saved to: Day10/cricket_scout_classification.png")
 
-# Display plot safely
-try:
-    plt.show(block=False)
-    plt.pause(0.5)
-    plt.close()
-except Exception:
-    plt.close()
+plt.close()

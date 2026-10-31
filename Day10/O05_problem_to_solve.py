@@ -20,6 +20,8 @@ from pathlib import Path
 import urllib.request
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -213,11 +215,5 @@ output_plot = base_dir / "hiring_decision_tree.png"
 plt.savefig(output_plot, dpi=300, bbox_inches='tight')
 print(f"\n[+] Visualization saved successfully to: {output_plot}")
 
-# Safe display
-try:
-    plt.show(block=False)
-    plt.pause(0.5)
-    plt.close()
-except Exception:
-    plt.close()
+plt.close()
 

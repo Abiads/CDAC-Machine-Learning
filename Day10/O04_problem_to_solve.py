@@ -23,6 +23,8 @@ Approach:
 
 from io import StringIO
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -246,10 +248,4 @@ output_plot = Path(__file__).parent / "cricket_rf_solution.png"
 plt.savefig(output_plot, dpi=300, bbox_inches='tight')
 print(f"\n[+] Visualization dashboard saved successfully to: {output_plot}")
 
-# Safe display
-try:
-    plt.show(block=False)
-    plt.pause(0.5)
-    plt.close()
-except Exception:
-    plt.close()
+plt.close()
