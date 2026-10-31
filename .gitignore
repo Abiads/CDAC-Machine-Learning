@@ -48,6 +48,8 @@ emails/
 *.csv
 !Day9/dataset/*.csv
 !dataset/*.csv
+!Day10/assets/*.csv
+!assets/*.csv
 *.tsv
 *.parquet
 *.feather
