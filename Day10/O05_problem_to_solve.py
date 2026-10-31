@@ -109,12 +109,11 @@ dt_clf.fit(X, y)
 print("\n" + "=" * 70)
 print("DECISION TREE SPLIT RULES:")
 print("=" * 70)
-tree_rules = export_text(
-    dt_clf,
-    feature_names=feature_columns,
-    class_names=['Not Hired', 'Hired']
-)
-print(tree_rules)
+# export_text accepts feature_names across all scikit-learn versions
+tree_rules = export_text(dt_clf, feature_names=feature_columns)
+# Map numeric class codes (0 -> Not Hired, 1 -> Hired) for readability
+readable_rules = tree_rules.replace("class: 0", "class: Not Hired").replace("class: 1", "class: Hired")
+print(readable_rules)
 
 # =====================================================================
 # STEP 5: Train Random Forest Classifier (Ensemble Model)
@@ -221,3 +220,4 @@ try:
     plt.close()
 except Exception:
     plt.close()
+
