@@ -80,32 +80,42 @@ As demonstrated in [`Day10/O03_random_forest.ipynb`](./O03_random_forest.ipynb) 
 | [`O01_entropy.ipynb`](./O01_entropy.ipynb) | Pure Python and SciPy calculation of Shannon Entropy across pure, mixed, and skewed distributions. Basic `DecisionTreeClassifier(criterion='entropy')` role prediction. | `scipy.stats.entropy`, `collections.Counter`, `DecisionTreeClassifier` |
 | [`O02_decissiontree.ipynb`](./O02_decissiontree.ipynb) | Theoretical derivations, mathematical curve plotting, and comparison table contrasting Gini Impurity vs. Shannon Entropy across binary class distributions. | Gini vs. Entropy curve plot, `1 - Σp²`, `-Σp log₂p` |
 | [`O03_random_forest.ipynb`](./O03_random_forest.ipynb) | 4-panel visual comparison comparing a single Decision Tree vs. Random Forests ($n \in \{1, 5, 20, 100\}$) on noisy synthetic 2D moons data, mapping decision surfaces and classification accuracies. | `make_moons`, `RandomForestClassifier`, contour meshgrid plots |
-| [`O04_problem.py`](./O04_problem.py) | **Real-World Case Study**: Cricket Scout & Coach Classification Challenge. Classifies players into `Batsman`, `Bowler`, and `All-Rounder` using Decision Trees & Random Forests, featuring domain engineering and live scout inference. | `RandomForestClassifier`, `DecisionTreeClassifier`, Feature Importance, `cricket_scout_classification.png` |
+| [`O04_problem.py`](./O04_problem.py) | **Real-World Case Study**: Cricket Scout & Coach Classification Challenge. Classifies players into `Batsman`, `Bowler`, `All-Rounder`, and `Wicket-Keeper` across `matches`, `runs`, `wickets`, `catches`, and `dominant_hand` using Decision Trees & Random Forests. | `RandomForestClassifier`, `DecisionTreeClassifier`, Feature Importance, `cricket_scout_classification.png` |
 
 ---
 
 ## 🏏 Case Study: Cricket Scouting Classification Challenge (`O04_problem.py`)
 
-### 1. Challenge Context
-Cricket scouts manually inspecting raw scorecards (`matches`, `runs`, `wickets`) face heavy cognitive burden and bias:
-- **Career Longevity Bias**: 1,000 runs scored over 25 matches indicates an elite batsman, whereas 1,000 runs over 200 matches indicates a lower-order bowler.
-- **Borderline Ambiguity**: Differentiating genuine all-rounders from tail-end bowlers who bat occasionally.
+### 1. Feature Space & Attributes
+- **Input Features**:
+  - `matches`: Career matches played (exposure metric).
+  - `runs`: Total career runs scored.
+  - `wickets`: Total career wickets taken.
+  - `catches`: Total career catches taken (isolates wicket-keepers & slip specialists).
+  - `dominant_hand`: Batting / bowling handedness (`Right` or `Left`).
+- **Target Variable (`role`)**:
+  - `Batsman`, `Bowler`, `All-Rounder`, `Wicket-Keeper`.
 
-### 2. End-to-End Machine Learning Approach
-1. **Feature Engineering**:
-   - $\text{Runs per Match} = \frac{\text{Runs}}{\text{Matches}}$
-   - $\text{Wickets per Match} = \frac{\text{Wickets}}{\text{Matches}}$
-   - Eliminates career length bias and exposes intrinsic player performance rates.
+### 2. End-to-End Machine Learning Workflow
+1. **Feature Engineering & Preprocessing**:
+   - $\text{Runs per Match (RPM)} = \frac{\text{Runs}}{\text{Matches}}$ (Batting efficiency)
+   - $\text{Wickets per Match (WPM)} = \frac{\text{Wickets}}{\text{Matches}}$ (Bowling efficiency)
+   - $\text{Catches per Match (CPM)} = \frac{\text{Catches}}{\text{Matches}}$ (Fielding/keeping efficiency)
+   - $\text{Hand Encoded} = 0 \text{ for Right}, 1 \text{ for Left}$ (Categorical binary encoding)
 2. **Interpretability via Decision Tree (Entropy Split)**:
-   - Provides clear, transparent decision rules coaches can follow:
-     - `runs_per_match <= 15.91` $\rightarrow$ **Bowler**
-     - `runs_per_match > 15.91` AND `wickets <= 12` $\rightarrow$ **Batsman**
-     - `runs_per_match > 15.91` AND `wickets > 12` $\rightarrow$ **All-Rounder**
-3. **Robustness via Random Forest Ensemble**:
-   - 100 estimators with out-of-bag scoring (`oob_score=True`) achieving 100% accuracy.
-   - Extracts feature importances showing that engineered rate ratios (`wickets_per_match`: 37.3%, `runs_per_match`: 31.6%) provide over 68% of predictive information.
+   - Clear deterministic coach guidelines derived from Shannon Entropy & Information Gain:
+     - $\text{wickets} \le 15.00$:
+       - $\text{catches\_per\_match} \le 0.98 \rightarrow$ **Batsman**
+       - $\text{catches\_per\_match} > 0.98 \rightarrow$ **Wicket-Keeper**
+     - $\text{wickets} > 15.00$:
+       - $\text{runs\_per\_match} \le 15.68 \rightarrow$ **Bowler**
+       - $\text{runs\_per\_match} > 15.68 \rightarrow$ **All-Rounder**
+3. **Robustness via Random Forest Ensemble (100 Trees)**:
+   - Decorrelates individual trees using random bootstrap aggregation and feature subsets.
+   - Out-of-Bag (OOB) accuracy: **100.00%**.
+   - **Feature Selection Discovery**: The model reveals that `hand_encoded` has only $\approx 0.1\%$ importance (near-zero Information Gain), proving mathematically that handedness does not bias player role, while rate metrics (`catches_per_match`, `runs_per_match`, `wickets_per_match`) supply over $58\%$ of predictive information.
 4. **Live Automated Scout Inference Engine**:
-   - Function `scout_evaluate_player(name, matches, runs, wickets)` predicting role, probability confidence, and distribution.
+   - `scout_evaluate_player(player_name, matches, runs, wickets, catches, dominant_hand)` provides instantaneous role prediction and confidence distribution across all roles.
 
 
 ---
