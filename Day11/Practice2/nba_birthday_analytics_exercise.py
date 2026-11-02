@@ -61,7 +61,7 @@ def phase_4_shared_birthday_cohort(df, player_name):
 
 def phase_5_evaluation_and_summary(df):
     """Phase 5: Summary findings on dataset coverage and birthday paradox."""
-    print("\n[PHASE 5] Evaluation & Summary Reporting (5 Marks)")
+    print("\n[PHASE 5] Evaluation & Summary Reporting")
     print("-" * 65)
     total_valid = df['bday'].dropna().count()
     unique_days = df['bday'].nunique()
@@ -74,7 +74,7 @@ def phase_5_evaluation_and_summary(df):
 def run_analytics_lifecycle():
     """Facade function coordinating the NBA analytics workflow."""
     print("=" * 65)
-    print("STARTING NBA BIRTHDAY & BIOGRAPHICAL LIFECYCLE (Out of 40 Marks)")
+    print("STARTING NBA BIRTHDAY & BIOGRAPHICAL LIFECYCLE")
     print("=" * 65)
 
     target_player = "Kareem Abdul-Jabbar"
