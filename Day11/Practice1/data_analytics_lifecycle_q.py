@@ -3,6 +3,8 @@ Title: End-to-End Data Analytics Lifecycle
 Description: Minimal, built-in function driven Python script for the 5 lifecycle phases.
 """
 
+
+from pathlib import Path
 import os
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -10,6 +12,7 @@ from sklearn.metrics import mean_absolute_error
 
 # Direct load: loads directly from current folder, falls back to Day11/Practice1 if run from root
 csv_file = "coffee_shop_data.csv" if os.path.exists("coffee_shop_data.csv") else "Day11/Practice1/coffee_shop_data.csv"
+csv_file = Path(__file__).resolve().parent / "coffee_shop_data.csv"
 df = None
 model = None
 X, y = None, None
