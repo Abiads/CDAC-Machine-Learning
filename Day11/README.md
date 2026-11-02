@@ -13,7 +13,7 @@ Comprehensive reference guide, mathematical formulations, architectural template
    - [Phase 3: Bivariate Association & Correlation](#phase-3-bivariate-association--correlation)
    - [Phase 4: Predictive Modeling (Regression & Classification)](#phase-4-predictive-modeling)
    - [Phase 5: Evaluation & Prescriptive Action](#phase-5-evaluation--prescriptive-action)
-4. [⚠️ The 8 Traps Where Learners Get Stuck (And How to Fix Them)](#-the-8-traps-where-learners-get-stuck)
+4. [⚠️ The 15 Traps Where Learners Get Stuck (With Exact Code Locations)](#-the-15-traps-where-learners-get-stuck-with-exact-code-locations)
 5. [📊 Quick Revision Cheat-Sheet](#-quick-revision-cheat-sheet)
 
 ---
@@ -215,58 +215,187 @@ def phase_4_model_evaluation(model, X, y):
 
 ---
 
-## ⚠️ The 8 Traps Where Learners Get Stuck
+## ⚠️ The 15 Traps Where Learners Get Stuck (With Exact Code Locations)
 
 ### ❌ Trap 1: 1D vs 2D Feature Matrix Dimension Error
-- **Error**: `ValueError: Expected 2D array, got 1D array instead... Reshape your data either using array.reshape(-1, 1)...`
-- **Cause**: Passing a 1D Series `df['Feature']` to `model.fit()`. Scikit-learn requires $X$ to have shape `(n_samples, n_features)`.
-- **Fix**: Use double brackets `df[['Feature']]`.
-
-### ❌ Trap 2: Forgetting `return` Between Pipeline Phases
-- **Error**: `AttributeError: 'NoneType' object has no attribute 'describe'` or `'NoneType' object has no attribute 'predict'`
-- **Cause**: Writing a phase function without returning the DataFrame or trained model.
-- **Fix**: Always return:
-  - `return df` (Phases 1, 2, 3)
-  - `return model, X, y` (Phase 4)
-
-### ❌ Trap 3: Relative Path `FileNotFoundError`
-- **Error**: `FileNotFoundError: [Errno 2] No such file or directory: 'coffee_shop_data.csv'`
-- **Cause**: Terminal working directory (`os.getcwd()`) differs from script directory.
-- **Fix**: Resolve parent path dynamically:
+- **Exact Location**: Phase 4 in all regression & classification scripts (e.g., [`Practice1/data_analytics_lifecycle_q.py:L47`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice1/data_analytics_lifecycle_q.py#L47), [`Practice3/employee_analytics_exercise.py:L52`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice3/employee_analytics_exercise.py#L52)).
+- **Error**: `ValueError: Expected 2D array, got 1D array instead: array=[10 20 15 ...]. Reshape your data either using array.reshape(-1, 1)...`
+- **Cause**: Writing `X = df['Feature']` (single bracket produces a 1D `pd.Series`). Scikit-Learn estimators demand a 2D matrix of shape `(n_samples, n_features)`.
+- **Fix**: Always use double brackets for features:
   ```python
-  csv_path = Path(__file__).resolve().parent / "filename.csv"
+  X = df[['Feature_Name']]  # 2D DataFrame (Shape: [N, 1]) -> REQUIRED
+  y = df['Target_Name']     # 1D Series (Shape: [N,]) -> ACCEPTABLE
   ```
 
+---
+
+### ❌ Trap 2: Forgetting `return` Between Pipeline Phases
+- **Exact Location**: Facade orchestrator `run_analytics_lifecycle()` / `run_ml_pipeline()` across all exercises (e.g., [`Practice3/employee_analytics_exercise.py:L74-L78`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice3/employee_analytics_exercise.py#L74-L78)).
+- **Error**: `AttributeError: 'NoneType' object has no attribute 'describe'` or `'NoneType' object has no attribute 'predict'`
+- **Cause**: A phase function computes results but forgets to return the DataFrame, model, or tensors. In Python, a function without an explicit `return` implicitly returns `None`.
+- **Fix**: Always return pipeline artifacts at the end of each phase:
+  ```python
+  return df                     # In Phases 1, 2, 3
+  return model, X, y            # In Phase 4 (or model, X_tr, X_te, y_tr, y_te)
+  ```
+
+---
+
+### ❌ Trap 3: Relative Path `FileNotFoundError`
+- **Exact Location**: Phase 1 data loading in all exercises (e.g., [`Practice1/data_analytics_lifecycle_q.py:L14`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice1/data_analytics_lifecycle_q.py#L14), [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L13`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L13)).
+- **Error**: `FileNotFoundError: [Errno 2] No such file or directory: 'coffee_shop_data.csv'`
+- **Cause**: Using bare filenames like `pd.read_csv("data.csv")`. Python resolves paths relative to the current terminal working directory (`os.getcwd()`), NOT the location of the `.py` script.
+- **Fix**: Resolve the parent folder dynamically:
+  ```python
+  from pathlib import Path
+  csv_path = Path(__file__).resolve().parent / "coffee_shop_data.csv"
+  df = pd.read_csv(csv_path)
+  ```
+
+---
+
 ### ❌ Trap 4: Non-Numeric Column Crash in `df.corr()` (Pandas 2.0+)
+- **Exact Location**: Phase 3 (Bivariate Association) across all exploratory analytics files:
+  - [`Practice1/data_analytics_lifecycle_q.py:L36`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice1/data_analytics_lifecycle_q.py#L36)
+  - [`Practice3/employee_analytics_exercise.py:L44`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice3/employee_analytics_exercise.py#L44)
+  - [`Practice4/healthcare_analytics_exercise.py:L43`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice4/healthcare_analytics_exercise.py#L43)
+  - [`Practice5/ecommerce_analytics_exercise.py:L42`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice5/ecommerce_analytics_exercise.py#L42)
 - **Error**: `TypeError: unsupported operand type(s) for -: 'str' and 'str'`
-- **Cause**: Dataset contains string identifiers (`Employee_ID`, `Patient_ID`, `Day`).
-- **Fix**: Always use `df.corr(numeric_only=True)`.
+- **Cause**: Datasets contain string columns (e.g., `Employee_ID`, `Patient_ID`, `Day`). In Pandas 2.0+, `.corr()` crashes unless string columns are explicitly ignored.
+- **Fix**: Always pass `numeric_only=True`:
+  ```python
+  corr = df.corr(numeric_only=True)
+  ```
+
+---
 
 ### ❌ Trap 5: Missing Parentheses in Pandas Boolean Masking
-- **Error**: `ValueError: The truth value of a Series is ambiguous.`
-- **Cause**: Using Python's logical `or` instead of bitwise `|`, or omitting parentheses.
-- **Fix**:
+- **Exact Location**: Phase 2 (Outlier Detection with $1.5 \times \text{IQR}$) in all practice scripts (e.g., [`Practice3/employee_analytics_exercise.py:L35`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice3/employee_analytics_exercise.py#L35)).
+- **Error**: `ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().`
+- **Cause**: Using Python's logical `or` instead of bitwise `|`, or omitting parentheses around sub-conditions. In Python, `|` has higher operator precedence than `<` or `>`.
+- **Fix**: Wrap each condition in parentheses and use `|`:
   ```python
   # Correct:
   outliers = col[(col < lower_bound) | (col > upper_bound)]
   ```
 
-### ❌ Trap 6: Confusing Pearson's $r$ with $R^2$
+---
+
+### ❌ Trap 6: Data Leakage via `fit_transform` on the Test Set
+- **Exact Location**: Phase 3 (Data Splitting & Scaling) in ML pipelines:
+  - [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L44-L52`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L44-L52)
+  - [`ML_Practice/Customer_Churn/customer_churn_exercise.py:L44-L52`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Customer_Churn/customer_churn_exercise.py#L44-L52)
+  - [`ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py:L45-L53`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py#L45-L53)
+- **Symptom / Flaw**: Writing `X_test_scaled = scaler.fit_transform(X_test)`.
+- **Cause**: Calling `.fit_transform()` recalculates the mean $\mu$ and standard deviation $\sigma$ of the test set, leaking unseen distribution parameters into the model.
+- **Fix**: Fit the scaler **only on training data**, then transform test data:
+  ```python
+  scaler = StandardScaler()
+  X_train_scaled = scaler.fit_transform(X_train)  # FIT and TRANSFORM
+  X_test_scaled = scaler.transform(X_test)        # TRANSFORM ONLY!
+  ```
+
+---
+
+### ❌ Trap 7: `SettingWithCopyWarning` on Chained Feature Engineering
+- **Exact Location**: Phase 2 (Feature Engineering) in ML practice pipelines:
+  - [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L30`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L30)
+  - [`ML_Practice/Customer_Churn/customer_churn_exercise.py:L30`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Customer_Churn/customer_churn_exercise.py#L30)
+  - [`ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py:L31`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py#L31)
+- **Warning**: `SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.`
+- **Cause**: Creating engineered columns directly on a DataFrame slice without an explicit `.copy()`.
+- **Fix**: Explicitly copy the DataFrame slice before assigning new columns:
+  ```python
+  def phase_2_feature_engineering_and_encoding(X):
+      X = X.copy()  # Prevents SettingWithCopyWarning
+      X['loan_to_income_ratio'] = X['loan_amount_k'] / X['annual_income_k']
+      return pd.get_dummies(X, drop_first=True)
+  ```
+
+---
+
+### ❌ Trap 8: Division by Zero in Ratio Feature Engineering
+- **Exact Location**: Feature ratio construction (e.g., [`ML_Practice/Customer_Churn/customer_churn_exercise.py:L32`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Customer_Churn/customer_churn_exercise.py#L32)).
+- **Symptom**: Values become `inf` or `NaN`, which crashes subsequent model fitting with `ValueError: Input contains NaN, infinity or a value too large for dtype('float64')`.
+- **Cause**: New subscribers with `tenure_months == 0` or applicants with `annual_income == 0` result in $X / 0 = \infty$.
+- **Fix**: Add a small epsilon or use `.replace()`:
+  ```python
+  # Safe ratio computation:
+  X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months'].replace(0, 1)
+  ```
+
+---
+
+### ❌ Trap 9: Missing `stratify=y` on Imbalanced Small Datasets
+- **Exact Location**: Phase 3 `train_test_split()` in classification tasks:
+  - [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L47`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L47)
+  - [`ML_Practice/Customer_Churn/customer_churn_exercise.py:L47`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Customer_Churn/customer_churn_exercise.py#L47)
+- **Flaw**: Using simple `train_test_split(X, y, test_size=0.2, random_state=42)` without stratification.
+- **Cause**: In small datasets ($N \le 25$), a random split can assign all default/churn cases to the training set and zero cases to the test set, rendering test evaluation meaningless.
+- **Fix**: Always pass `stratify=y`:
+  ```python
+  X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+  ```
+
+---
+
+### ❌ Trap 10: Feature Shape/Name Mismatch During `joblib` Inference
+- **Exact Location**: Phase 5 (Model Persistence & Sample Inference):
+  - [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L76`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L76)
+  - [`ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py:L77`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Real_Estate/housing_ml_pipeline_exercise.py#L77)
+- **Error**: `ValueError: X has 6 features, but StandardScaler is expecting 8 features as input.`
+- **Cause**: Training on One-Hot Encoded features (which added dummy columns), but attempting inference with the raw pre-encoded features.
+- **Fix**: Save `X_encoded.columns.tolist()` alongside the model, and pass the exact matching feature vector in identical column order.
+
+---
+
+### ❌ Trap 11: Unsupervised Distance Distortion without Feature Scaling
+- **Exact Location**: Phase 2 of unsupervised clustering:
+  - [`ML_Practice/Cricket_Player_Statistics/cricket_clustering_exercise.py:L31`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Cricket_Player_Statistics/cricket_clustering_exercise.py#L31)
+  - [`ML_Practice/Customer_Segmentation/customer_segmentation_exercise.py:L30`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Customer_Segmentation/customer_segmentation_exercise.py#L30)
+- **Symptom**: K-Means groups players or customers based on only one variable while ignoring the rest.
+- **Cause**: `runs_scored` ranges up to $12,000$, while `wickets_taken` ranges from $0$ to $280$. Because Euclidean distance squares differences $(x_1 - x_2)^2$, `runs_scored` completely dominates the cluster assignments.
+- **Fix**: Feature standardization is mandatory for distance-based clustering:
+  ```python
+  scaler = StandardScaler()
+  X_scaled = scaler.fit_transform(X)
+  ```
+
+---
+
+### ❌ Trap 12: Inconsistent Date Formats in `pd.to_datetime`
+- **Exact Location**: [`Practice2/nba_birthday_analytics_exercise.py:L23`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice2/nba_birthday_analytics_exercise.py#L23)
+- **Error**: `ParserError: Unknown string format` or `TypeError: '<' not supported between instances of 'str' and 'int'`
+- **Cause**: Datasets with thousands of rows often contain corrupted or missing birth dates.
+- **Fix**: Use `errors='coerce'` to safely replace malformed strings with `NaT`:
+  ```python
+  df['birth_date'] = pd.to_datetime(df['birth_date'], errors='coerce')
+  ```
+
+---
+
+### ❌ Trap 13: Confusing Pearson's $r$ with $R^2$
 - **Distinction**:
   - Pearson's $r \in [-1.0, +1.0]$: Direction and strength of linear relationship between two continuous variables.
-  - $R^2 \in [0.0, 1.0]$: Percentage of target variance accounted for by the regression model. In simple linear regression, $R^2 = (r)^2$.
+  - $R^2 \in [0.0, 1.0]$: Percentage of target variance accounted for by the regression model. In simple linear regression with 1 feature, $R^2 = (r)^2$.
 
-### ❌ Trap 7: Misinterpreting Scikit-Learn Confusion Matrix Layout
-- **Scikit-Learn Layout**:
-  - Row 0 = Ground Truth Negative ($0$) $\rightarrow$ `[TN, FP]`
-  - Row 1 = Ground Truth Positive ($1$) $\rightarrow$ `[FN, TP]`
-  - Column 0 = Predicted Negative ($0$)
-  - Column 1 = Predicted Positive ($1$)
+---
 
-### ❌ Trap 8: Small-Dataset Overfitting Risk ($N = 25$)
-- **Viva / Interview Question**: *"Your model achieved $R^2 = 0.99$. Is it ready for production?"*
+### ❌ Trap 14: Misinterpreting Scikit-Learn Confusion Matrix Layout
+- **Exact Location**: Phase 4 in classification evaluation ([`Practice4/healthcare_classification_exercise.py:L48`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/Practice4/healthcare_classification_exercise.py#L48), [`ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py:L62`](file:///c:/Users/conne/Downloads/ML_CDAC_ALILOG/Day11/ML_Practice/Bank_Loan_Risk/loan_risk_exercise.py#L62)).
+- **Scikit-Learn Standard Layout**:
+  $$\begin{pmatrix} \text{Actual 0, Pred 0 (TN)} & \text{Actual 0, Pred 1 (FP)} \\ \text{Actual 1, Pred 0 (FN)} & \text{Actual 1, Pred 1 (TP)} \end{pmatrix}$$
+  - **Row 0**: Actual Negatives ($0$).
+  - **Row 1**: Actual Positives ($1$).
+  - **Column 0**: Predicted Negatives ($0$).
+  - **Column 1**: Predicted Positives ($1$).
+
+---
+
+### ❌ Trap 15: Small-Dataset Overfitting Risk ($N = 25$)
+- **Viva / Interview Question**: *"Your model achieved $R^2 = 0.99$ on 25 rows. Is it ready for production?"*
 - **Accurate Answer**:
-  1. **No**. Small datasets ($N=25$) naturally yield inflated $R^2$ values due to limited variance exposure.
+  1. **No**. Small datasets naturally yield inflated $R^2$ values due to limited sample diversity.
   2. **Multicollinearity / Confounders**: In the coffee shop dataset, warmer weather increases foot traffic, which in turn increases revenue; marketing spend is partially confounded by weather.
   3. **Capacity Constraints**: Linear extrapolation beyond the maximum observed spend ignores physical seating limits and diminishing marginal returns.
 
