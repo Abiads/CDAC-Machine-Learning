@@ -1,95 +1,90 @@
 """
 Title: E-Commerce Customer Analytics Lifecycle 
-Description: Fill in the TODO sections across the 5 lifecycle phases using 
-             'ecommerce_customer_data.csv'.
-
+Description: Simple, built-in function driven Python script for e-commerce customer analytics.
 """
 
-# Step 0: Import necessary libraries
-# TODO: Import pandas, numpy, LinearRegression from sklearn.linear_model, and evaluation metrics
+from pathlib import Path
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+csv_path = Path(__file__).resolve().parent / "ecommerce_customer_data.csv"
 
 
 def phase_1_discovery_and_setup():
-    """
-    [Phase 1] Discovery & Data Setup 
-    - Goal: Load 'ecommerce_customer_data.csv' and inspect structure.
-    - Check for null values and print summary info.
-    """
+    """Phase 1: Load data and inspect structure."""
     print("\n[PHASE 1] Discovery & Data Setup")
     print("-" * 65)
-    # TODO: Load CSV file using pandas
-    # TODO: Print first 5 rows and verify dataset shape
-    # TODO: Check for any missing values
-    pass
+    df = pd.read_csv(csv_path)
+    print(df.head())
+    print(f"\nShape: {df.shape}")
+    print("Missing Values:\n", df.isnull().sum())
+    return df
 
 
 def phase_2_descriptive_statistics(df):
-    """
-    [Phase 2] Descriptive Statistics & Data Measures 
-    - Goal: Compute measures of central tendency and dispersion 
-      for 'Annual_Spend_USD'.
-    - Check for potential outliers using the IQR method.
-    """
+    """Phase 2: Descriptive stats and IQR outlier check for Annual_Spend_USD."""
     print("\n[PHASE 2] Descriptive Statistics")
     print("-" * 65)
-    # TODO: Calculate Mean, Median, Std Dev, Variance, and IQR for Annual_Spend_USD
-    # TODO: Identify any values falling outside 1.5 * IQR bounds
-    pass
+    col = df['Annual_Spend_USD']
+    q1, q3 = col.quantile(0.25), col.quantile(0.75)
+    iqr = q3 - q1
+    print(col.describe())
+    print(f"Variance: {col.var():.2f}")
+    print(f"IQR: {iqr:.2f}")
+    outliers = col[(col < q1 - 1.5 * iqr) | (col > q3 + 1.5 * iqr)]
+    print(f"Outliers Count: {len(outliers)}")
+    return df
 
 
 def phase_3_bivariate_association(df):
-    """
-    [Phase 3] Bivariate Association & Correlation 
-    - Goal: Examine relationships between Browsing Minutes, Items in Cart, and Annual Spend.
-    - Compute Pearson correlation matrix.
-    """
+    """Phase 3: Bivariate Pearson correlation matrix."""
     print("\n[PHASE 3] Bivariate Association")
     print("-" * 65)
-    # TODO: Select numeric columns and compute Pearson correlation matrix
-    # TODO: Highlight correlations involving Annual_Spend_USD
-    pass
+    corr = df.corr(numeric_only=True)
+    print(corr.round(4))
+    print(f"\nBrowsing_Minutes vs Annual_Spend_USD: r = {corr.loc['Browsing_Minutes', 'Annual_Spend_USD']:.4f}")
+    print(f"Items_In_Cart vs Annual_Spend_USD: r = {corr.loc['Items_In_Cart', 'Annual_Spend_USD']:.4f}")
+    return df
 
 
 def phase_4_predictive_modeling(df):
-    """
-    [Phase 4] Predictive Analytics & Regression Modeling 
-    - Goal: Predict 'Annual_Spend_USD' based on 'Browsing_Minutes'.
-    - Train a Simple Linear Regression model.
-    """
+    """Phase 4: Simple Linear Regression predicting Annual_Spend from Browsing_Minutes."""
     print("\n[PHASE 4] Predictive Modeling")
     print("-" * 65)
-    # TODO: Set X = df[['Browsing_Minutes']] and y = df['Annual_Spend_USD']
-    # TODO: Fit Linear Regression model and output slope & intercept
-    pass
+    X = df[['Browsing_Minutes']]
+    y = df['Annual_Spend_USD']
+    model = LinearRegression().fit(X, y)
+    print(f"Slope (beta_1): {model.coef_[0]:.4f}")
+    print(f"Intercept (beta_0): {model.intercept_:.4f}")
+    return model, X, y
 
 
 def phase_5_evaluation_and_reporting(model, X, y, df):
-    """
-    [Phase 5] Evaluation & Prescriptive Recommendations 
-    - Goal: Evaluate model performance using R-squared and MAE.
-    - Provide prescriptive business recommendations based on findings.
-    """
+    """Phase 5: Evaluation and marketing recommendations."""
     print("\n[PHASE 5] Evaluation & Business Action")
     print("-" * 65)
-    # TODO: Calculate R2 score and Mean Absolute Error (MAE)
-    # TODO: Print prescriptive marketing action items
-    pass
+    y_pred = model.predict(X)
+    print(f"R-squared Score: {model.score(X, y):.4f}")
+    print(f"Mean Absolute Error (MAE): ${mean_absolute_error(y, y_pred):.2f}")
+    print("\nMarketing Action: Browsing time strongly drives spending; optimize UX and personalized recommendations.")
 
 
 def run_analytics_lifecycle():
-    """
-    Facade Orchestrator function.
-    """
+    """Facade Orchestrator function."""
     print("=" * 65)
-    print("STARTING E-COMMERCE ANALYTICS LIFECYCLE ")
+    print("STARTING E-COMMERCE ANALYTICS LIFECYCLE")
     print("=" * 65)
-    
-    # Executing phases chronologically
+
     df = phase_1_discovery_and_setup()
-    # df = phase_2_descriptive_statistics(df)
-    # df = phase_3_bivariate_association(df)
-    # model, X, y = phase_4_predictive_modeling(df)
-    # phase_5_evaluation_and_reporting(model, X, y, df)
+    df = phase_2_descriptive_statistics(df)
+    df = phase_3_bivariate_association(df)
+    model, X, y = phase_4_predictive_modeling(df)
+    phase_5_evaluation_and_reporting(model, X, y, df)
+
+    print("\n" + "=" * 65)
+    print("E-COMMERCE LIFECYCLE COMPLETED SUCCESSFULLY")
+    print("=" * 65)
 
 
 if __name__ == "__main__":
