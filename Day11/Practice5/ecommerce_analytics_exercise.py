@@ -23,10 +23,10 @@ def phase_1_discovery_and_setup():
 
 
 def phase_2_descriptive_statistics(df):
-    """Phase 2: Descriptive stats and IQR outlier check for Browsing_Minutes."""
+    """Phase 2: Descriptive stats and IQR outlier check for Annual_Spend_USD."""
     print("\n[PHASE 2] Descriptive Statistics")
     print("-" * 65)
-    col = df['Browsing_Minutes']
+    col = df['Annual_Spend_USD']
     print(col.describe())
     print(f"Variance: {col.var():.2f}")
     q1 = col.quantile(0.25)
@@ -47,6 +47,7 @@ def phase_3_bivariate_association(df):
     corr = df.corr(numeric_only=True)
     print(corr.round(4))
     print(f"\nBrowsing_Minutes vs Annual_Spend_USD: r = {corr.loc['Browsing_Minutes', 'Annual_Spend_USD']:.4f}")
+    print(f"Items_In_Cart vs Annual_Spend_USD: r = {corr.loc['Items_In_Cart', 'Annual_Spend_USD']:.4f}")
     return df
 
 

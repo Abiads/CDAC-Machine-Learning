@@ -28,12 +28,19 @@ def phase_1_discovery_and_setup():
 
 
 def phase_2_descriptive_statistics():
-    """Phase 2: Descriptive stats using built-in describe, median, and variance."""
+    """Phase 2: Descriptive stats using built-in describe, median, and IQR outliers."""
     print("\n--- Phase 2: Descriptive Statistics ---")
     num_df = df.select_dtypes(include='number')
     print("Summary (Mean, Std, Min, Max):\n", num_df.describe().T[['mean', 'std', 'min', 'max']])
     print("\nMedian:\n", num_df.median())
     print("\nVariance:\n", num_df.var())
+    
+    # IQR & Outliers for Daily_Revenue_USD
+    col = df['Daily_Revenue_USD']
+    q1, q3 = col.quantile(0.25), col.quantile(0.75)
+    iqr = q3 - q1
+    outliers = col[(col < q1 - 1.5 * iqr) | (col > q3 + 1.5 * iqr)]
+    print(f"\nDaily_Revenue IQR: {iqr:.2f}, Outliers Count: {len(outliers)}")
 
 
 def phase_3_bivariate_association():

@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
 
 csv_path = Path(__file__).resolve().parent / "customer_churn_data.csv"
@@ -58,6 +58,7 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     y_pred = model.predict(X_test_scaled)
     print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
     print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+    print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
     return model
 
 
