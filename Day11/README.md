@@ -291,3 +291,4 @@ def phase_4_model_evaluation(model, X, y):
 | **Logistic Regression Fit**| `model = LogisticRegression().fit(df[['F1', 'F2']], df['Target'])` |
 | **Classification Accuracy**| `accuracy_score(y, model.predict(X))` |
 | **Confusion Matrix** | `confusion_matrix(y, model.predict(X))` |
+
