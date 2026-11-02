@@ -1,104 +1,92 @@
 """
-Title: Unsupervised Customer Segmentation Pipeline with K-Means (Student Exercise)
-Description: A modular Python exercise script for loading customer behavioral data, 
-             scaling features for distance-based algorithms, training a K-Means clustering model, 
-             evaluating cluster cohesion, profiling segments, and persisting artifacts using joblib.
+Title: Unsupervised Customer Segmentation Pipeline with K-Means
+Description: Simple, built-in function driven Python script for customer segmentation.
 """
 
-# Step 0: Import necessary libraries
-# TODO: Import pandas, numpy, StandardScaler from sklearn.preprocessing, 
-#       KMeans from sklearn.cluster, silhouette_score from sklearn.metrics, and joblib
+from pathlib import Path
+import warnings
+warnings.filterwarnings('ignore')
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import joblib
+
+csv_path = Path(__file__).resolve().parent / "customer_segmentation_data.csv"
 
 
 def phase_1_discovery_and_setup():
-    """
-    [Phase 1] Discovery, Setup & Feature Selection
-    - Goal: Load 'customer_segmentation_data.csv' and inspect structure.
-    - Drop non-analytical identifiers (e.g., 'customer_id').
-    - Select numeric feature subset for clustering (e.g., annual income, spending score).
-    """
+    """Phase 1: Ingest behavioral data and select numeric clustering features."""
     print("\n[PHASE 1] Discovery & Feature Selection")
     print("-" * 65)
-    # TODO: Load CSV file using pandas
-    # TODO: Drop ID column ('customer_id')
-    # TODO: Select relevant features for clustering (e.g., 'annual_income_k', 'spending_score_1_100', 'purchase_frequency_monthly')
-    pass
+    df = pd.read_csv(csv_path)
+    X = df.drop(columns=['customer_id'])
+    print(f"Dataset Shape: {df.shape}")
+    print(X.head(3))
+    return X, df
 
 
 def phase_2_feature_scaling(X):
-    """
-    [Phase 2] Unsupervised Feature Scaling
-    - Goal: Initialize and fit StandardScaler on clustering features.
-    - Unsupervised algorithms like K-Means rely heavily on Euclidean distance, making scaling mandatory.
-    """
+    """Phase 2: Scale features using StandardScaler for distance metrics."""
     print("\n[PHASE 2] Unsupervised Feature Scaling")
     print("-" * 65)
-    # TODO: Initialize StandardScaler()
-    # TODO: Fit and transform features X into X_scaled
-    pass
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    return X_scaled, scaler
 
 
-def phase_3_kmeans_model_induction(X_scaled):
-    """
-    [Phase 3] K-Means Model Induction
-    - Goal: Instantiate KMeans clustering model (e.g., setting n_clusters=3).
-    - Fit model to scaled data and assign cluster labels back to dataset.
-    """
+def phase_3_kmeans_model_induction(X_scaled, df_original):
+    """Phase 3: Train KMeans with 3 clusters and assign segment labels."""
     print("\n[PHASE 3] K-Means Model Induction & Labeling")
     print("-" * 65)
-    # TODO: Instantiate KMeans(n_clusters=3, random_state=42)
-    # TODO: Fit model and generate cluster labels (.fit_predict(X_scaled))
-    pass
+    model = KMeans(n_clusters=3, random_state=42, n_init='auto')
+    labels = model.fit_predict(X_scaled)
+    df_clustered = df_original.copy()
+    df_clustered['cluster_id'] = labels
+    return model, labels, df_clustered
 
 
-def phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_original):
-    """
-    [Phase 4] Cluster Evaluation & Business Profiling
-    - Goal: Compute Silhouette Score to measure cluster separation and cohesion.
-    - Group original data by assigned cluster labels to profile customer segments.
-    """
+def phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered):
+    """Phase 4: Calculate silhouette score and inspect segment centroids."""
     print("\n[PHASE 4] Cluster Evaluation & Profiling")
     print("-" * 65)
-    # TODO: Compute silhouette_score(X_scaled, labels)
-    # TODO: Append cluster labels to original dataframe and compute group means to profile segments
-    pass
+    score = silhouette_score(X_scaled, labels)
+    print(f"Silhouette Score (Cluster Cohesion): {score:.4f}")
+    profile = df_clustered.groupby('cluster_id')[['age', 'annual_income_k', 'spending_score_1_100', 'purchase_frequency_monthly']].mean()
+    print("\nCustomer Segment Profiles:\n", profile.round(2))
 
 
 def phase_5_joblib_model_persistence(model, scaler, feature_names):
-    """
-    [Phase 5] Unsupervised Model Persistence with Joblib
-    - Goal: Save the trained KMeans model and fitted scaler to disk using joblib.
-    - Test loading artifacts to predict the cluster segment of a new customer.
-    """
+    """Phase 5: Serialize KMeans artifacts and test segment prediction on new customer."""
     print("\n[PHASE 5] Model Persistence with Joblib")
     print("-" * 65)
-    # TODO: Save model, scaler, and feature list using joblib.dump()
-    # TODO: Load artifacts using joblib.load() and assign a new customer profile to a cluster
-    pass
+    base_dir = Path(__file__).resolve().parent
+    joblib.dump(model, base_dir / "customer_segmentation_model.joblib")
+    joblib.dump(scaler, base_dir / "customer_segmentation_scaler.joblib")
+    print("Artifacts saved: customer_segmentation_model.joblib, customer_segmentation_scaler.joblib")
 
+    # Sample customer: Age 25, $20k income, 90 spending score, 8 monthly visits
+    sample_scaled = scaler.transform([[25, 20, 90, 8]])
+    cluster_pred = model.predict(sample_scaled)
+    print(f"Sample Customer Assigned to Segment ID: {cluster_pred[0]}")
 
-# ==========================================
-# THE FACADE FUNCTION (Orchestrator)
-# ==========================================
 
 def run_clustering_pipeline():
-    """
-    Facade function coordinating the entire unsupervised segmentation pipeline.
-    """
+    """Facade function coordinating the entire unsupervised segmentation pipeline."""
     print("=" * 65)
     print("STARTING UNSUPERVISED CLUSTERING LIFECYCLE (K-Means)")
     print("=" * 65)
-    
-    # Executing phases chronologically
-    # X = phase_1_discovery_and_setup()
-    # X_scaled, scaler = phase_2_feature_scaling(X)
-    # model, labels, df_clustered = phase_3_kmeans_model_induction(X_scaled, X)
-    # phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered)
-    # phase_5_joblib_model_persistence(model, scaler, list(X.columns))
+
+    X, df_original = phase_1_discovery_and_setup()
+    X_scaled, scaler = phase_2_feature_scaling(X)
+    model, labels, df_clustered = phase_3_kmeans_model_induction(X_scaled, df_original)
+    phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered)
+    phase_5_joblib_model_persistence(model, scaler, list(X.columns))
+
+    print("\n" + "=" * 65)
+    print("CUSTOMER SEGMENTATION COMPLETED SUCCESSFULLY")
+    print("=" * 65)
 
 
-# ==========================================
-# MAIN GUARD
-# ==========================================
 if __name__ == "__main__":
     run_clustering_pipeline()

@@ -1,104 +1,93 @@
 """
 Title: Unsupervised Cricket Player Role Segmentation 
-Description: A modular Python exercise script for loading cricket statistics, 
-             scaling features, training a K-Means clustering model to group 
-             players into functional roles (Batsmen, Bowlers, All-Rounders), 
-             evaluating clusters, and persisting artifacts using joblib.
+Description: Simple, built-in function driven Python script for KMeans cricket clustering.
 """
 
-# Step 0: Import necessary libraries
-# TODO: Import pandas, numpy, StandardScaler from sklearn.preprocessing, 
-#       KMeans from sklearn.cluster, silhouette_score from sklearn.metrics, and joblib
+from pathlib import Path
+import warnings
+warnings.filterwarnings('ignore')
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import joblib
+
+csv_path = Path(__file__).resolve().parent / "cricket_player_stats.csv"
 
 
 def phase_1_discovery_and_setup():
-    """
-    [Phase 1] Discovery, Setup & Feature Selection
-    - Goal: Load 'cricket_player_stats.csv' and inspect structure.
-    - Separate player names/identifiers from numeric statistics.
-    - Select numeric features required for role clustering.
-    """
+    """Phase 1: Ingest player stats and select numeric performance features."""
     print("\n[PHASE 1] Discovery & Feature Selection")
     print("-" * 65)
-    # TODO: Load CSV file using pandas
-    # TODO: Retain 'player_name' for final profiling
-    # TODO: Select numerical features (e.g., 'runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy')
-    pass
+    df = pd.read_csv(csv_path)
+    feature_cols = ['runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy']
+    X = df[feature_cols]
+    print(f"Dataset Shape: {df.shape}")
+    print(df[['player_name'] + feature_cols].head(3))
+    return X, df
 
 
 def phase_2_feature_scaling(X):
-    """
-    [Phase 2] Unsupervised Feature Scaling
-    - Goal: Fit StandardScaler on performance metrics to equalize feature weightings.
-    """
+    """Phase 2: Scale features with StandardScaler to equalize distance weightings."""
     print("\n[PHASE 2] Unsupervised Feature Scaling")
     print("-" * 65)
-    # TODO: Initialize StandardScaler()
-    # TODO: Fit and transform features X into X_scaled
-    pass
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    return X_scaled, scaler
 
 
 def phase_3_kmeans_model_induction(X_scaled, df_original):
-    """
-    [Phase 3] K-Means Model Induction
-    - Goal: Train KMeans model setting n_clusters=3 (Batsmen, Bowlers, All-Rounders).
-    - Fit model to scaled data and assign cluster labels back to dataset.
-    """
+    """Phase 3: Train KMeans with 3 clusters (Batsmen, Bowlers, All-Rounders)."""
     print("\n[PHASE 3] K-Means Model Induction & Labeling")
     print("-" * 65)
-    # TODO: Instantiate KMeans(n_clusters=3, random_state=42)
-    # TODO: Fit model and generate cluster labels using .fit_predict(X_scaled)
-    pass
+    model = KMeans(n_clusters=3, random_state=42, n_init='auto')
+    labels = model.fit_predict(X_scaled)
+    df_clustered = df_original.copy()
+    df_clustered['cluster_id'] = labels
+    return model, labels, df_clustered
 
 
 def phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered):
-    """
-    [Phase 4] Cluster Evaluation & Role Profiling
-    - Goal: Calculate Silhouette Score to measure cluster separation.
-    - Calculate average statistics per cluster and translate centroids into cricket roles.
-    """
+    """Phase 4: Evaluate silhouette score and profile cluster centroids."""
     print("\n[PHASE 4] Cluster Evaluation & Role Profiling")
     print("-" * 65)
-    # TODO: Compute silhouette_score(X_scaled, labels)
-    # TODO: Group df_clustered by 'cluster_id' and compute mean statistics to interpret roles
-    pass
+    score = silhouette_score(X_scaled, labels)
+    print(f"Silhouette Score (Cluster Quality): {score:.4f}")
+    profile = df_clustered.groupby('cluster_id')[['runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy']].mean()
+    print("\nCluster Centroid Profiles (Roles):\n", profile.round(2))
 
 
 def phase_5_joblib_model_persistence(model, scaler, feature_names):
-    """
-    [Phase 5] Unsupervised Model Persistence with Joblib
-    - Goal: Save the trained KMeans model and scaler to disk using joblib.
-    - Test loading artifacts to assign a new player profile to a role cluster.
-    """
+    """Phase 5: Serialize KMeans pipeline artifacts and test sample player prediction."""
     print("\n[PHASE 5] Model Persistence with Joblib")
     print("-" * 65)
-    # TODO: Save model, scaler, and feature list using joblib.dump()
-    # TODO: Load artifacts using joblib.load() and predict the cluster for a new player profile
-    pass
+    base_dir = Path(__file__).resolve().parent
+    joblib.dump(model, base_dir / "cricket_kmeans_model.joblib")
+    joblib.dump(scaler, base_dir / "cricket_scaler.joblib")
+    print("Artifacts saved: cricket_kmeans_model.joblib, cricket_scaler.joblib")
 
+    # Sample player inference: 10,000 runs, 50.0 avg, 2 wickets, 7.5 economy
+    sample_scaled = scaler.transform([[10000, 50.0, 2, 7.5]])
+    cluster_pred = model.predict(sample_scaled)
+    print(f"Sample Player Classified into Cluster ID: {cluster_pred[0]}")
 
-# ==========================================
-# THE FACADE FUNCTION (Orchestrator)
-# ==========================================
 
 def run_cricket_clustering_pipeline():
-    """
-    Facade function coordinating the cricket player segmentation pipeline.
-    """
+    """Facade function coordinating the cricket player segmentation pipeline."""
     print("=" * 65)
     print("STARTING CRICKET PLAYER ROLE CLUSTERING LIFECYCLE (K-Means)")
     print("=" * 65)
-    
-    # Executing phases chronologically
-    # X, df_original = phase_1_discovery_and_setup()
-    # X_scaled, scaler = phase_2_feature_scaling(X)
-    # model, labels, df_clustered = phase_3_kmeans_model_induction(X_scaled, df_original)
-    # phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered)
-    # phase_5_joblib_model_persistence(model, scaler, list(X.columns))
+
+    X, df_original = phase_1_discovery_and_setup()
+    X_scaled, scaler = phase_2_feature_scaling(X)
+    model, labels, df_clustered = phase_3_kmeans_model_induction(X_scaled, df_original)
+    phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered)
+    phase_5_joblib_model_persistence(model, scaler, list(X.columns))
+
+    print("\n" + "=" * 65)
+    print("CRICKET CLUSTERING COMPLETED SUCCESSFULLY")
+    print("=" * 65)
 
 
-# ==========================================
-# MAIN GUARD
-# ==========================================
 if __name__ == "__main__":
     run_cricket_clustering_pipeline()
