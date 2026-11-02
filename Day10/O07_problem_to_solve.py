@@ -8,9 +8,9 @@ from IPython.display import Image, display
 import os
 from pathlib import Path
 
-input_file = "./assets/PastHires.csv"
-if not os.path.exists(input_file):
-    input_file = Path(__file__).parent / "assets" / "PastHires.csv"
+input_file = Path(__file__).parent / "assets" / "PastHires.csv"
+if not input_file.exists():
+    input_file = Path("./Day10/assets/PastHires.csv")
 
 df = pd.read_csv(input_file)
 d = {'Y': 1, 'N': 0, 'BS': 0, 'MS': 1, 'PhD': 2}

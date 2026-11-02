@@ -10,9 +10,9 @@ import os
 from pathlib import Path
 
 # Candidate input file path handling (works whether executed from root or Day10)
-input_file = "./assets/PastHires.csv"
-if not os.path.exists(input_file):
-    input_file = Path(__file__).parent / "assets" / "PastHires.csv"
+input_file = Path(__file__).parent / "assets" / "PastHires.csv"
+if not input_file.exists():
+    input_file = Path("./Day10/assets/PastHires.csv")
 
 df = pd.read_csv(input_file)
 # print(df.head())
