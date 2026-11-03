@@ -1,30 +1,26 @@
 """
 ================================================================================
-EXAM PRACTICE: Day 11 - ML Practice 4
-DOMAIN: Digital Commerce & Persona Segmentation (K-Means Clustering)
+EXAM PRACTICE (FILL IN THE BLANKS): Day 11 - ML Practice 4
+DOMAIN: Retail Persona Segmentation (K-Means Clustering)
 ================================================================================
 PROBLEM STATEMENT (PS):
-A direct-to-consumer e-commerce brand wants to group its customer base into 
-distinct marketing personas (VIP High Spenders, Budget Conscious, Regulars) 
-to tailor promotional campaigns and discount tiers. The dataset contains 25 
-shoppers tracked across age, income, spending score, and purchase frequency.
+Segment 25 retail shoppers into 3 distinct marketing personas based on age, income, 
+spending score, and purchase frequency.
+Apply StandardScaler, fit KMeans(n_clusters=3), validate with silhouette_score, 
+and profile centroid means.
 
-SEGMENTATION QUESTIONS TO SOLVE:
-1. Which continuous features capture shopper purchasing power and frequency?
-2. Why is standardization mandatory prior to calculating Euclidean cluster distances?
-3. How do you fit KMeans with k=3 and record segment memberships?
-4. How do you measure cluster separation with the silhouette score?
-5. How do you profile the cluster centroids to translate math into marketing personas?
-
-DATASET FILE: customer_segmentation_data.csv
-AVAILABLE COLUMNS:
-  - customer_id (identifier)
-  - age, annual_income_k, spending_score, purchase_frequency
+Fill in all the `___` blanks below to complete the implementation.
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Import required libraries (Pandas, StandardScaler, KMeans, silhouette_score, joblib)
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+# Placeholder for your answers
+___ = None
 
 csv_path = Path(__file__).resolve().parent / "customer_segmentation_data.csv"
 
@@ -32,53 +28,68 @@ csv_path = Path(__file__).resolve().parent / "customer_segmentation_data.csv"
 def phase_1_discovery_and_feature_selection():
     """
     [Phase 1] Discovery & Segmentation Feature Selection
-    - Ingest customer_segmentation_data.csv.
-    - Inspect dimensions and select continuous features:
-      ['age', 'annual_income_k', 'spending_score', 'purchase_frequency'].
-    - Return df and feature matrix X.
     """
     print("\n[PHASE 1] Discovery & Feature Selection")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    df = pd.read_csv(___)
+    
+    # 1. Select the 4 continuous shopping features
+    features = ['age', 'annual_income_k', 'spending_score', 'purchase_frequency']
+    X = df[___]
+    
+    return df, ___                      # 2. Return df, X
 
 
 def phase_2_feature_scaling(X):
     """
     [Phase 2] Unsupervised Feature Scaling
-    - Apply StandardScaler to normalize all feature scales.
-    - Return X_scaled and the fitted scaler.
     """
     print("\n[PHASE 2] Unsupervised Feature Scaling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    scaler = StandardScaler()
+    # 3. Fit and transform scaler
+    X_scaled = scaler.fit_transform(___)
+    
+    return X_scaled, ___                # 4. Return X_scaled, scaler
 
 
 def phase_3_kmeans_clustering(df, X_scaled, n_clusters=3):
     """
-    [Phase 3] K-Means Induction & Segment Assignment
-    - Fit KMeans with n_clusters=3 and random_state=42.
-    - Assign the resulting cluster IDs to the DataFrame as 'segment_id'.
-    - Return the fitted kmeans model and labeled DataFrame.
+    [Phase 3] K-Means Clustering & Segment Assignment
     """
     print("\n[PHASE 3] K-Means Clustering & Segment Assignment")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 5. Fit KMeans
+    kmeans = KMeans(n_clusters=___, random_state=42).fit(___)
+    
+    # 6. Assign cluster labels
+    df['segment_id'] = kmeans.___
+    
+    return kmeans, ___                  # 7. Return kmeans, df
 
 
 def phase_4_cluster_evaluation_and_profiling(X_scaled, kmeans, df):
     """
-    [Phase 4] Silhouette Validation & Marketing Persona Profiling
-    - Compute the silhouette score across X_scaled and cluster labels.
-    - Group by segment_id and compute centroid averages.
-    - Print the profile summary and business persona for each cluster.
+    [Phase 4] Silhouette Score & Persona Profiling
     """
     print("\n[PHASE 4] Cluster Evaluation & Persona Profiling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 8. Compute silhouette score
+    score = silhouette_score(___, kmeans.labels_)
+    print(f"Silhouette Score: {score:.4f}")
+    
+    features = ['age', 'annual_income_k', 'spending_score', 'purchase_frequency']
+    # 9. Compute centroid averages
+    centroids = df.groupby('segment_id')[features].___()
+    print("Customer Segment Centroids:\n", centroids.round(2))
 
 
 def run_segmentation_pipeline():

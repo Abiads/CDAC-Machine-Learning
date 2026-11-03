@@ -1,32 +1,27 @@
 """
 ================================================================================
-EXAM PRACTICE: Day 11 - ML Practice 3
-DOMAIN: Telecom & Subscription Retention (Random Forest Classification)
+EXAM PRACTICE (FILL IN THE BLANKS): Day 11 - ML Practice 3
+DOMAIN: Telecom Subscriber Retention (Random Forest Classification)
 ================================================================================
 PROBLEM STATEMENT (PS):
-A telecommunications provider experiences high customer attrition among postpaid 
-subscribers. Management requires an automated churn prediction system to flag 
-at-risk subscribers before they cancel service. You are provided with 25 subscriber 
-records capturing contract tenure, billing history, and support service enrollment.
+Predict customer churn (churn_flag: 0 = Active, 1 = Churned) using an ensemble
+Random Forest model. Engineer avg_monthly_spend handling zero tenure accounts, 
+one-hot encode categoricals, split 80/20 with stratification, scale features, 
+and evaluate test accuracy and confusion matrix.
 
-RETENTION QUESTIONS TO SOLVE:
-1. How do you engineer an average monthly spend metric (total_charges / tenure_months) 
-   without triggering division-by-zero crashes on brand new accounts (tenure = 0)?
-2. How do you encode multi-category variables like 'contract_type' and binary 'tech_support'?
-3. Why is an ensemble of decision trees (Random Forest) resilient against overfitting, 
-   and how do you initialize it with 50 estimators?
-4. How do you evaluate precision, recall, and F1-score across both active and churned classes?
-
-DATASET FILE: customer_churn_data.csv
-AVAILABLE COLUMNS:
-  - customer_id (identifier)
-  - age, tenure_months, monthly_charges, total_charges, contract_type, tech_support
-  - churn_flag (binary target: 0 = Active, 1 = Churned)
+Fill in all the `___` blanks below to complete the implementation.
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Import required libraries (Pandas, train_test_split, StandardScaler, RandomForestClassifier, metrics, joblib)
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Placeholder for your answers
+___ = None
 
 csv_path = Path(__file__).resolve().parent / "customer_churn_data.csv"
 
@@ -34,56 +29,80 @@ csv_path = Path(__file__).resolve().parent / "customer_churn_data.csv"
 def phase_1_discovery_and_target_identification():
     """
     [Phase 1] Discovery & Churn Target Audit
-    - Ingest customer_churn_data.csv.
-    - Check dataset dimensions and target class balance (churn_flag).
-    - Isolate feature matrix X (drop customer_id and churn_flag) and target y.
-    - Return X, y.
     """
     print("\n[PHASE 1] Discovery & Target Identification")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    df = pd.read_csv(___)
+    print("Class Balance:\n", df['churn_flag'].value_counts())
+    
+    # 1. Drop non-predictive ID and target
+    X = df.drop(columns=[___, ___])
+    
+    # 2. Isolate binary target
+    y = df[___]
+    
+    return ___, ___                     # 3. Return X, y
 
 
 def phase_2_feature_engineering_and_encoding(X):
     """
-    [Phase 2] Safe Ratio Construction & Encoding
-    - Safely copy X.
-    - Compute 'avg_monthly_spend' safely handling tenure_months == 0 accounts.
-    - One-hot encode categorical features with drop_first=True.
-    - Return transformed X_encoded.
+    [Phase 2] Ratio Engineering & Categorical Encoding
     """
     print("\n[PHASE 2] Feature Engineering & Categorical Encoding")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    X = X.___()
+    
+    # 4. Compute avg monthly spend preventing division by zero on tenure_months == 0
+    X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months'].replace(0, ___)
+    
+    # 5. One-hot encode categoricals
+    X_encoded = pd.get_dummies(X, drop_first=___)
+    
+    return ___                          # 6. Return X_encoded
 
 
 def phase_3_scaling_and_train_test_split(X, y):
     """
     [Phase 3] Stratified Splitting & Scaling
-    - Perform an 80/20 train/test split with stratification on y.
-    - Standardize features using StandardScaler (fit on train, transform test).
-    - Return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler.
     """
     print("\n[PHASE 3] Data Splitting & Feature Scaling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 7. Stratified train/test split
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=___)
+    
+    # 8. Fit on train, transform on test
+    scaler = StandardScaler()
+    X_tr_scaled = scaler.fit_transform(___)
+    X_te_scaled = scaler.transform(___)
+    
+    return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler
 
 
 def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y_test):
     """
     [Phase 4] Ensemble Modeling with Random Forest
-    - Train a RandomForestClassifier with 50 trees and random_state=42.
-    - Predict on the scaled test set.
-    - Print accuracy percentage, confusion matrix, and full classification report.
-    - Return the trained model.
     """
     print("\n[PHASE 4] Model Training & Test Set Evaluation")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 9. Fit RandomForestClassifier with 50 estimators
+    model = RandomForestClassifier(n_estimators=___, random_state=42).fit(___, ___)
+    
+    # 10. Predict on test set
+    y_pred = model.predict(___)
+    
+    print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
+    print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+    print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
+    
+    return ___                          # 11. Return model
 
 
 def run_churn_pipeline():

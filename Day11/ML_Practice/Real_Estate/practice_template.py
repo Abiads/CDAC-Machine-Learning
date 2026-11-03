@@ -1,31 +1,28 @@
 """
 ================================================================================
-EXAM PRACTICE: Day 11 - ML Practice 5
+EXAM PRACTICE (FILL IN THE BLANKS): Day 11 - ML Practice 5
 DOMAIN: Real Estate Valuation & Regression Pipeline (Linear Regression)
 ================================================================================
 PROBLEM STATEMENT (PS):
-A property analytics platform requires an automated appraisal pipeline to forecast 
-residential home sale prices (price_usd) from structural attributes and geographic 
-location types (Urban, Suburban, Rural). The training dataset contains 25 verified 
-recent home transactions.
+Forecast residential property prices (price_usd) using an end-to-end regression
+pipeline. Engineer sqft_per_room, one-hot encode location_type, split 80/20, 
+scale features using StandardScaler, fit Linear Regression, and evaluate 
+R-squared, MAE, and RMSE.
 
-VALUATION QUESTIONS TO SOLVE:
-1. How do you engineer a structural room density metric (sqft / (bedrooms + bathrooms))?
-2. How do you convert the categorical 'location_type' feature into one-hot numeric columns?
-3. How do you split the dataset 80/20 and apply StandardScaler without leaking test statistics?
-4. How do you fit an ordinary least squares Linear Regression model and compute R-squared, 
-   Mean Absolute Error (MAE), and Root Mean Squared Error (RMSE)?
-
-DATASET FILE: housing_ml_data.csv
-AVAILABLE COLUMNS:
-  - house_id (identifier)
-  - sqft, bedrooms, bathrooms, age_years, garage_spaces, location_type
-  - price_usd (continuous target)
+Fill in all the `___` blanks below to complete the implementation.
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Import required libraries (Numpy, Pandas, train_test_split, StandardScaler, LinearRegression, metrics, joblib)
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+
+# Placeholder for your answers
+___ = None
 
 csv_path = Path(__file__).resolve().parent / "housing_ml_data.csv"
 
@@ -33,55 +30,84 @@ csv_path = Path(__file__).resolve().parent / "housing_ml_data.csv"
 def phase_1_discovery_and_target_identification():
     """
     [Phase 1] Discovery & Target Identification
-    - Ingest housing_ml_data.csv.
-    - Inspect dimensions and isolate feature matrix X (drop house_id and price_usd) and target y.
-    - Return X, y.
     """
     print("\n[PHASE 1] Discovery & Target Identification")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    df = pd.read_csv(___)
+    
+    # 1. Drop identifier and target
+    X = df.drop(columns=[___, ___])
+    
+    # 2. Isolate continuous price target
+    y = df[___]
+    
+    return ___, ___                     # 3. Return X, y
 
 
 def phase_2_feature_engineering_and_encoding(X):
     """
     [Phase 2] Spatial Feature Engineering & Encoding
-    - Safely copy X.
-    - Engineer 'sqft_per_room' = sqft / (bedrooms + bathrooms).
-    - One-hot encode 'location_type' using pd.get_dummies(..., drop_first=True).
-    - Return transformed X_encoded.
     """
     print("\n[PHASE 2] Feature Engineering & Categorical Encoding")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    X = X.___()
+    
+    # 4. Compute sqft per total rooms (bedrooms + bathrooms)
+    X['sqft_per_room'] = X['sqft'] / (X[___] + X[___])
+    
+    # 5. One-hot encode location_type
+    X_encoded = pd.get_dummies(X, drop_first=___)
+    
+    return ___                          # 6. Return X_encoded
 
 
 def phase_3_scaling_and_train_test_split(X, y):
     """
     [Phase 3] Splitting & Scaling
-    - Split data 80/20 with random_state=42.
-    - Standardize features with StandardScaler (fit on train, transform test).
-    - Return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler.
     """
     print("\n[PHASE 3] Data Splitting & Feature Scaling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 7. 80/20 train/test split
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # 8. Fit on train, transform on test
+    scaler = StandardScaler()
+    X_tr_scaled = scaler.fit_transform(___)
+    X_te_scaled = scaler.transform(___)
+    
+    return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler
 
 
 def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y_test):
     """
     [Phase 4] Multi-Metric Regression Evaluation
-    - Fit LinearRegression on X_train_scaled.
-    - Predict on X_test_scaled.
-    - Compute and print R-squared score, MAE ($), and RMSE ($).
-    - Return the trained model.
     """
     print("\n[PHASE 4] Model Training & Test Set Evaluation")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 9. Fit LinearRegression
+    model = LinearRegression().fit(___, ___)
+    
+    # 10. Predict on test set
+    y_pred = model.predict(___)
+    
+    # 11. Compute metrics
+    r2 = model.score(___, ___)
+    mae = mean_absolute_error(___, ___)
+    rmse = np.sqrt(mean_squared_error(___, ___))
+    
+    print(f"R-squared Score: {r2:.4f}")
+    print(f"Mean Absolute Error (MAE): ${mae:.2f}")
+    print(f"Root Mean Squared Error (RMSE): ${rmse:.2f}")
+    
+    return ___                          # 12. Return model
 
 
 def run_housing_pipeline():

@@ -1,125 +1,152 @@
 """
 ================================================================================
-EXAM PRACTICE: Day 11 - Practice 3
-DOMAIN: Human Resources & Workforce Productivity Analytics
-================================================================================
-PROBLEM STATEMENT (PS):
-The Chief People Officer (CPO) of a technology firm wants to evaluate the return 
-on investment (ROI) of mandatory professional training programs. The HR dataset 
-tracks 25 team members over a multi-month evaluation cycle, logging hours spent 
-in technical training, years of industry experience, and weekly tasks completed.
+EXAM PRACTICE (FILL IN THE BLANKS): Day 11 - Practice 3
+NEW PROBLEM STATEMENT (PS - Feature Variation):
+--------------------------------------------------------------------------------
+The HR director states:
+  "Training hours were informative, but we want to assess senior staff contribution.
+   Evaluate whether 'Years_Experience' reliably predicts 'Weekly_Tasks_Completed'. 
+   Determine the expected productivity gain per year of experience, evaluate 
+   the model using R-squared and MAE, and recommend whether hiring experienced staff 
+   provides higher task output."
 
-HR MANAGEMENT QUESTIONS TO SOLVE:
-1. Does task completion follow a normal spread, or do specific high-performers 
-   skew the data?
-2. Which factor has a stronger linear correlation with output: Training Hours 
-   or Years of Experience?
-3. For every additional 1 hour an employee spends in training, how many more 
-   tasks do they complete per week?
-4. What proportion of the variance in weekly productivity is explained solely by 
-   training hours, and what is the typical task-count error of this model?
-
-DATASET FILE: employee_productivity.csv
-AVAILABLE COLUMNS:
-  - Employee_ID (alphanumeric staff identifier)
-  - Training_Hours (independent variable / feature)
-  - Years_Experience (work tenure)
-  - Daily_Hours_Worked (standard working hours)
-  - Team_Size (colleagues in pod)
-  - Weekly_Tasks_Completed (dependent business target)
-
-THINKING CHECKLIST FOR THE EXAM:
-- Why must you pass numeric_only=True to df.corr()?
-- If the exam switches the feature to Years_Experience, where do you update the code?
-- How do you isolate the 1.5 * IQR bounds without truth-value ambiguity errors?
-- How do you interpret a model with R-squared around 0.37 vs 0.99?
+YOUR TASK:
+Read the new Problem Statement (PS) above. Fill in all the `___` blanks below
+to implement the end-to-end 5-phase analytics lifecycle for this new scenario.
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Import required libraries (Pandas, LinearRegression, mean_absolute_error)
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+# Placeholder for your answers
+___ = None
 
 csv_path = Path(__file__).resolve().parent / "employee_productivity.csv"
 
 
 def phase_1_discovery_and_setup():
     """
-    [Phase 1] Discovery & Data Setup
-    - Ingest employee_productivity.csv using Pandas.
-    - Inspect the head, print the dataset dimensions, and audit null entries.
-    - Return the DataFrame.
+    [Phase 1] Discovery & Setup
+    - Ingest employee_productivity.csv.
+    - Inspect head, shape, and null values.
     """
     print("\n[PHASE 1] Discovery & Data Setup")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    df = pd.read_csv(___)
+    print("Head:\n", df.head())
+    print(f"Shape: {df.shape}")
+    print("Missing Values:\n", df.isnull().sum())
+    
+    return ___                          # 1. Return the DataFrame
 
 
 def phase_2_descriptive_statistics(df):
     """
     [Phase 2] Descriptive Statistics & Dispersion
-    - Focus on the dependent metric (Weekly_Tasks_Completed).
-    - Compute parametric and non-parametric statistics (mean, median, std, variance).
-    - Implement Tukey's 1.5 * IQR outlier detection on task completion.
-    - Return the DataFrame.
+    - Analyze the primary target column (Weekly_Tasks_Completed).
     """
     print("\n[PHASE 2] Descriptive Statistics")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    target_col = ___                    # 2. Fill the dependent target column name
+    col = df[target_col]
+    
+    print(col.describe())
+    print(f"Variance: {col.var():.2f}")
+    
+    # Tukey's 1.5 * IQR Rule
+    q1 = col.quantile(___)              # 3. 25th percentile
+    q3 = col.quantile(___)              # 4. 75th percentile
+    iqr = ___ - ___
+    
+    # 5. Outlier bounds filter
+    outliers = col[(col < q1 - 1.5 * iqr) | (col > q3 + 1.5 * iqr)]
+    print(f"IQR: {iqr:.2f}, Outliers Count: {len(outliers)}")
+    
+    return ___                          # 6. Return the DataFrame
 
 
 def phase_3_bivariate_association(df):
     """
-    [Phase 3] Bivariate Association & Correlation
-    - Compute the Pearson correlation matrix for all numeric columns.
-    - Extract and report the correlation between Training_Hours and Weekly_Tasks_Completed.
-    - THINK: Compare this against the correlation for Years_Experience.
-    - Return the DataFrame.
+    [Phase 3] Bivariate Correlation Matrix
+    - Compute correlation and extract association between Years_Experience and Weekly_Tasks_Completed.
     """
     print("\n[PHASE 3] Bivariate Association")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 7. Pass parameter to skip non-numeric Employee_ID
+    corr = df.corr(numeric_only=___)
+    print("Correlation Matrix:\n", corr.round(4))
+    
+    predictor = ___                     # 8. Fill the feature requested in this new PS
+    target = ___                        # 9. Fill the target metric
+    print(f"\nCorrelation ({predictor} vs {target}): r = {corr.loc[predictor, target]:.4f}")
+    
+    return ___                          # 10. Return the DataFrame
 
 
 def phase_4_predictive_modeling(df):
     """
     [Phase 4] Predictive Analytics & Regression Modeling
-    - Define the independent feature matrix X (Training_Hours) and target vector y.
-    - THINK: Ensure X is 2-dimensional.
-    - Train an ordinary least squares Linear Regression model.
-    - Print the slope (beta_1) and intercept (beta_0).
-    - Return the model, feature matrix X, and target vector y.
+    - Set up feature matrix X and target vector y according to the PS.
     """
     print("\n[PHASE 4] Predictive Modeling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 11. Feature matrix (DOUBLE brackets for 2D DataFrame)
+    X = df[[___]]                       
+    
+    # 12. Target vector (Single bracket for 1D Series)
+    y = df[___]                         
+    
+    # 13. Fit model
+    model = LinearRegression().fit(___, ___)
+    
+    print(f"Slope (beta_1): {model.coef_[0]:.4f}")
+    print(f"Intercept (beta_0): {model.intercept_:.4f}")
+    
+    return ___, ___, ___                # 14. Return model, X, y
 
 
 def phase_5_evaluation_and_reporting(model, X, y, df):
     """
     [Phase 5] Evaluation & HR Recommendations
-    - Generate predictions and compute the R-squared score and Mean Absolute Error (MAE).
-    - Synthesize the technical findings into a strategic recommendation for the HR executive.
+    - Compute R-squared, MAE, and strategic HR conclusion.
     """
     print("\n[PHASE 5] Evaluation & HR Recommendations (5 Marks)")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 15. Predict on X
+    y_pred = model.predict(___)
+    
+    # 16. Inbuilt R2 calculation
+    r2 = model.score(___, ___)
+    
+    # 17. Mean Absolute Error
+    mae = mean_absolute_error(___, ___)
+    
+    print(f"R-squared: {r2:.4f}, MAE: {mae:.2f}")
+    print("HR Action: Experience positively predicts task velocity; factor into hiring compensation.")
 
 
 # ==============================================================================
 # THE FACADE ORCHESTRATOR
-# NOTE: In test environments, uncomment these calls chronologically as you solve.
 # ==============================================================================
 def run_analytics_lifecycle():
     print("=" * 65)
     print("STARTING EMPLOYEE ANALYTICS LIFECYCLE (Out of 40 Marks)")
     print("=" * 65)
     
-    df = phase_1_discovery_and_setup()
+    # df = phase_1_discovery_and_setup()
     # df = phase_2_descriptive_statistics(df)
     # df = phase_3_bivariate_association(df)
     # model, X, y = phase_4_predictive_modeling(df)

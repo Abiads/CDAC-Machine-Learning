@@ -1,113 +1,148 @@
 """
 ================================================================================
-EXAM PRACTICE: Day 11 - Practice 1
-DOMAIN: Retail & Hospitality Analytics (Coffee Shop Operations)
-================================================================================
-PROBLEM STATEMENT (PS):
-A specialty coffee chain is evaluating whether increasing daily digital marketing
-spend translates to higher store revenue. You are provided with daily operational 
-data from the flagship store across 25 consecutive operating days.
+EXAM PRACTICE (FILL IN THE BLANKS): Day 11 - Practice 1
+NEW PROBLEM STATEMENT (PS - Operational Variation):
+--------------------------------------------------------------------------------
+The café regional manager reviewed our marketing spend analysis, but now poses
+a new operational question:
+  "Marketing is external, but what about in-store customer volume? I want to 
+   know if store 'Foot_Traffic' directly predicts 'Daily_Revenue_USD'. 
+   Also, audit the dispersion of daily revenue to ensure there are no extreme 
+   revenue anomalies."
 
-MANAGEMENT QUESTIONS TO SOLVE:
-1. Is the revenue distribution symmetrical, or are there significant outliers?
-2. Which feature has the strongest linear association with daily revenue?
-3. How much revenue increase is expected for every additional $1 spent on marketing?
-4. How well does marketing spend alone explain revenue variance, and what is the 
-   expected prediction error in dollars?
-
-DATASET FILE: coffee_shop_data.csv
-AVAILABLE COLUMNS:
-  - Day (string ID)
-  - Marketing_Spend_USD (continuous independent predictor)
-  - Average_Temperature_C (ambient temperature)
-  - Foot_Traffic (store visitor count)
-  - Daily_Revenue_USD (continuous business response / target)
-
-THINKING CHECKLIST FOR THE EXAM:
-- Look at the column names in the dataset before selecting features.
-- If the exam switches the feature to Foot_Traffic or Average_Temperature_C,
-  which line in Phase 4 determines that choice?
-- Why must you avoid bare filename paths when loading the CSV?
-- What happens if you run .corr() on non-numeric columns in Pandas 2.0+?
-- What array dimension does Scikit-Learn require for feature matrices?
+YOUR TASK:
+Read the new Problem Statement (PS) above. Fill in all the `___` blanks below
+to implement the end-to-end 5-phase analytics lifecycle for this new scenario.
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Import required libraries (Pandas, LinearRegression, metrics)
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
 
+# Placeholder for your answers
+___ = None
+
+# Step 0: Robust file path resolution
 csv_path = Path(__file__).resolve().parent / "coffee_shop_data.csv"
 
 
 def phase_1_discovery_and_setup():
     """
-    [Phase 1] Discovery & Data Setup
-    - Load the dataset dynamically from csv_path.
-    - Inspect the first 5 records, check total row/column dimensions.
-    - Audit for missing or null entries across all fields.
-    - Return the ingested DataFrame.
+    [Phase 1] Discovery & Setup
+    - Load the CSV dataset into a DataFrame.
+    - Inspect head, shape, and missing values.
     """
     print("\n[PHASE 1] Discovery & Data Setup")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path)
+    print("First 5 rows:\n", df.head())
+    print(f"Shape: {df.shape}")
+    print("Missing Values:\n", df.isnull().sum())
+    
+    return df                           # What must you return to avoid NoneType crash?
 
 
 def phase_2_descriptive_statistics(df):
     """
-    [Phase 2] Descriptive Statistics & Outlier Audit
-    - Analyze the primary target metric (Daily_Revenue_USD).
-    - Compute parametric measures (count, mean, standard deviation, min, max).
-    - Compute non-parametric dispersion (median, variance).
-    - Implement Tukey's 1.5 * IQR rule to identify any revenue anomalies.
-    - Return the DataFrame.
+    [Phase 2] Descriptive Statistics on the Target Metric
+    - Audit dispersion and IQR outliers for 'Daily_Revenue_USD'.
     """
     print("\n[PHASE 2] Descriptive Statistics")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    target_col_name = ___               # 3. Fill the exact target column name from the PS
+    col = df[target_col_name]
+    
+    print(col.describe())
+    print(f"Median: {col.median():.2f}")
+    print(f"Variance: {col.var():.2f}")
+    
+    # Tukey's 1.5 * IQR Outlier Rule
+    q1 = col.quantile(___)              # 4. Fill 25th percentile value (e.g. 0.25)
+    q3 = col.quantile(___)              # 5. Fill 75th percentile value (e.g. 0.75)
+    iqr = ___ - ___                     # 6. Formula for IQR
+    
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+    
+    # 7. Complete the boolean filter with bitwise operator and parentheses
+    outliers = col[(col < ___) | (col > ___)]
+    print(f"IQR: {iqr:.2f}, Outliers Count: {len(outliers)}")
+    
+    return ___                          # 8. Return the DataFrame
 
 
 def phase_3_bivariate_association(df):
     """
-    [Phase 3] Bivariate Association & Correlation
-    - Compute the Pearson correlation matrix for all numeric columns.
-    - Extract and report the correlation coefficient between marketing spend and revenue.
-    - THINK: Check the correlation between Foot_Traffic and revenue as well.
-    - Return the DataFrame.
+    [Phase 3] Bivariate Correlation
+    - Compute correlation and extract association between Foot_Traffic and revenue.
     """
     print("\n[PHASE 3] Bivariate Association")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 9. What parameter must be passed in Pandas 2.0+ to prevent non-numeric crashes?
+    corr = df.corr(numeric_only=___)
+    print("Correlation Matrix:\n", corr.round(4))
+    
+    predictor = ___                     # 10. Fill the predictor column requested in this new PS
+    target = ___                        # 11. Fill the target column
+    print(f"Correlation ({predictor} vs {target}): r = {corr.loc[predictor, target]:.4f}")
+    
+    return ___                          # 12. Return the DataFrame
 
 
 def phase_4_predictive_modeling(df):
     """
     [Phase 4] Predictive Analytics & Regression Modeling
-    - Isolate the independent predictor matrix (X) and the dependent target vector (y).
-    - THINK: What bracket syntax ensures X is a 2D matrix?
-    - Fit an ordinary least squares Simple Linear Regression model.
-    - Extract and print the regression slope (beta_1) and intercept (beta_0).
-    - Return the trained model, feature matrix X, and target vector y.
+    - Set up feature matrix X and target vector y according to the PS.
     """
     print("\n[PHASE 4] Predictive Modeling")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 13. Which column is the predictor, and what bracket syntax ensures a 2D matrix?
+    X = df[[___]]                       
+    
+    # 14. Which column is the dependent target?
+    y = df[___]                         
+    
+    # 15. Instantiate and fit Linear Regression
+    model = LinearRegression().fit(___, ___)
+    
+    print(f"Slope (beta_1): {model.coef_[0]:.4f}")
+    print(f"Intercept (beta_0): {model.intercept_:.4f}")
+    
+    # 16. Return the three essential items needed for Phase 5
+    return ___, ___, ___
 
 
 def phase_5_evaluation_and_reporting(model, X, y, df):
     """
-    [Phase 5] Model Evaluation & Prescriptive Action
-    - Generate model predictions on X.
-    - Compute the coefficient of determination (R-squared) and Mean Absolute Error (MAE).
-    - Translate the mathematical slope and error into an actionable business recommendation.
+    [Phase 5] Evaluation & Prescriptive Action
+    - Compute R-squared, MAE, and formulate a business takeaway.
     """
     print("\n[PHASE 5] Evaluation & Prescriptive Action")
     print("-" * 65)
-    # TODO: Write your implementation here
-    pass
+    
+    # FILL IN THE BLANKS:
+    # 17. Generate predictions
+    y_pred = model.predict(___)
+    
+    # 18. Compute inbuilt R-squared score
+    r2 = model.score(___, ___)
+    
+    # 19. Compute Mean Absolute Error
+    mae = mean_absolute_error(___, ___)
+    
+    print(f"R-squared Score: {r2:.4f}")
+    print(f"Mean Absolute Error (MAE): ${mae:.2f}")
+    print("Business Action: Foot traffic strongly predicts daily store revenue.")
 
 
 # ==============================================================================
@@ -119,19 +154,10 @@ def run_analytics_lifecycle():
     print("STARTING COFFEE SHOP ANALYTICS LIFECYCLE (Out of 40 Marks)")
     print("=" * 65)
     
-    # Phase 1
-    df = phase_1_discovery_and_setup()
-    
-    # Phase 2
+    # df = phase_1_discovery_and_setup()
     # df = phase_2_descriptive_statistics(df)
-    
-    # Phase 3
     # df = phase_3_bivariate_association(df)
-    
-    # Phase 4
     # model, X, y = phase_4_predictive_modeling(df)
-    
-    # Phase 5
     # phase_5_evaluation_and_reporting(model, X, y, df)
 
 
