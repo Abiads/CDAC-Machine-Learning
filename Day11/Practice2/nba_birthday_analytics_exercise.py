@@ -4,6 +4,7 @@ Description: Simple, built-in function driven Python script for loading,
              sanitizing, and analyzing NBA player birth dates and shared birthdays.
 """
 
+
 from pathlib import Path
 import pandas as pd
 
@@ -64,7 +65,7 @@ def phase_5_evaluation_and_summary(df):
     print("\n[PHASE 5] Evaluation & Summary Reporting")
     print("-" * 65)
     total_valid = df['bday'].dropna().count()
-    unique_days = df['bday'].nunique()
+    unique_days = df['bday'].nunique() #nunique count unique values
     print(f"Total Players Analyzed: {total_valid}")
     print(f"Unique Birthday Calendar Days: {unique_days} / 366")
     print("Birthday Paradox Conclusion: With 4,900+ players, every single day of the")
