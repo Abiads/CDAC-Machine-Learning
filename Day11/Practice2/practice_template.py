@@ -1,163 +1,129 @@
 """
 ================================================================================
-PRACTICE TEMPLATE: Day 11 - Practice 2 (NBA Player Birthday Paradox & Lookup)
+EXAM PRACTICE: Day 11 - Practice 2
+DOMAIN: Sports Demographics & Date Analytics (NBA Player Records)
 ================================================================================
-INSTRUCTIONS FOR THE TEST:
-In the exam, you are given this skeleton. Follow the TODOs step-by-step.
-Run this script using: python practice_template.py
+PROBLEM STATEMENT (PS):
+A sports analytics firm wants to study demographic clustering and verify the 
+celebrated "Birthday Paradox" across the entire historical roster of NBA players 
+(nearly 5,000 professional athletes). In addition, scouting staff require an 
+interactive player lookup utility to search biographical records and retrieve 
+all players sharing that athlete's exact calendar birthday.
 
-DATASET: player_data.csv
-COLUMNS: ['name', 'year_start', 'year_end', 'position', 'height', 'weight', 'birth_date', 'college']
-KEY TASKS:
-1. pd.to_datetime with errors='coerce'
-2. dt.strftime('%B %d').value_counts()
-3. Case-insensitive lookup (.str.lower() == target.lower())
-4. Cohort filtering (dt.month == target_month & dt.day == target_day)
+SCOUTING & ANALYTICAL QUESTIONS TO SOLVE:
+1. How many player records have corrupted or missing date values, and how can 
+   you ingest them without the parsing engine crashing?
+2. Which calendar days in the year have the highest concentration of NBA birthdays?
+3. How can you query an athlete (e.g., 'Kareem Abdul-Jabbar' or 'Michael Jordan') 
+   regardless of whether the search query is uppercase, lowercase, or mixed?
+4. How do you programmatically isolate the target player's birth month and day,
+   and filter all other league players born on that exact calendar day?
+
+DATASET FILE: player_data.csv
+AVAILABLE COLUMNS:
+  - name (player full name)
+  - year_start, year_end (active career span)
+  - position (F, C, G)
+  - height, weight (physical attributes)
+  - birth_date (raw date string, e.g., 'April 16, 1947')
+  - college (alma mater)
+
+THINKING CHECKLIST FOR THE EXAM:
+- Why does standard pd.to_datetime() fail on raw legacy dates, and what parameter 
+  prevents crashes?
+- How do you extract calendar date strings without the birth year?
+- How do you perform case-insensitive string filtering in Pandas?
+- If the exam specifies searching for a different player, which variable changes?
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Step 0 - Uncomment and import required libraries
-# import pandas as pd
+# TODO: Import required libraries (Pandas, datetime if needed)
 
-# PATH TRAP AVOIDANCE
 csv_path = Path(__file__).resolve().parent / "player_data.csv"
 
 
 def phase_1_discovery_and_sanitization():
     """
-    [Phase 1] Discovery & Data Sanitization (5 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Read CSV: df = pd.read_csv(csv_path)
-    2. Convert birth_date to datetime:
-       # TRAP: Always pass errors='coerce' so corrupted date strings become NaT instead of crashing!
-       df['birth_date'] = pd.to_datetime(df['birth_date'], errors='coerce')
-    3. Check shape and nulls:
-       print(f"Shape: {df.shape}")
-       print("Missing Birth Dates:", df['birth_date'].isnull().sum())
-    4. CRITICAL: Always return df!
+    [Phase 1] Data Discovery & Date Sanitization
+    - Ingest player_data.csv using Pandas.
+    - Standardize column names if needed and inspect total rows and columns.
+    - Parse 'birth_date' into true datetime objects without throwing parsing errors.
+    - Count how many birth dates were missing or unparseable.
+    - Return the sanitized DataFrame.
     """
     print("\n[PHASE 1] Discovery & Data Sanitization")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # df = pd.read_csv(csv_path)
-    # df['birth_date'] = pd.to_datetime(df['birth_date'], errors='coerce')
-    # print(f"Shape: {df.shape}")
-    # print(f"Missing Birth Dates: {df['birth_date'].isnull().sum()}")
-    # return df
+    # TODO: Write your implementation here
     pass
 
 
 def phase_2_birthday_paradox_analysis(df):
     """
-    [Phase 2] Birthday Paradox & Frequency Analysis (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Extract calendar birthday string:
-       bday_str = df['birth_date'].dt.strftime('%B %d')
-    2. Count frequency per calendar day:
-       counts = bday_str.value_counts()
-       print("Top 5 Shared Birthdays:\n", counts.head(5))
-    3. CRITICAL: Always return df!
+    [Phase 2] Birthday Paradox & Frequency Distribution
+    - Extract month and day components from birth_date as a formatted string.
+    - Compute the frequency of births occurring on every calendar day.
+    - Display the top 5 most common birthdays in NBA history.
+    - Return the DataFrame.
     """
     print("\n[PHASE 2] Birthday Paradox & Frequency Analysis")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # bday_series = df['birth_date'].dt.strftime('%B %d')
-    # top_bdays = bday_series.value_counts()
-    # print("Top 5 Shared Birthdays in NBA History:\n", top_bdays.head(5))
-    # return df
+    # TODO: Write your implementation here
     pass
 
 
 def phase_3_player_lookup_system(df, player_name):
     """
-    [Phase 3] Case-Insensitive Player Lookup (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Filter row matching player_name (case-insensitive):
-       # TRAP: Use .str.lower() on column and .lower() on input string!
-       match = df[df['name'].str.lower() == player_name.lower()]
-    2. Check if player found:
-       if match.empty:
-           print(f"Player '{player_name}' not found.")
-           return None
-       player = match.iloc[0]
-       print(f"Player: {player['name']}, Position: {player['position']}, Birth Date: {player['birth_date'].strftime('%B %d, %Y')}")
-       return player
+    [Phase 3] Biographical Player Lookup System
+    - Perform a case-insensitive match for the specified player_name.
+    - If found, extract and display position, college, and formatted birth date.
+    - If not found, notify the user gracefully.
+    - Return the single-row player record (or None).
     """
     print(f"\n[PHASE 3] Player Lookup: Searching for '{player_name}'")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # match = df[df['name'].str.lower() == player_name.lower()]
-    # if match.empty:
-    #     print(f"Player '{player_name}' not found.")
-    #     return None
-    # player = match.iloc[0]
-    # print(f"Name: {player['name']}")
-    # print(f"Position: {player['position']}")
-    # print(f"College: {player['college']}")
-    # print(f"Birth Date: {player['birth_date'].strftime('%B %d, %Y')}")
-    # return player
+    # TODO: Write your implementation here
     pass
 
 
 def phase_4_shared_birthday_cohort(df, player):
     """
-    [Phase 4] Shared Birthday Cohort Finder (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Extract player's month and day:
-       p_month = player['birth_date'].month
-       p_day = player['birth_date'].day
-    2. Query dataset for all players sharing this month and day:
-       cohort = df[(df['birth_date'].dt.month == p_month) & (df['birth_date'].dt.day == p_day)]
-       peers = cohort[cohort['name'] != player['name']]
-       print(f"Total players sharing {player['birth_date'].strftime('%B %d')}: {len(cohort)}")
-       print("Peer Names:\n", peers[['name', 'birth_date', 'position']].to_string(index=False))
+    [Phase 4] Shared Birthday Cohort Retrieval
+    - Using the target player retrieved in Phase 3, extract their birth month and day.
+    - Query the league dataset for all OTHER players born on that same calendar day.
+    - Exclude the target player from the peer list.
+    - Print the count and details of all players in this birthday cohort.
     """
-    print(f"\n[PHASE 4] Shared Birthday Cohort Finder")
+    print("\n[PHASE 4] Shared Birthday Cohort Finder")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # if player is None:
-    #     return
-    # p_month, p_day = player['birth_date'].month, player['birth_date'].day
-    # cohort = df[(df['birth_date'].dt.month == p_month) & (df['birth_date'].dt.day == p_day)]
-    # peers = cohort[cohort['name'] != player['name']]
-    # print(f"Total players born on {player['birth_date'].strftime('%B %d')}: {len(cohort)}")
-    # print(peers[['name', 'birth_date', 'position']].to_string(index=False))
+    # TODO: Write your implementation here
     pass
 
 
 def phase_5_evaluation_and_summary(df):
     """
-    [Phase 5] Summary & Reporting (5 Marks)
-    -------------------------------------------------------------
-    Print concluding insights on Birthday Paradox proof in the NBA.
+    [Phase 5] Summary Reporting & Paradox Verification
+    - Report the total number of valid player records analyzed.
+    - Count the number of unique calendar days occupied by NBA birthdays.
+    - Conclude mathematically on why shared birthdays are virtually guaranteed 
+      in a cohort of 4,900+ individuals.
     """
     print("\n[PHASE 5] Summary & Reporting")
     print("-" * 65)
-    # --- WRITE YOUR CODE HERE ---
-    # total_players = len(df.dropna(subset=['birth_date']))
-    # print(f"Total validated player records: {total_players}")
-    # print("Birthday Paradox Verified: Shared dates are prevalent across 4,900+ players.")
+    # TODO: Write your implementation here
     pass
 
 
 # ==============================================================================
 # THE FACADE ORCHESTRATOR
-# TRAP: Uncomment lines chronologically as you complete each phase!
+# NOTE: In test environments, uncomment these calls chronologically as you solve.
 # ==============================================================================
 def run_analytics_lifecycle():
     print("=" * 65)
     print("STARTING NBA BIRTHDAY & BIOGRAPHICAL LIFECYCLE (Out of 40 Marks)")
     print("=" * 65)
     
+    # Target player to search (THINK: What if the exam asks for a different player?)
     target_player = "Kareem Abdul-Jabbar"
     
     df = phase_1_discovery_and_sanitization()

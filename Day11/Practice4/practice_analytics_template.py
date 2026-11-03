@@ -1,151 +1,118 @@
 """
 ================================================================================
-PRACTICE TEMPLATE: Day 11 - Practice 4A (Healthcare Vitals Regression)
+EXAM PRACTICE: Day 11 - Practice 4A
+DOMAIN: Clinical Healthcare & Hemodynamic Modeling (Vitals Regression)
 ================================================================================
-INSTRUCTIONS FOR THE TEST:
-In the exam, you are given this skeleton. Follow the TODOs step-by-step.
-Run this script using: python practice_analytics_template.py
+PROBLEM STATEMENT (PS):
+A preventive cardiology clinic is analyzing patient vital signs to identify 
+the physiological determinants of systolic blood pressure. Early detection of 
+lifestyle-driven hypertension enables clinicians to intervene with diet and 
+exercise regimens before prescribing lifelong pharmaceutical treatments.
 
-DATASET: patient_health_data.csv
-COLUMNS: ['Patient_ID', 'Age', 'BMI', 'Daily_Steps', 'Resting_Heart_Rate', 'Systolic_BP']
-INDEPENDENT FEATURE (X): 'BMI'
-DEPENDENT TARGET (y):    'Systolic_BP'
+CLINICAL QUESTIONS TO SOLVE:
+1. What is the typical distribution and variability of Systolic Blood Pressure 
+   in this patient cohort? Are there any clinical outliers?
+2. Does Body Mass Index (BMI) correlate positively or negatively with blood pressure? 
+   How does Daily_Steps compare?
+3. For every 1-unit increase in patient BMI, how many millimeters of mercury (mmHg) 
+   does systolic pressure rise?
+4. How accurately can systolic blood pressure be forecasted using only BMI?
+
+DATASET FILE: patient_health_data.csv
+AVAILABLE COLUMNS:
+  - Patient_ID (unique record identifier)
+  - Age (chronological age)
+  - BMI (Body Mass Index)
+  - Daily_Steps (physical activity measure)
+  - Resting_Heart_Rate (beats per minute)
+  - Systolic_BP (continuous clinical target, mmHg)
+
+THINKING CHECKLIST FOR THE EXAM:
+- What column name represents the target variable in this dataset?
+- If the question asks to model blood pressure against Daily_Steps instead of BMI,
+  how will your slope and correlation interpretation change?
+- Why must the feature matrix X be 2-dimensional for Scikit-Learn?
 ================================================================================
 """
 
 from pathlib import Path
-# TODO: Step 0 - Uncomment and import required libraries
-# import pandas as pd
-# from sklearn.linear_model import LinearRegression
-# from sklearn.metrics import mean_absolute_error
+# TODO: Import required libraries (Pandas, LinearRegression, mean_absolute_error)
 
 csv_path = Path(__file__).resolve().parent / "patient_health_data.csv"
 
 
 def phase_1_discovery_and_setup():
     """
-    [Phase 1] Discovery & Data Setup (5 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Read CSV: df = pd.read_csv(csv_path)
-    2. Inspect structure: print(df.head()), print(df.shape), print(df.isnull().sum())
-    3. Return df!
+    [Phase 1] Discovery & Clinical Data Setup
+    - Ingest patient_health_data.csv dynamically using Path.
+    - Inspect the first 5 records, check dimensions, and verify data completeness.
+    - Return the DataFrame.
     """
     print("\n[PHASE 1] Discovery & Data Setup")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # df = pd.read_csv(csv_path)
-    # print(df.head())
-    # print(f"Shape: {df.shape}")
-    # print("Missing Values:\n", df.isnull().sum())
-    # return df
+    # TODO: Write your implementation here
     pass
 
 
 def phase_2_descriptive_statistics(df):
     """
-    [Phase 2] Descriptive Statistics (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    Target Column to analyze: 'Systolic_BP'
-    1. Compute describe(), IQR, and outliers:
-       col = df['Systolic_BP']
-       q1 = col.quantile(0.25)
-       q3 = col.quantile(0.75)
-       iqr = q3 - q1
-       outliers = col[(col < q1 - 1.5 * iqr) | (col > q3 + 1.5 * iqr)]
-    2. Return df!
+    [Phase 2] Descriptive Statistics & Clinical Bounds
+    - Extract and analyze the primary vital metric (Systolic_BP).
+    - Compute parametric (mean, std) and non-parametric (median, variance) statistics.
+    - Implement the 1.5 * IQR rule to identify any blood pressure outliers.
+    - Return the DataFrame.
     """
     print("\n[PHASE 2] Descriptive Statistics")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # col = df['Systolic_BP']
-    # print(col.describe())
-    # q1, q3 = col.quantile(0.25), col.quantile(0.75)
-    # iqr = q3 - q1
-    # print(f"IQR: {iqr:.2f}")
-    # outliers = col[(col < q1 - 1.5 * iqr) | (col > q3 + 1.5 * iqr)]
-    # print(f"Outliers Count: {len(outliers)}")
-    # return df
+    # TODO: Write your implementation here
     pass
 
 
 def phase_3_bivariate_association(df):
     """
-    [Phase 3] Bivariate Association & Correlation (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. Compute correlation:
-       # TRAP: Always pass numeric_only=True ('Patient_ID' is string!)
-       corr = df.corr(numeric_only=True)
-       print(corr.round(4))
-       print(f"BMI vs Systolic_BP: r = {corr.loc['BMI', 'Systolic_BP']:.4f}")
-       print(f"Daily_Steps vs Systolic_BP: r = {corr.loc['Daily_Steps', 'Systolic_BP']:.4f}")
-    2. Return df!
+    [Phase 3] Bivariate Association & Clinical Correlation
+    - Compute the Pearson correlation matrix across all numeric features.
+    - Extract and report the correlation between BMI and Systolic_BP.
+    - Extract and report the correlation between Daily_Steps and Systolic_BP.
+    - Return the DataFrame.
     """
     print("\n[PHASE 3] Bivariate Association")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # corr = df.corr(numeric_only=True)
-    # print(corr.round(4))
-    # print(f"BMI vs Systolic_BP: r = {corr.loc['BMI', 'Systolic_BP']:.4f}")
-    # print(f"Daily_Steps vs Systolic_BP: r = {corr.loc['Daily_Steps', 'Systolic_BP']:.4f}")
-    # return df
+    # TODO: Write your implementation here
     pass
 
 
 def phase_4_predictive_modeling(df):
     """
-    [Phase 4] Predictive Analytics & Regression Modeling (10 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. X = df[['BMI']]   <-- TRAP: DOUBLE BRACKETS
-    2. y = df['Systolic_BP']
-    3. Fit model:
-       model = LinearRegression().fit(X, y)
-       print(f"Slope (beta_1): {model.coef_[0]:.4f}")
-       print(f"Intercept (beta_0): {model.intercept_:.4f}")
-    4. Return (model, X, y)!
+    [Phase 4] Predictive Analytics & Clinical Regression Modeling
+    - Set up the 2D feature matrix X (BMI) and 1D target vector y (Systolic_BP).
+    - Train an ordinary least squares Linear Regression model.
+    - Print the regression slope (beta_1) and intercept (beta_0).
+    - Return the model, feature matrix X, and target vector y.
     """
     print("\n[PHASE 4] Predictive Modeling")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # X = df[['BMI']]
-    # y = df['Systolic_BP']
-    # model = LinearRegression().fit(X, y)
-    # print(f"Slope (beta_1): {model.coef_[0]:.4f}")
-    # print(f"Intercept (beta_0): {model.intercept_:.4f}")
-    # return model, X, y
+    # TODO: Write your implementation here
     pass
 
 
 def phase_5_evaluation_and_reporting(model, X, y, df):
     """
-    [Phase 5] Evaluation & Clinical Recommendations (5 Marks)
-    -------------------------------------------------------------
-    WHERE & WHAT TO CHANGE:
-    1. y_pred = model.predict(X)
-    2. r2 = model.score(X, y)
-    3. mae = mean_absolute_error(y, y_pred)
-    4. Print clinical takeaway.
+    [Phase 5] Clinical Evaluation & Prescriptive Protocol
+    - Generate blood pressure predictions across X.
+    - Compute the R-squared score and Mean Absolute Error (MAE in mmHg).
+    - Formulate a clear clinical intervention strategy based on the model's parameters.
     """
     print("\n[PHASE 5] Evaluation & Clinical Action (5 Marks)")
     print("-" * 65)
-    
-    # --- WRITE YOUR CODE HERE ---
-    # y_pred = model.predict(X)
-    # r2 = model.score(X, y)
-    # mae = mean_absolute_error(y, y_pred)
-    # print(f"R-squared Score: {r2:.4f}")
-    # print(f"Mean Absolute Error (MAE): {mae:.2f}")
-    # print("Clinical Action: Higher BMI strongly predicts elevated blood pressure; prescribe lifestyle & weight management.")
+    # TODO: Write your implementation here
     pass
 
 
+# ==============================================================================
+# THE FACADE ORCHESTRATOR
+# NOTE: In test environments, uncomment these calls chronologically as you solve.
+# ==============================================================================
 def run_analytics_lifecycle():
     print("=" * 65)
     print("STARTING HEALTHCARE ANALYTICS LIFECYCLE (Out of 40 Marks)")
