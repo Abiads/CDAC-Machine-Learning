@@ -34,16 +34,16 @@ def phase_1_discovery_and_target_identification():
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    df = pd.read_csv(___)
+    df = pd.read_csv(csv_path)
     print("Class Balance:\n", df['churn_flag'].value_counts())
     
     # 1. Drop non-predictive ID and target
-    X = df.drop(columns=[___, ___])
+    X = df.drop(columns=['customer_id', 'churn_flag'])
     
     # 2. Isolate binary target
-    y = df[___]
+    y = df['churn_flag']
     
-    return ___, ___                     # 3. Return X, y
+    return X, y                     # 3. Return X, y
 
 
 def phase_2_feature_engineering_and_encoding(X):
@@ -54,15 +54,15 @@ def phase_2_feature_engineering_and_encoding(X):
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    X = X.___()
+    X = X.copy()
     
     # 4. Compute avg monthly spend preventing division by zero on tenure_months == 0
-    X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months'].replace(0, ___)
+    X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months'].replace(0, 1)
     
     # 5. One-hot encode categoricals
-    X_encoded = pd.get_dummies(X, drop_first=___)
+    X_encoded = pd.get_dummies(X, drop_first=True)
     
-    return ___                          # 6. Return X_encoded
+    return X_encoded                          # 6. Return X_encoded
 
 
 def phase_3_scaling_and_train_test_split(X, y):
@@ -74,12 +74,12 @@ def phase_3_scaling_and_train_test_split(X, y):
     
     # FILL IN THE BLANKS:
     # 7. Stratified train/test split
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=___)
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
     # 8. Fit on train, transform on test
     scaler = StandardScaler()
-    X_tr_scaled = scaler.fit_transform(___)
-    X_te_scaled = scaler.transform(___)
+    X_tr_scaled = scaler.fit_transform(X_tr)
+    X_te_scaled = scaler.transform(X_te)
     
     return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler
 
@@ -93,16 +93,16 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     
     # FILL IN THE BLANKS:
     # 9. Fit RandomForestClassifier with 50 estimators
-    model = RandomForestClassifier(n_estimators=___, random_state=42).fit(___, ___)
+    model = RandomForestClassifier(n_estimators=50, random_state=42).fit(X_train_scaled, y_train)
     
     # 10. Predict on test set
-    y_pred = model.predict(___)
+    y_pred = model.predict(X_test_scaled)
     
     print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
     print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
     print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
     
-    return ___                          # 11. Return model
+    return model                          # 11. Return model
 
 
 def run_churn_pipeline():
@@ -110,10 +110,10 @@ def run_churn_pipeline():
     print("STARTING SUPERVISED CLASSIFICATION LIFECYCLE (Random Forest)")
     print("=" * 65)
     
-    # X, y = phase_1_discovery_and_target_identification()
-    # X_enc = phase_2_feature_engineering_and_encoding(X)
-    # X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
-    # model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
+    X, y = phase_1_discovery_and_target_identification()
+    X_enc = phase_2_feature_engineering_and_encoding(X)
+    X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
+    model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
 
 
 if __name__ == "__main__":

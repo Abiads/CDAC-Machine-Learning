@@ -35,15 +35,15 @@ def phase_1_discovery_and_target_identification():
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    df = pd.read_csv(___)
+    df = pd.read_csv(csv_path)
     
     # 1. Drop identifier and target
-    X = df.drop(columns=[___, ___])
+    X = df.drop(columns=['house_id', 'price_usd'])
     
     # 2. Isolate continuous price target
-    y = df[___]
+    y = df['price_usd']
     
-    return ___, ___                     # 3. Return X, y
+    return X, y                     # 3. Return X, y
 
 
 def phase_2_feature_engineering_and_encoding(X):
@@ -54,15 +54,15 @@ def phase_2_feature_engineering_and_encoding(X):
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    X = X.___()
+    X = X.copy()
     
-    # 4. Compute sqft per total rooms (bedrooms + bathrooms)
-    X['sqft_per_room'] = X['sqft'] / (X[___] + X[___])
+    # 4. Compute sqft per room
+    X['sqft_per_room'] = X['square_feet'] / X['num_bedrooms']
     
     # 5. One-hot encode location_type
-    X_encoded = pd.get_dummies(X, drop_first=___)
+    X_encoded = pd.get_dummies(X, drop_first=True)
     
-    return ___                          # 6. Return X_encoded
+    return X_encoded                          # 6. Return X_encoded
 
 
 def phase_3_scaling_and_train_test_split(X, y):
@@ -78,8 +78,8 @@ def phase_3_scaling_and_train_test_split(X, y):
     
     # 8. Fit on train, transform on test
     scaler = StandardScaler()
-    X_tr_scaled = scaler.fit_transform(___)
-    X_te_scaled = scaler.transform(___)
+    X_tr_scaled = scaler.fit_transform(X_tr)
+    X_te_scaled = scaler.transform(X_te)
     
     return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler
 
@@ -93,21 +93,21 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     
     # FILL IN THE BLANKS:
     # 9. Fit LinearRegression
-    model = LinearRegression().fit(___, ___)
+    model = LinearRegression().fit(X_train_scaled, y_train)
     
     # 10. Predict on test set
-    y_pred = model.predict(___)
+    y_pred = model.predict(X_test_scaled)
     
     # 11. Compute metrics
-    r2 = model.score(___, ___)
-    mae = mean_absolute_error(___, ___)
-    rmse = np.sqrt(mean_squared_error(___, ___))
+    r2 = model.score(X_test_scaled, y_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     
     print(f"R-squared Score: {r2:.4f}")
     print(f"Mean Absolute Error (MAE): ${mae:.2f}")
     print(f"Root Mean Squared Error (RMSE): ${rmse:.2f}")
     
-    return ___                          # 12. Return model
+    return model                          # 12. Return model
 
 
 def run_housing_pipeline():
@@ -115,10 +115,10 @@ def run_housing_pipeline():
     print("STARTING HOUSING VALUATION PIPELINE (Linear Regression)")
     print("=" * 65)
     
-    # X, y = phase_1_discovery_and_target_identification()
-    # X_enc = phase_2_feature_engineering_and_encoding(X)
-    # X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
-    # model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
+    X, y = phase_1_discovery_and_target_identification()
+    X_enc = phase_2_feature_engineering_and_encoding(X)
+    X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
+    model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
 
 
 if __name__ == "__main__":

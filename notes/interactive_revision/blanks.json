@@ -1,0 +1,212 @@
+[
+  {
+    "id": "1.1",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "A DataFrame is a ______ data structure used for data manipulation in Python.",
+    "answer": "two-dimensional (2D)",
+    "aliases": [
+      "two-dimensional",
+      "2d",
+      "two dimensional",
+      "2-dimensional"
+    ],
+    "explanation": "- In Pandas, the two foundational data structures are the Series and the DataFrame.\n  - A Series is a 1-dimensional labeled array capable of holding data of any type.\n  - A DataFrame is a 2-dimensional labeled data structure with columns of potentially\n    different types. It is structured like a spreadsheet or SQL table with both\n    row labels (index) and column labels.\n  - Mathematical representation: A DataFrame can be modeled as a matrix M of size\n    m x n, where m is the number of rows (observations) and n is the number of \n    columns (variables/features).\n  - Python implementation:\n      import pandas as pd\n      df = pd.DataFrame({'Age': [25, 30], 'Salary': [50000, 75000]})\n      print(df.ndim)  # Outputs: 2"
+  },
+  {
+    "id": "1.2",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "In a Data Table, the horizontal sections are called ______, and the vertical sections are called ______.",
+    "answer": "rows, columns",
+    "aliases": [
+      "rows, columns",
+      "rows and columns",
+      "row, column",
+      "rows,columns",
+      "rows columns"
+    ],
+    "explanation": "- Rows (Horizontal): Represent individual records, observations, samples, or instances.\n    In machine learning, each row corresponds to a single data point vector x_i.\n  - Columns (Vertical): Represent attributes, features, variables, or dimensions measured\n    for each observation.\n  - Terminology Equivalence:\n    * Relational Databases: Row = Record / Tuple; Column = Attribute / Field.\n    * Machine Learning: Row = Instance / Sample; Column = Feature / Predictor.\n    * Statistics: Row = Observation / Case; Column = Variable / Measurement."
+  },
+  {
+    "id": "1.3",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "A dictionary in Python stores data as ______ pairs.",
+    "answer": "key-value",
+    "aliases": [
+      "key-value",
+      "key value",
+      "keys and values",
+      "key:value",
+      "key-value pairs"
+    ],
+    "explanation": "- A Python dictionary (`dict`) is an unordered, mutable collection of associative items.\n  - Each item consists of a unique, immutable 'key' (such as a string, integer, or tuple)\n    mapped to a 'value' (which can be any arbitrary Python object).\n  - Time Complexity: Key lookups, insertions, and deletions have an average time \n    complexity of O(1) due to underlying hash table implementation.\n  - Relation to Pandas: A Pandas DataFrame is internally implemented as a dictionary-like \n    container for Series objects, where keys correspond to column names."
+  },
+  {
+    "id": "1.4",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "A tuple is similar to a list, but it is ______, meaning its values cannot be changed.",
+    "answer": "immutable",
+    "aliases": [
+      "immutable",
+      "unmutable",
+      "not mutable"
+    ],
+    "explanation": "- Mutability distinguishes lists from tuples in Python:\n    * Lists (`[...]`): Mutable. Elements can be added, removed, or modified in-place.\n    * Tuples (`(...)`): Immutable. Once created, their size and element bindings \n      cannot be altered.\n  - Why Immutability Matters:\n    1. Integrity: Guarantees write-protection for sensitive, constant configuration data.\n    2. Hashability: Because tuples are immutable, they are hashable and can serve as \n       dictionary keys or set elements, whereas lists cannot.\n    3. Performance: Tuples have smaller memory overhead and slightly faster allocation \n       times compared to dynamic lists."
+  },
+  {
+    "id": "1.5",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "The process of summarizing and organizing data to extract useful insights is called ______.",
+    "answer": "data analysis (or Exploratory Data Analysis - EDA)",
+    "aliases": [
+      "data analysis",
+      "exploratory data analysis",
+      "eda",
+      "data exploration"
+    ],
+    "explanation": "- Data analysis is the systematic process of applying statistical and logical techniques \n    to describe, condense, illustrate, and evaluate data.\n  - Core stages of modern Data Analysis:\n    1. Data Collection: Sourcing raw data from databases, APIs, or sensor streams.\n    2. Data Cleaning: Handling nulls, correcting formatting anomalies, trimming whitespace.\n    3. Exploratory Data Analysis (EDA): Generating summary statistics (mean, median, IQR), \n       frequency tables, and visualizations to reveal latent patterns.\n    4. Inferential Modeling: Drawing statistical hypotheses or predictive conclusions."
+  },
+  {
+    "id": "1.6",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "The vertical sections in a DataFrame, each representing a specific attribute or feature, are called ______.",
+    "answer": "columns",
+    "aliases": [
+      "columns",
+      "column",
+      "attributes",
+      "features"
+    ],
+    "explanation": "- In tabular modeling, a column represents a homogeneous property observed across all subjects.\n  - In Pandas, extracting a single column returns a `pd.Series` object.\n  - Example: `df['Salary']` isolates the salary column as a 1D labeled array."
+  },
+  {
+    "id": "1.7",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "A structured collection of data that is stored electronically and can be queried is known as a ______.",
+    "answer": "database",
+    "aliases": [
+      "database",
+      "db",
+      "relational database",
+      "sql database"
+    ],
+    "explanation": "- A database is an organized collection of structured data, typically stored electronically \n    in a computer system and managed by a Database Management System (DBMS).\n  - Main categories:\n    1. Relational Databases (RDBMS): PostgreSQL, MySQL, SQLite, Oracle (tabular, strict schemas, SQL).\n    2. NoSQL Databases: MongoDB (Document), Redis (Key-Value), Cassandra (Columnar), Neo4j (Graph).\n  - Integration: Data analysts query databases using SQL (`SELECT * FROM table WHERE condition`)\n    and ingest result sets directly into Pandas via `pd.read_sql()`."
+  },
+  {
+    "id": "1.8",
+    "sectionNum": 1,
+    "sectionTitle": "Statistics Session 1: DataFrames in Python (Pandas)",
+    "source": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx (Slides 9-10)",
+    "prompt": "The function used to remove missing values from a DataFrame is ______.",
+    "answer": "dropna()",
+    "aliases": [
+      "dropna",
+      "dropna()",
+      "df.dropna",
+      "df.dropna()"
+    ],
+    "explanation": "- In Pandas, missing or null values are represented by `NaN` (Not a Number) or `None`.\n  - The `dropna()` method filters out rows or columns containing missing values.\n  - Key Parameters:\n    * `axis=0` (default): Drops rows containing NaN.\n    * `axis=1`: Drops columns containing NaN.\n    * `how='any'` (default): Drops the row/column if at least one NaN is present.\n    * `how='all'`: Drops only if all entries in that row/column are NaN.\n    * `subset=['col1', 'col2']`: Restricts null-checking to designated columns.\n  - Best Practice Consideration: Dropping data can lead to substantial information loss. \n    If nulls exceed 5-10% of records, imputation (`df.fillna(df.median())`) is usually \n    preferred over blanket row deletion.\n\n\n================================================================================"
+  },
+  {
+    "id": "2.1",
+    "sectionNum": 2,
+    "sectionTitle": "Statistics Session 4: Understanding Data Features",
+    "source": "Session 4 Understanding Data Features -Tuned.pptx (Slide 21)",
+    "prompt": "______ features represent categories or groups.",
+    "answer": "Categorical (or Qualitative)",
+    "aliases": [
+      "categorical",
+      "qualitative",
+      "categorical data",
+      "qualitative data"
+    ],
+    "explanation": "- Categorical variables represent qualitative characteristics that fall into distinct bins.\n  - Subtypes:\n    1. Nominal Categorical: Categories without inherent mathematical ordering.\n       Examples: Gender (Male, Female, Other), City (Mumbai, Delhi, Bangalore), Blood Type (A, B, AB, O).\n    2. Ordinal Categorical: Categories with an intrinsic, meaningful hierarchy or order.\n       Examples: Education Level (High School < Bachelor's < Master's < PhD), \n       Customer Satisfaction (Dissatisfied < Neutral < Satisfied), Severity (Low < Medium < High).\n  - Preprocessing Requirement: Machine learning models cannot process raw strings; categorical \n    variables must be encoded into numerical values via One-Hot Encoding or Ordinal Encoding."
+  },
+  {
+    "id": "2.2",
+    "sectionNum": 2,
+    "sectionTitle": "Statistics Session 4: Understanding Data Features",
+    "source": "Session 4 Understanding Data Features -Tuned.pptx (Slide 21)",
+    "prompt": "A ______ feature can take any value within a range.",
+    "answer": "Continuous",
+    "aliases": [
+      "continuous",
+      "continuous data",
+      "continuous feature"
+    ],
+    "explanation": "- Continuous features are quantitative variables obtained through measurement.\n  - Distinctive property: Between any two continuous values, there exist an infinite \n    number of intermediate values along the real number line.\n  - Examples:\n    * Height (e.g., 175.42 cm)\n    * Temperature (e.g., 36.65 °C)\n    * Stock Price (e.g., 2450.75 INR)\n    * Time to complete a marathon (e.g., 2 hours, 14 minutes, 33.12 seconds)\n  - Visual Representation: Continuous data is commonly visualized using histograms, \n    KDE (Kernel Density Estimation) plots, and box plots."
+  },
+  {
+    "id": "2.3",
+    "sectionNum": 2,
+    "sectionTitle": "Statistics Session 4: Understanding Data Features",
+    "source": "Session 4 Understanding Data Features -Tuned.pptx (Slide 21)",
+    "prompt": "The count of items purchased is an example of a ______ feature.",
+    "answer": "Discrete",
+    "aliases": [
+      "discrete",
+      "discrete data",
+      "discrete feature",
+      "count"
+    ],
+    "explanation": "- Discrete features are quantitative variables obtained through counting.\n  - Distinctive property: They take distinct, separate numerical values—typically \n    non-negative integers {0, 1, 2, 3, ...}.\n  - Examples:\n    * Number of children in a household (0, 1, 2, ... cannot have 2.3 children)\n    * Number of items purchased in a shopping cart\n    * Count of website visits per day\n    * Number of customer service calls made\n  - Probability Modeling: Discrete counts are typically modeled using Poisson, \n    Binomial, or Negative Binomial distributions.\n\n\n================================================================================"
+  },
+  {
+    "id": "3.1",
+    "sectionNum": 3,
+    "sectionTitle": "Statistics Session 5: Data Distributions",
+    "source": "Session 5 Data Distributions - Tuned.pptx (Slides 33-34)",
+    "prompt": "______ measures the asymmetry of a data distribution.",
+    "answer": "Skewness",
+    "aliases": [
+      "skewness",
+      "skew",
+      "asymmetry"
+    ],
+    "explanation": "- Skewness is the 3rd standardized moment of a probability distribution.\n  - Formula: Skewness = E[((X - mu) / sigma)^3]\n  - Classification:\n    * Symmetrical (Skewness ≈ 0): Normal bell curve where Mean = Median = Mode.\n    * Positive / Right-Skewed (Skewness > 0): The right tail is longer. The majority \n      of data points cluster at lower values, while a few extreme high values pull \n      the mean to the right. Ordering: Mean > Median > Mode.\n      Real-world example: Household income, house prices, insurance claim sizes.\n    * Negative / Left-Skewed (Skewness < 0): The left tail is longer. Extreme low \n      values pull the mean to the left. Ordering: Mean < Median < Mode.\n      Real-world example: Human lifespan in developed countries, retirement age."
+  },
+  {
+    "id": "3.2",
+    "sectionNum": 3,
+    "sectionTitle": "Statistics Session 5: Data Distributions",
+    "source": "Session 5 Data Distributions - Tuned.pptx (Slides 33-34)",
+    "prompt": "The ______ rule states that 95% of data falls within 2 standard deviations of the mean in a normal distribution.",
+    "answer": "68-95-99.7 Rule (or Empirical Rule)",
+    "aliases": [
+      "68-95-99.7 rule",
+      "empirical rule",
+      "68-95-99.7",
+      "three sigma rule",
+      "3-sigma rule",
+      "empirical"
+    ],
+    "explanation": "- In any symmetrical, bell-shaped Gaussian (Normal) distribution N(mu, sigma^2):\n    * Approximately 68.27% of observations fall within mu ± 1 sigma.\n    * Approximately 95.45% of observations fall within mu ± 2 sigma.\n    * Approximately 99.73% of observations fall within mu ± 3 sigma.\n  - Statistical Significance: Observations lying beyond 3 standard deviations \n    (|z| > 3) represent only ~0.27% of the distribution and are universally \n    flagged as statistical outliers."
+  },
+  {
+    "id": "3.3",
+    "sectionNum": 3,
+    "sectionTitle": "Statistics Session 5: Data Distributions",
+    "source": "Session 5 Data Distributions - Tuned.pptx (Slides 33-34)",
+    "prompt": "If the tails of a distribution are heavier than normal, it is called ______ kurtosis.",
+    "answer": "Leptokurtic (or Positive Kurtosis)",
+    "aliases": [
+      "leptokurtic",
+      "positive kurtosis",
+      "leptokurtic distribution"
+    ],
+    "explanation": "- Kurtosis measures the \"tailedness\" and peak sharpness of a distribution \n    (the 4th standardized moment).\n  - Normal distribution reference: Excess Kurtosis = Kurtosis - 3 = 0 (Mesokurtic).\n  - Three Kurtosis Types:\n    1. Leptokurtic (Excess Kurtosis > 0): Sharp, high peak and fat, heavy tails.\n       Critical implication: Indicates high \"tail risk\"—a significantly greater probability \n       of extreme, rare outlier events than predicted by a normal distribution. \n       Common in financial asset returns and algorithmic trading.\n    2. Mesokurtic (Excess Kurtosis = 0): Standard normal distribution.\n    3. Platykurtic (Excess Kurtosis < 0): Flat, broad peak with thin, light tails. \n       Extreme outliers are very rare. Example: Uniform distribution.\n\n\n================================================================================"
+  }
+]

@@ -33,13 +33,13 @@ def phase_1_discovery_and_feature_selection():
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    df = pd.read_csv(___)
+    df = pd.read_csv(csv_path)
     
     # 1. Select the 4 performance features
     features = ['runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy']
-    X = df[___]
+    X = df[features]
     
-    return df, ___                      # 2. Return df, X
+    return df, X                      # 2. Return df, X
 
 
 def phase_2_feature_scaling(X):
@@ -52,9 +52,9 @@ def phase_2_feature_scaling(X):
     # FILL IN THE BLANKS:
     # 3. Fit and transform StandardScaler
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(___)
+    X_scaled = scaler.fit_transform(X)
     
-    return X_scaled, ___                # 4. Return X_scaled, scaler
+    return X_scaled, scaler                # 4. Return X_scaled, scaler
 
 
 def phase_3_kmeans_clustering(df, X_scaled, n_clusters=3):
@@ -66,12 +66,12 @@ def phase_3_kmeans_clustering(df, X_scaled, n_clusters=3):
     
     # FILL IN THE BLANKS:
     # 5. Fit KMeans with 3 clusters
-    kmeans = KMeans(n_clusters=___, random_state=42).fit(___)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(X_scaled)
     
     # 6. Assign labels back to dataframe
-    df['cluster_id'] = kmeans.___
+    df['cluster_id'] = kmeans.labels_
     
-    return kmeans, ___                  # 7. Return kmeans, df
+    return kmeans, df                  # 7. Return kmeans, df
 
 
 def phase_4_cluster_evaluation_and_profiling(X_scaled, kmeans, df):
@@ -83,12 +83,12 @@ def phase_4_cluster_evaluation_and_profiling(X_scaled, kmeans, df):
     
     # FILL IN THE BLANKS:
     # 8. Compute silhouette score
-    score = silhouette_score(___, kmeans.labels_)
+    score = silhouette_score(X_scaled, kmeans.labels_)
     print(f"Silhouette Score: {score:.4f}")
     
     features = ['runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy']
     # 9. Compute centroid mean per cluster
-    centroids = df.groupby('cluster_id')[features].___()
+    centroids = df.groupby('cluster_id')[features].mean()
     print("Cluster Centroid Profiles:\n", centroids.round(2))
 
 
@@ -97,10 +97,10 @@ def run_clustering_pipeline():
     print("STARTING CRICKET PLAYER ROLE CLUSTERING LIFECYCLE (K-Means)")
     print("=" * 65)
     
-    # df, X = phase_1_discovery_and_feature_selection()
-    # X_scaled, scaler = phase_2_feature_scaling(X)
-    # kmeans, df = phase_3_kmeans_clustering(df, X_scaled)
-    # phase_4_cluster_evaluation_and_profiling(X_scaled, kmeans, df)
+    df, X = phase_1_discovery_and_feature_selection()
+    X_scaled, scaler = phase_2_feature_scaling(X)
+    kmeans, df = phase_3_kmeans_clustering(df, X_scaled)
+    phase_4_cluster_evaluation_and_profiling(X_scaled, kmeans, df)
 
 
 if __name__ == "__main__":

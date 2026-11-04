@@ -1,0 +1,1110 @@
+[
+  {
+    "id": 1,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "What is the primary characteristic that distinguishes Machine Learning from Traditional Programming?",
+    "options": [
+      "A) ML focuses on explicit rules, while Traditional Programming uses data-driven learning.",
+      "B) ML systems improve over time with more data, unlike Traditional Programming.",
+      "C) Traditional Programming is well-suited for complex tasks with large datasets.",
+      "D) ML is rigid and requires human experts to anticipate all scenarios."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) ML systems improve over time with more data, unlike Traditional Programming.",
+    "explanation": "Machine learning systems are designed to improve their performance as they are exposed to more data, a fundamental difference from traditional programs that maintain a consistent performance level unless explicitly updated with new hard-coded rules.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 12-13"
+  },
+  {
+    "id": 2,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "Which type of Machine Learning is characterized by training models on unlabeled data to discover hidden patterns and structures?",
+    "options": [
+      "A) Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Semi-Supervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Unsupervised Learning",
+    "explanation": "Unsupervised learning specifically deals with unlabeled data, aiming to find inherent structures, patterns, or groupings within it without any predefined output targets.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 14-15"
+  },
+  {
+    "id": 3,
+    "track": "Machine Learning",
+    "session": "Session 1: Introduction to Machine Learning, Fundamental Concepts & Types",
+    "question": "An agent learning to play a complex video game through trial and error, receiving points for good moves and penalties for bad ones, is an example of which type of machine learning?",
+    "options": [
+      "A) Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Semi-Supervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Reinforcement Learning",
+    "explanation": "Reinforcement learning involves an agent interacting with an environment, learning through rewards and penalties to determine optimal actions in a sequence of decisions, which perfectly describes the scenario of an agent playing a game.",
+    "sourceDeck": "Session 1-ML-intro-fundamental-types.pptx",
+    "sourceSlide": "Slide 16-17"
+  },
+  {
+    "id": 4,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "Which of the following is NOT a primary goal of data preprocessing in machine learning?",
+    "options": [
+      "a) To ensure data is in a suitable format for model training.",
+      "b) To reduce the computational cost of model deployment.",
+      "c) To improve the accuracy and robustness of machine learning models.",
+      "d) To handle inconsistencies and errors within the dataset."
+    ],
+    "correctIndex": 1,
+    "answerText": "b) To reduce the computational cost of model deployment.",
+    "explanation": "While some preprocessing steps like dimensionality reduction can indirectly help reduce deployment costs by simplifying models, the primary goals of preprocessing are focused on data quality, cleaning, and format before deployment, directly impacting model training and performance.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 13-14"
+  },
+  {
+    "id": 5,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "A dataset for a credit risk model contains numerous missing values in the 'Income' column. Which of the following imputation methods would typically introduce the least bias if the income distribution is skewed and contains outliers?",
+    "options": [
+      "a) Replacing missing values with the mean income.",
+      "b) Removing all rows with missing income values.",
+      "c) Replacing missing values with the median income.",
+      "d) Using a constant value like 0 for all missing incomes."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Replacing missing values with the median income.",
+    "explanation": "If the data distribution is skewed or contains outliers, the mean can be heavily influenced by these extreme values, leading to a biased imputation. The median is a more robust measure of central tendency in such cases, making it a better choice than the mean. Removing rows (b) can lead to significant data loss, and using a constant (d) can distort the distribution and introduce artificial patterns.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 15-16"
+  },
+  {
+    "id": 6,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "You are preparing a dataset for a house price prediction model. One feature, 'Square Footage', shows a few extremely large values compared to the rest. Which action is generally recommended for handling these potential outliers?",
+    "options": [
+      "a) Always remove the rows containing these extreme values.",
+      "b) Transform the 'Square Footage' feature using a logarithmic scale.",
+      "c) Replace the extreme values with the mean of the 'Square Footage' column.",
+      "d) Do nothing, as machine learning models can inherently handle outliers."
+    ],
+    "correctIndex": 1,
+    "answerText": "b) Transform the 'Square Footage' feature using a logarithmic scale.",
+    "explanation": "Transforming skewed features like 'Square Footage' with a logarithmic scale can effectively reduce the impact of large outliers, making the distribution more symmetric and suitable for many machine learning models without discarding valuable data points (a) or introducing potential bias with mean replacement (c).",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 17-18"
+  },
+  {
+    "id": 7,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "You have a categorical feature 'Country' with 150 unique values in a customer dataset. Which encoding method would be most appropriate to prevent a drastic increase in the dataset's dimensionality while capturing the categorical information?",
+    "options": [
+      "a) One-Hot Encoding.",
+      "b) Ordinal Encoding (assigning a random integer to each country).",
+      "c) Label Encoding (assigning integers based on alphabetical order).",
+      "d) Binary Encoding."
+    ],
+    "correctIndex": 3,
+    "answerText": "d) Binary Encoding.",
+    "explanation": "One-Hot Encoding (a) would create 150 new columns, significantly increasing dimensionality and potentially leading to sparsity issues. Ordinal/Label encoding (b, c) would impose an artificial order on nominal data, which can negatively affect model performance. Binary encoding converts integers to binary codes and splits them into separate columns, significantly reducing the dimensionality compared to one-hot encoding while avoiding false ordinality.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 19-20"
+  },
+  {
+    "id": 8,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "Which of the following scenarios is an example of feature construction?",
+    "options": [
+      "a) Applying StandardScaler to normalize a numerical feature.",
+      "b) Imputing missing values in a column using the KNN imputer.",
+      "c) Deriving 'age_in_years' from a 'date_of_birth' column.",
+      "d) Removing a feature that has a low correlation with the target variable."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Deriving 'age_in_years' from a 'date_of_birth' column.",
+    "explanation": "Feature construction involves creating new features from existing data to provide more relevant information to the model. Deriving 'age_in_years' from 'date_of_birth' is a classic example. Scaling (a) is feature transformation, imputation (b) is data cleaning, and removing features (d) is feature selection.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 21-22"
+  },
+  {
+    "id": 9,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "What is the primary motivation for applying Principal Component Analysis (PCA) during data preprocessing?",
+    "options": [
+      "a) To transform non-linear relationships into linear ones.",
+      "b) To handle missing values in a high-dimensional dataset.",
+      "c) To reduce the number of features while retaining most of the data's variance.",
+      "d) To encode categorical variables into numerical values."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) To reduce the number of features while retaining most of the data's variance.",
+    "explanation": "PCA is a linear dimensionality reduction technique. Its main goal is to project high-dimensional data onto a lower-dimensional space, capturing the maximum variance in the data with fewer orthogonal components. This helps combat the curse of dimensionality, reduces computational complexity, and can mitigate multicollinearity.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 23-24"
+  },
+  {
+    "id": 10,
+    "track": "Machine Learning",
+    "session": "Session 2: Data Preprocessing in Machine Learning",
+    "question": "In a dataset used to train a fraud detection model, 99% of transactions are legitimate and only 1% are fraudulent. What is this common data preprocessing challenge called, and which technique is commonly used to address it?",
+    "options": [
+      "a) High Dimensionality; addressed using PCA.",
+      "b) Outlier Presence; addressed by removing extreme values.",
+      "c) Imbalanced data; addressed using techniques like SMOTE (Synthetic Minority Over-sampling Technique).",
+      "d) Missing Data; addressed using mean imputation."
+    ],
+    "correctIndex": 2,
+    "answerText": "c) Imbalanced data; addressed using techniques like SMOTE (Synthetic Minority Over-sampling Technique).",
+    "explanation": "A significant difference in the number of instances of different classes (99% vs. 1%) is known as class imbalance. It can lead to models that perform poorly on the minority class. Techniques like SMOTE (Synthetic Minority Over-sampling Technique), random over-sampling, or under-sampling are commonly used during preprocessing to balance the class distribution.",
+    "sourceDeck": "Session 2 - Data-Preprocessing.pptx",
+    "sourceSlide": "Slide 25-26"
+  },
+  {
+    "id": 11,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "In the Problem Formulation stage of a machine learning project, which of the following is the least likely primary consideration?",
+    "options": [
+      "A) Defining clear and measurable business goals.",
+      "B) Determining if machine learning is the appropriate solution.",
+      "C) Identifying specific algorithms for model training.",
+      "D) Establishing key performance indicators (KPIs) for project success."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Identifying specific algorithms for model training.",
+    "explanation": "The Problem Formulation stage focuses on the high-level business understanding, defining goals, determining project feasibility with ML, and establishing KPIs. Algorithm selection is premature at this stage and typically occurs later during the Model Training and Evaluation phase.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 15-16"
+  },
+  {
+    "id": 12,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "Which of the following activities is primarily associated with the \"Data Exploration\" phase rather than \"Data Collection\" or \"Feature Engineering\"?",
+    "options": [
+      "A) Sourcing data from various databases and APIs.",
+      "B) Creating new features by combining existing ones.",
+      "C) Visualizing data distributions and relationships to understand underlying patterns.",
+      "D) Handling missing values and outliers in the dataset."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Visualizing data distributions and relationships to understand underlying patterns.",
+    "explanation": "Data Exploration (EDA) primarily involves understanding the dataset's structure, summary statistics, data distributions, and correlations, often through visualization. Sourcing data is part of Data Collection (A). Creating new features (B) and handling missing values/outliers (D) are core activities of Feature Engineering and Data Preprocessing, respectively.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 17-18"
+  },
+  {
+    "id": 13,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "During the Model Training and Evaluation stage, why is \"Hyperparameter Tuning\" distinct from \"Model Training\"?",
+    "options": [
+      "A) Model training optimizes internal model parameters, while hyperparameter tuning optimizes external algorithm settings.",
+      "B) Hyperparameter tuning occurs after the model has been deployed, while model training happens beforehand.",
+      "C) Model training involves selecting evaluation metrics, while hyperparameter tuning evaluates model performance.",
+      "D) Hyperparameter tuning is only applicable to unsupervised learning models, unlike model training."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Model training optimizes internal model parameters, while hyperparameter tuning optimizes external algorithm settings.",
+    "explanation": "Model training is the process where the algorithm learns its internal parameters (e.g., weights in neural networks, split points in decision trees) directly from the training data. Hyperparameter tuning involves finding the best values for settings that control the learning process itself (e.g., learning rate, number of trees) and are set before training begins.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 19-20"
+  },
+  {
+    "id": 14,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "What is the primary purpose of implementing \"continuous monitoring\" after a machine learning model has been deployed?",
+    "options": [
+      "A) To continuously retrain the model on the original training data.",
+      "B) To detect model drift and ensure the model remains accurate over time in a live environment.",
+      "C) To generate explanations for all individual predictions made by the model.",
+      "D) To automate the problem formulation process for future projects."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) To detect model drift and ensure the model remains accurate over time in a live environment.",
+    "explanation": "Continuous monitoring is crucial in the Model Deployment and Maintenance stage to track the model's performance in the real world. Over time, changes in input data distribution (data drift) or the relationship between inputs and outputs (concept drift) can degrade performance, necessitating monitoring to trigger retraining or updates.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 21-22"
+  },
+  {
+    "id": 15,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "In which stage of the machine learning process would \"assembling a multidisciplinary team\" be most critical for establishing a solid foundation?",
+    "options": [
+      "A) Model Training and Evaluation",
+      "B) Problem Formulation",
+      "C) Feature Engineering",
+      "D) Model Deployment"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Problem Formulation",
+    "explanation": "Assembling a team with diverse expertise (domain experts, data scientists, engineers, business stakeholders) is vital right at the beginning during Problem Formulation to ensure business alignment, technical feasibility, and realistic goal setting.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 23-24"
+  },
+  {
+    "id": 16,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "A data scientist notices that their trained model performs exceptionally well on the training data but poorly on the validation data. Which action, commonly part of the Model Training and Evaluation stage, is most appropriate to address this issue?",
+    "options": [
+      "A) Collecting more training data with similar distribution.",
+      "B) Immediately deploying the model to production to test on real-world data.",
+      "C) Conducting hyperparameter tuning or exploring ensemble methods to reduce overfitting.",
+      "D) Re-evaluating the business objectives in the Problem Formulation stage."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Conducting hyperparameter tuning or exploring ensemble methods to reduce overfitting.",
+    "explanation": "High performance on training data coupled with poor performance on validation data is a classic sign of overfitting. Techniques like regularization (tuned via hyperparameters) and ensemble methods are standard approaches to mitigate overfitting during the Model Training and Evaluation stage. Deploying an overfitted model (B) is risky.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 25-26"
+  },
+  {
+    "id": 17,
+    "track": "Machine Learning",
+    "session": "Session 3: End-to-End Machine Learning Process",
+    "question": "Which of the following is a key consideration during the Model Deployment stage to ensure the solution can handle real-world demands?",
+    "options": [
+      "A) Exploratory Data Analysis to identify anomalies in new data.",
+      "B) Detailed documentation of the business problem formulation.",
+      "C) Ensuring scalability to handle varying workloads.",
+      "D) Selecting the optimal loss function for algorithm training."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Ensuring scalability to handle varying workloads.",
+    "explanation": "Model Deployment requires addressing non-functional requirements such as scalability (handling varying user request volumes), latency (response time), reliability, and integration into existing production systems. Loss function selection (D) occurs during training, EDA (A) occurs earlier, and business problem documentation (B) is finalized during formulation.",
+    "sourceDeck": "Session 3 - ML-Process-End-to-End.pptx",
+    "sourceSlide": "Slide 27-28"
+  },
+  {
+    "id": 18,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "Which of the following best describes the fundamental characteristic of data used in supervised learning?",
+    "options": [
+      "A) Data is completely unlabeled and used to find hidden patterns.",
+      "B) Data includes a mix of labeled and unlabeled instances.",
+      "C) Data is labeled, meaning each input is paired with a known target output.",
+      "D) Data consists of an agent interacting with an environment through rewards."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Data is labeled, meaning each input is paired with a known target output.",
+    "explanation": "Supervised learning fundamentally relies on labeled datasets, where the algorithm learns a mapping function from input features to known target outputs (labels).",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 16-17"
+  },
+  {
+    "id": 19,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A financial institution wants to develop a model to predict the credit score (a numerical value between 300 and 850) of loan applicants based on their financial history. What type of supervised learning task is this, and which algorithm could be a suitable initial choice?",
+    "options": [
+      "A) Classification; Logistic Regression",
+      "B) Regression; Linear Regression",
+      "C) Clustering; K-Means",
+      "D) Dimensionality Reduction; PCA"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Regression; Linear Regression",
+    "explanation": "Predicting a continuous numerical value (credit score between 300 and 850) is a regression task. Linear Regression is a fundamental and common algorithm suitable as an initial choice for regression problems.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 18-19"
+  },
+  {
+    "id": 20,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "In the context of evaluating supervised learning algorithms, if a model's decision-making process needs to be clearly understood and explained to stakeholders (e.g., in medical diagnosis), which factor would be prioritized?",
+    "options": [
+      "A) Computational Complexity",
+      "B) Scalability",
+      "C) Interpretability",
+      "D) Robustness"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Interpretability",
+    "explanation": "Interpretability refers to the ease with which a human can understand how a model makes its predictions. In high-stakes applications like healthcare or finance, interpretability is often prioritized to ensure trust, transparency, and regulatory compliance.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 20-21"
+  },
+  {
+    "id": 21,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A supervised learning model is being developed to distinguish between benign and malignant tumors based on patient data. This involves assigning each case to one of two distinct categories. Which of the following algorithms is not typically used for such a classification task?",
+    "options": [
+      "A) Logistic Regression",
+      "B) Support Vector Machines (SVM)",
+      "C) Linear Regression",
+      "D) Random Forest"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Linear Regression",
+    "explanation": "Linear Regression is designed for predicting continuous numerical values, not categorical outcomes. While it could theoretically be thresholded, Logistic Regression (A), SVM (B), and Random Forest (D) are specifically designed and well-suited for classification tasks like binary tumor categorization.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 22-23"
+  },
+  {
+    "id": 22,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A company is building a spam email detector. They have a dataset of millions of emails, many of which are unlabeled, but a smaller subset has been manually labeled as 'spam' or 'not spam'. If the goal is to make use of both labeled and unlabeled data for training, which learning paradigm would involve combining supervised and unsupervised elements, but is not the focus of section 2.1?",
+    "options": [
+      "A) Pure Supervised Learning",
+      "B) Unsupervised Learning",
+      "C) Reinforcement Learning",
+      "D) Semi-Supervised Learning"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Semi-Supervised Learning",
+    "explanation": "Semi-Supervised Learning specifically addresses situations where a small amount of labeled data is combined with a large amount of unlabeled data during training, bridging the gap between pure supervised and unsupervised learning.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 24-25"
+  },
+  {
+    "id": 23,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "When selecting a supervised learning algorithm, considering whether it performs well in the presence of missing or incorrect input values relates to which factor?",
+    "options": [
+      "A) Interpretability",
+      "B) Scalability",
+      "C) Robustness",
+      "D) Computational Complexity"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Robustness",
+    "explanation": "Robustness refers to an algorithm's ability to maintain good performance even when the input data contains noise, missing values, outliers, or other imperfections.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 26-27"
+  },
+  {
+    "id": 24,
+    "track": "Machine Learning",
+    "session": "Session 4: Supervised Learning",
+    "question": "A data scientist is working on a project to automatically classify news articles into predefined topics (e.g., 'Politics', 'Sports', 'Technology'). They have a large dataset of articles, each with a known topic label. Which supervised learning task and a commonly associated algorithm would be most appropriate for this problem?",
+    "options": [
+      "A) Regression; Decision Trees",
+      "B) Classification; Naive Bayes",
+      "C) Dimensionality Reduction; t-SNE",
+      "D) Clustering; K-Means"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Classification; Naive Bayes",
+    "explanation": "Assigning articles to predefined categories (topics) is a classification task. Naive Bayes is a well-established and efficient algorithm commonly used for text classification tasks due to its effectiveness with high-dimensional text data.",
+    "sourceDeck": "Session 4 - Supervised-learning.pptx",
+    "sourceSlide": "Slide 28-29"
+  },
+  {
+    "id": 25,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following scenarios would most appropriately utilize a DBSCAN algorithm?",
+    "options": [
+      "A) Predicting house prices based on size and location.",
+      "B) Grouping customers into 3 distinct segments based on purchase frequency.",
+      "C) Identifying unusually shaped clusters of network traffic that might indicate an intrusion.",
+      "D) Classifying emails as spam or not spam based on labeled examples."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Identifying unusually shaped clusters of network traffic that might indicate an intrusion.",
+    "explanation": "DBSCAN is a density-based clustering algorithm that excels at finding arbitrarily shaped clusters and identifying outliers (noise). This makes it highly suitable for detecting complex, non-linear patterns often associated with network intrusions, where the number of clusters is not known beforehand. Options A, B, and D are better suited for regression, K-Means clustering, and supervised classification, respectively.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 15-16"
+  },
+  {
+    "id": 26,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "A data scientist is working with a large dataset of patient medical records, where a small fraction of records are labeled with a rare disease diagnosis, but most are unlabeled. The goal is to identify potential new subtypes of the disease. Which learning approach would be most effective?",
+    "options": [
+      "A) Pure Supervised Learning (e.g., Logistic Regression)",
+      "B) Pure Unsupervised Learning (e.g., K-Means Clustering)",
+      "C) A Hybrid Approach combining Supervised and Unsupervised Learning",
+      "D) Reinforcement Learning"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) A Hybrid Approach combining Supervised and Unsupervised Learning",
+    "explanation": "The presence of a small amount of labeled data for the rare disease suggests supervised components, but the vast majority of unlabeled data and the goal of discovering \"new subtypes\" points strongly towards leveraging unsupervised learning. A hybrid approach would use the labeled data to understand known disease characteristics and the unlabeled data to find novel patterns, making it the most effective strategy.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 17-18"
+  },
+  {
+    "id": 27,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "When considering the interpretability of a machine learning model for a critical application like credit scoring, which of the following is generally preferred?",
+    "options": [
+      "A) Deep Neural Networks (often less interpretable) for their high accuracy.",
+      "B) Isolation Forest for its efficiency in anomaly detection.",
+      "C) Supervised models like Logistic Regression or Random Forests for their transparency.",
+      "D) t-SNE for its ability to visualize high-dimensional data."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Supervised models like Logistic Regression or Random Forests for their transparency.",
+    "explanation": "In applications like credit scoring, where understanding why a decision was made is crucial for regulatory compliance and user trust, interpretability is paramount. Supervised models such as Logistic Regression and even certain tree-based methods like Random Forests (when analyzed for feature importance) offer higher transparency and explainability compared to complex models like deep neural networks or purely exploratory tools like t-SNE. Isolation Forest is for anomaly detection, not primarily for credit scoring decisions requiring interpretability.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 19-20"
+  },
+  {
+    "id": 28,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following unsupervised learning techniques would be most appropriate for reducing the computational load and storage requirements of a large image dataset while striving to retain as much variance as possible?",
+    "options": [
+      "A) t-Distributed Stochastic Neighbor Embedding (t-SNE)",
+      "B) DBSCAN",
+      "C) Principal Component Analysis (PCA)",
+      "D) Hierarchical Clustering"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Principal Component Analysis (PCA)",
+    "explanation": "PCA is a dimensionality reduction technique specifically designed to project data into a lower-dimensional space while maximizing the preserved variance. This reduces computational requirements and storage for large datasets like images. t-SNE (A) is primarily for visualization in 2D or 3D and does not preserve global variance well. DBSCAN (B) and Hierarchical Clustering (D) are clustering methods, not dimensionality reduction techniques.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 21-22"
+  },
+  {
+    "id": 29,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "A retail company has a massive dataset of customer transactions with no predefined labels indicating customer segments. They want to group customers based on their purchasing behavior to tailor marketing strategies. Which of the following decision criteria and corresponding approach is most suitable?",
+    "options": [
+      "A) Availability of Labeled Data: Supervised Learning (e.g., Support Vector Machines)",
+      "B) Task Objectives: Supervised Learning (e.g., Linear Regression)",
+      "C) Availability of Labeled Data: Unsupervised Learning (e.g., K-Means Clustering)",
+      "D) Interpretability: Supervised Learning (e.g., Decision Trees)"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Availability of Labeled Data: Unsupervised Learning (e.g., K-Means Clustering)",
+    "explanation": "The problem explicitly states \"no predefined labels\" for customer segments, immediately ruling out pure supervised learning. The objective is to \"group customers based on their purchasing behavior,\" which is a classic clustering task, a subset of unsupervised learning. K-Means Clustering is a common and effective algorithm for such segmentation.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 23-24"
+  },
+  {
+    "id": 30,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "In the context of unsupervised learning, what is the primary advantage of DBSCAN over K-Means when the data might contain noise and clusters of irregular shapes?",
+    "options": [
+      "A) DBSCAN is faster than K-Means for large datasets.",
+      "B) DBSCAN requires specifying the number of clusters (K) beforehand.",
+      "C) DBSCAN can automatically discover the number of clusters and is robust to noise and irregular shapes.",
+      "D) DBSCAN produces a hierarchical structure (dendrogram) that K-Means does not."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) DBSCAN can automatically discover the number of clusters and is robust to noise and irregular shapes.",
+    "explanation": "A key advantage of DBSCAN is its ability to find clusters of arbitrary shapes and identify outliers (noise) as points that don't belong to any cluster. Unlike K-Means, DBSCAN does not require the user to pre-specify the number of clusters (K), which can be a significant benefit when the true number of clusters is unknown. DBSCAN's speed depends on implementation and data; it doesn't generally produce dendrograms (that's Hierarchical Clustering).",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 25-26"
+  },
+  {
+    "id": 31,
+    "track": "Machine Learning",
+    "session": "Session 5: Unsupervised Learning",
+    "question": "Which of the following statements accurately describes the role of \"exploration vs. exploitation\" in the context of choosing between supervised and unsupervised learning?",
+    "options": [
+      "A) It is primarily a dilemma in Reinforcement Learning, not directly applicable to supervised or unsupervised choices.",
+      "B) Exploration refers to trying supervised models, while exploitation refers to using unsupervised models.",
+      "C) It refers to the trade-off of collecting more labeled data (exploration) versus using existing unlabeled data (exploitation).",
+      "D) It describes the balance between exploring new data patterns (unsupervised) and exploiting known relationships (supervised) when limited labeled data is available."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) It is primarily a dilemma in Reinforcement Learning, not directly applicable to supervised or unsupervised choices.",
+    "explanation": "The concept of \"exploration vs. exploitation\" is a fundamental dilemma in Reinforcement Learning, where an agent must decide whether to try new actions to discover potentially better rewards (exploration) or stick with actions known to yield good rewards (exploitation). While there are analogous trade-offs in general ML, the specific term \"exploration vs. exploitation\" is most directly and prominently associated with Reinforcement Learning principles.",
+    "sourceDeck": "Session 5 - Unsupervised-learning.pptx",
+    "sourceSlide": "Slide 27-28"
+  },
+  {
+    "id": 32,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "Which of the following best describes the primary advantage of Semi-Supervised Learning over pure Supervised Learning?",
+    "options": [
+      "A) It achieves perfect accuracy without needing any labeled data.",
+      "B) It operates entirely without feedback or training data.",
+      "C) It effectively leverages a combination of limited labeled data and abundant unlabeled data to improve model performance.",
+      "D) It eliminates the need for computational resources during training."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) It effectively leverages a combination of limited labeled data and abundant unlabeled data to improve model performance.",
+    "explanation": "Semi-Supervised Learning bridges the gap between supervised and unsupervised learning. In many real-world scenarios, obtaining labels is expensive and time-consuming, but unlabeled data is abundant. By using a small set of labeled data alongside a large pool of unlabeled data, SSL improves generalization and accuracy without the massive labeling cost of pure supervised learning.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 13-14"
+  },
+  {
+    "id": 33,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "In Reinforcement Learning, what is the core dilemma an agent faces when interacting with its environment?",
+    "options": [
+      "A) Deciding whether to use labeled or unlabeled data.",
+      "B) Choosing between linear and non-linear regression models.",
+      "C) Balancing the need to explore new actions against exploiting known high-reward actions.",
+      "D) Determining the optimal number of clusters for grouping states."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Balancing the need to explore new actions against exploiting known high-reward actions.",
+    "explanation": "The Exploration vs. Exploitation trade-off is the central challenge in RL. The agent must balance exploring unvisited states/actions to discover higher potential rewards versus exploiting its current knowledge to take actions already known to yield positive rewards.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 15-16"
+  },
+  {
+    "id": 34,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "A healthcare organization has a small dataset of accurately diagnosed patient medical images (labeled) and a vast collection of unanalyzed medical images (unlabeled). Which machine learning paradigm would be most suitable for building an effective diagnostic tool, and why?",
+    "options": [
+      "A) Pure Supervised Learning, relying solely on the small set of labeled images.",
+      "B) Pure Unsupervised Learning, relying only on finding patterns in the unlabeled data.",
+      "C) Reinforcement Learning, to optimize the diagnostic process through trial and error.",
+      "D) Semi-Supervised Learning, as it can combine the limited labeled data with the abundant unlabeled data to enhance diagnostic accuracy."
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Semi-Supervised Learning, as it can combine the limited labeled data with the abundant unlabeled data to enhance diagnostic accuracy.",
+    "explanation": "Given the scenario of limited labeled data and abundant unlabeled data, Semi-Supervised Learning is the ideal choice. It can leverage the existing accurate diagnoses while gaining broader understanding and generalization from the large pool of unlabeled images, improving the overall diagnostic tool beyond what pure supervised learning (A) or unsupervised learning (B) alone could achieve, and RL (C) is not suitable for this kind of static classification task.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 17-18"
+  },
+  {
+    "id": 35,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "Which of the following is NOT an application area where Reinforcement Learning has shown significant success?",
+    "options": [
+      "A) Autonomous systems like self-driving cars.",
+      "B) Playing complex strategy games like Go.",
+      "C) Training robots for dexterous manipulation tasks.",
+      "D) Automatically segmenting medical images based on pre-defined anatomical labels."
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Automatically segmenting medical images based on pre-defined anatomical labels.",
+    "explanation": "Image segmentation with pre-defined labels is a classic supervised learning task (classification/regression at pixel level). Autonomous systems, game playing, and robotics involve sequential decision-making and interaction with dynamic environments, which are core strengths of Reinforcement Learning.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 19-20"
+  },
+  {
+    "id": 36,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "What role does \"transfer of knowledge\" play in the principles of Semi-Supervised Learning?",
+    "options": [
+      "A) It refers to the agent transferring its learned policy to a new environment.",
+      "B) It's the process of converting unlabeled data into labeled data.",
+      "C) It means leveraging insights gained from limited labeled data to improve predictions across the larger unlabeled dataset.",
+      "D) It describes the process of moving a model from a supervised task to an unsupervised task."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) It means leveraging insights gained from limited labeled data to improve predictions across the larger unlabeled dataset.",
+    "explanation": "In Semi-Supervised Learning, the foundational understanding derived from the small labeled dataset is \"transferred\" or applied to the abundant unlabeled data, allowing the model to make more informed predictions and generalize better.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 21-22"
+  },
+  {
+    "id": 37,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "When Reinforcement Learning is used to complement Unsupervised Learning in a recommendation system, what is the primary benefit?",
+    "options": [
+      "A) It eliminates the need for clustering users or items.",
+      "B) It helps define the clear objective and optimize recommendations to maximize user engagement.",
+      "C) It makes the entire system purely data-driven without any human input.",
+      "D) It converts the unsupervised patterns into fully labeled training data for supervised models."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) It helps define the clear objective and optimize recommendations to maximize user engagement.",
+    "explanation": "Unsupervised learning can cluster users and items (finding patterns), but RL provides the goal-oriented framework to then optimize the recommendations iteratively by selecting items that maximize metrics like user engagement or satisfaction, adding a crucial layer of decision-making and optimization.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 23-24"
+  },
+  {
+    "id": 38,
+    "track": "Machine Learning",
+    "session": "Session 6: Semi-Supervised Learning and Reinforcement Learning",
+    "question": "A manufacturing company wants to identify subtle anomalies in sensor data from machinery to predict failures before they occur. They have a massive amount of historical sensor data, but very few instances of actual machine failures are explicitly logged and labeled. Which approach is most likely to be effective?",
+    "options": [
+      "A) Pure Supervised Learning, focusing on the few labeled failure instances.",
+      "B) Pure Unsupervised Learning, to cluster normal operating data and identify outliers.",
+      "C) Semi-Supervised Learning, leveraging both the few labeled failure instances and the vast unlabeled historical data.",
+      "D) Reinforcement Learning, to train an agent to predict failures in real-time."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Semi-Supervised Learning, leveraging both the few labeled failure instances and the vast unlabeled historical data.",
+    "explanation": "Given the scarcity of labeled failure data but abundance of unlabeled operational data, Semi-Supervised Learning is ideal. It can learn from the few known failures while also understanding the normal operational patterns from the extensive unlabeled data, leading to a more robust anomaly detection system than pure supervised (A) or unsupervised (B). Reinforcement Learning (D) is less suitable for this prediction/classification type of task.",
+    "sourceDeck": "Session 6 - Semi-supervised-reinforcement.pptx",
+    "sourceSlide": "Slide 25-26"
+  },
+  {
+    "id": 39,
+    "track": "Statistics",
+    "session": "Session 1: DataFrames in Python (Pandas)",
+    "question": "What is the primary difference between a Python list and a Pandas DataFrame?",
+    "options": [
+      "A. Lists store only numbers, DataFrames store only text.",
+      "B. Lists are 1D, DataFrames are 2D.",
+      "C. Lists are used only in machine learning.",
+      "D. DataFrames cannot store numerical data."
+    ],
+    "correctIndex": 1,
+    "answerText": "B. Lists are 1D, DataFrames are 2D.",
+    "explanation": "A Python list is a one-dimensional (1D) sequential collection of items, whereas a Pandas DataFrame is a two-dimensional (2D) tabular data structure consisting of rows and columns with labeled axes.",
+    "sourceDeck": "Session 1 Dataframes in Python 2 aug 2025 -Tuned.pptx",
+    "sourceSlide": "Slide 7-8"
+  },
+  {
+    "id": 40,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "What is the primary goal of descriptive statistics?",
+    "options": [
+      "A) To make inferences about a population",
+      "B) To describe and summarize data",
+      "C) To test hypotheses",
+      "D) To establish causality"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) To describe and summarize data",
+    "explanation": "Descriptive statistics aims to provide a summary of the main features of a dataset, making it easier to understand. Inferential statistics, hypothesis testing, and causal inference deal with drawing generalized conclusions about broader populations.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 3-4"
+  },
+  {
+    "id": 41,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "Which measure of central tendency is most affected by outliers?",
+    "options": [
+      "A) Median",
+      "B) Mode",
+      "C) Mean",
+      "D) Range"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Mean",
+    "explanation": "The arithmetic mean incorporates the exact magnitude of every single value in the dataset (sum divided by count). As a result, extreme outliers pull the mean heavily toward them. The median and mode are positional measures and remain unaffected by extreme outliers.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q1)"
+  },
+  {
+    "id": 42,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "What does a standard deviation of 0 indicate?",
+    "options": [
+      "A) All values are different",
+      "B) Data is widely spread",
+      "C) All values are the same",
+      "D) There are outliers in the data"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) All values are the same",
+    "explanation": "Standard deviation quantifies the dispersion of values around the mean. If standard deviation = 0, there is zero variability around the mean, which guarantees that every single value in the dataset is identical.",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q2)"
+  },
+  {
+    "id": 43,
+    "track": "Statistics",
+    "session": "Session 2: Introduction to Descriptive Statistics",
+    "question": "If the mean and median are equal, the data is likely:",
+    "options": [
+      "A) Skewed right",
+      "B) Symmetrical",
+      "C) Skewed left",
+      "D) Uniform"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Symmetrical",
+    "explanation": "In a symmetrical distribution (such as the standard normal distribution), the left and right halves are mirror images, causing the Mean, Median, and Mode to coincide at the central axis (Mean = Median = Mode).",
+    "sourceDeck": "Session 2 Introduction to Descriptive Statistics Tuned.pptx",
+    "sourceSlide": "Slide 24-25 (Q3)"
+  },
+  {
+    "id": 44,
+    "track": "Statistics",
+    "session": "Session 3: Data Visualization",
+    "question": "A data scientist wants to show the monthly trend of website traffic over a year. Which visualization is most appropriate?",
+    "options": [
+      "A. Scatter Plot",
+      "B. Line Chart",
+      "C. Pie Chart",
+      "D. Bar Plot"
+    ],
+    "correctIndex": 1,
+    "answerText": "B. Line Chart",
+    "explanation": "A line chart connects sequential continuous data points over time, making it the most effective visualization for observing trends, seasonal variations, and temporal progression (time series data).",
+    "sourceDeck": "Session 3 Visualization -Tuned.pptx",
+    "sourceSlide": "Slide 12 (Q1)"
+  },
+  {
+    "id": 45,
+    "track": "Statistics",
+    "session": "Session 3: Data Visualization",
+    "question": "A researcher wants to examine the relationship between students’ study hours and their exam scores. Which visualization should be used?",
+    "options": [
+      "A. Pie Chart",
+      "B. Line Chart",
+      "C. Scatter Plot",
+      "D. Bar Plot"
+    ],
+    "correctIndex": 2,
+    "answerText": "C. Scatter Plot",
+    "explanation": "A scatter plot plots individual bivariate data points along two continuous quantitative axes, making it the standard choice for discovering relationships, correlations, and clusters between two continuous variables (study hours vs. exam scores).",
+    "sourceDeck": "Session 3 Visualization -Tuned.pptx",
+    "sourceSlide": "Slide 12 (Q2)"
+  },
+  {
+    "id": 46,
+    "track": "Statistics",
+    "session": "Session 4: Understanding Data Features",
+    "question": "Which feature type is used to represent customer feedback: \"Satisfied\", \"Neutral\", \"Dissatisfied\"?",
+    "options": [
+      "A) Categorical",
+      "B) Discrete",
+      "C) Continuous",
+      "D) Ordinal"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Categorical (specifically Ordinal Categorical)",
+    "explanation": "Customer feedback consists of qualitative category labels with a meaningful internal hierarchy or order (\"Satisfied\" > \"Neutral\" > \"Dissatisfied\"), classifying it as an ordinal categorical feature.",
+    "sourceDeck": "Session 4 Understanding Data Features -Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
+  },
+  {
+    "id": 47,
+    "track": "Statistics",
+    "session": "Session 4: Understanding Data Features",
+    "question": "The number of books a person owns is an example of which feature type?",
+    "options": [
+      "A) Categorical",
+      "B) Discrete",
+      "C) Continuous",
+      "D) Ordinal"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Discrete",
+    "explanation": "Discrete features represent countable numeric quantities that take distinct, isolated integer values (0, 1, 2, ...). You cannot own 2.7 books, unlike continuous features which can assume any value along a continuum.",
+    "sourceDeck": "Session 4 Understanding Data Features -Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
+  },
+  {
+    "id": 48,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "What does a right-skewed distribution indicate?",
+    "options": [
+      "A) The majority of values are low, with a few high values",
+      "B) The majority of values are high, with a few low values",
+      "C) The data is perfectly symmetrical",
+      "D) The data has no variation"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) The majority of values are low, with a few high values",
+    "explanation": "In a right-skewed (positively skewed) distribution, the bulk of observations are clustered at the lower end (left), while a long tail of infrequent, extreme high values stretches out to the right. In this case, Mean > Median > Mode.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 23-24 (Q1)"
+  },
+  {
+    "id": 49,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "Which measure is best for skewed data?",
+    "options": [
+      "A) Mean",
+      "B) Median",
+      "C) Mode",
+      "D) Standard deviation"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Median",
+    "explanation": "The median represents the 50th percentile (exact middle value) and is robust to extreme values, unlike the mean and standard deviation which are disproportionately distorted by skewness and outliers.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 23-24 (Q2)"
+  },
+  {
+    "id": 50,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "What does a high positive kurtosis (leptokurtic distribution) indicate about a dataset?",
+    "options": [
+      "A) The data has lighter tails and fewer extreme outliers than a normal distribution.",
+      "B) The distribution is skewed heavily to the right.",
+      "C) The data has heavy tails and a higher risk of extreme outliers.",
+      "D) The mean, median, and mode are all equal."
+    ],
+    "correctIndex": 2,
+    "answerText": "C) The data has heavy tails and a higher risk of extreme outliers.",
+    "explanation": "Leptokurtic distributions possess positive excess kurtosis (> 0), characterized by a sharper central peak and fat, heavy tails. This indicates a significantly higher probability of extreme outlier events compared to a standard normal bell curve.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 25-26 (Q3)"
+  },
+  {
+    "id": 51,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "In a negatively skewed (left-skewed) distribution, which of the following relationships generally holds true?",
+    "options": [
+      "A) Mean > Median > Mode",
+      "B) Mean < Median < Mode",
+      "C) Mean = Median = Mode",
+      "D) Median > Mean > Mode"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Mean < Median < Mode",
+    "explanation": "In a negatively skewed (left-skewed) distribution, the long tail extends toward the left due to extreme low values. These low values drag the mean down below the median, leading to the general ordering: Mean < Median < Mode.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 27-28"
+  },
+  {
+    "id": 52,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "How does Winsorizing handle extreme outliers in a dataset?",
+    "options": [
+      "A) It completely deletes the outlier observations from the dataset.",
+      "B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).",
+      "C) It transforms the entire dataset using a logarithmic scale.",
+      "D) It replaces all missing and extreme values with the dataset mean."
+    ],
+    "correctIndex": 1,
+    "answerText": "B) It replaces extreme values with the nearest non-outlier percentile values (e.g., 5th or 95th percentile).",
+    "explanation": "Winsorization limits the influence of outliers by capping values beyond specified percentiles (e.g., values below the 5th percentile are set to the 5th percentile value, and values above the 95th percentile are set to the 95th percentile value) instead of trimming/removing records.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 29-30"
+  },
+  {
+    "id": 53,
+    "track": "Statistics",
+    "session": "Session 5: Data Distributions (Skewness, Kurtosis & Spread)",
+    "question": "How is the Interquartile Range (IQR) calculated, and why is it preferred over standard deviation for skewed data?",
+    "options": [
+      "A) IQR = Q3 - Q1; it is robust to extreme outliers.",
+      "B) IQR = Q4 - Q1; it covers 100% of the dataset.",
+      "C) IQR = Q3 + Q1; it measures the total variance of the sample.",
+      "D) IQR = Mean - Median; it measures the symmetry of the data."
+    ],
+    "correctIndex": 0,
+    "answerText": "A) IQR = Q3 - Q1; it is robust to extreme outliers.",
+    "explanation": "The Interquartile Range is computed as the difference between the 75th percentile (Q3) and the 25th percentile (Q1). By focusing strictly on the middle 50% of the dataset, it completely filters out extreme tail values, providing a robust measure of statistical dispersion for skewed distributions.",
+    "sourceDeck": "Session 5 Data Distributions - Tuned.pptx",
+    "sourceSlide": "Slide 31-32"
+  },
+  {
+    "id": 54,
+    "track": "Statistics",
+    "session": "Session 6: Probability Theory",
+    "question": "If events A and B are independent, P(A ∩ B) is:",
+    "options": [
+      "A) P(A) + P(B)",
+      "B) P(A) - P(B)",
+      "C) P(A) * P(B)",
+      "D) None of the above"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) P(A) * P(B)",
+    "explanation": "By the fundamental multiplication rule of probability, when two events A and B are independent (the occurrence of one does not affect the probability of the other), their joint probability is the product of their individual probabilities: P(A ∩ B) = P(A) * P(B).",
+    "sourceDeck": "Session 6 Probability Theory - Tuned.pptx",
+    "sourceSlide": "Slide 29-30 (Q1)"
+  },
+  {
+    "id": 55,
+    "track": "Statistics",
+    "session": "Session 6: Probability Theory",
+    "question": "What is the sample space for a coin toss?",
+    "options": [
+      "A) {H, T}",
+      "B) {1, 2}",
+      "C) {Red, Black}"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) {H, T}",
+    "explanation": "The sample space S represents the set of all possible distinct outcomes resulting from a random experiment. Tossing a coin has two elementary outcomes: Head (H) and Tail (T), so S = {H, T}.",
+    "sourceDeck": "Session 6 Probability Theory - Tuned.pptx",
+    "sourceSlide": "Slide 29-30 (Q2)"
+  },
+  {
+    "id": 56,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "What is a Random Variable?",
+    "options": [
+      "a) A variable that takes deterministic values.",
+      "b) A variable that always takes integer values.",
+      "c) A constant that never changes.",
+      "d) A variable that assigns numerical values to the outcomes of a random process."
+    ],
+    "correctIndex": 3,
+    "answerText": "d) A variable that assigns numerical values to the outcomes of a random process.",
+    "explanation": "A random variable is a formal mathematical rule/function that associates a unique numerical real value with each elementary outcome in the sample space of a random experiment.",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 24-25"
+  },
+  {
+    "id": 57,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "Which distribution has mean = variance?",
+    "options": [
+      "A) Normal",
+      "B) Binomial",
+      "C) Poisson"
+    ],
+    "correctIndex": 2,
+    "answerText": "C) Poisson",
+    "explanation": "A unique defining characteristic of the Poisson distribution is that both its expected value (mean) and variance are equal to its single rate parameter lambda (E[X] = Var(X) = lambda).",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 26-27 (Q1)"
+  },
+  {
+    "id": 58,
+    "track": "Statistics",
+    "session": "Session 7: Probability Distributions (Normal, Binomial & Poisson)",
+    "question": "Which is used for yes/no trials?",
+    "options": [
+      "A) Poisson",
+      "B) Binomial"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Binomial",
+    "explanation": "The Binomial distribution models the number of successes in n repeated, independent Bernoulli trials, where each trial has strictly two possible complementary outcomes (success/failure, yes/no).",
+    "sourceDeck": "Session 7 Probability Distributions Tuned.pptx",
+    "sourceSlide": "Slide 26-27 (Q2)"
+  },
+  {
+    "id": 59,
+    "track": "Statistics",
+    "session": "Session 8: Types of Sampling Methods",
+    "question": "Which sampling ensures proportional representation?",
+    "options": [
+      "A) Random",
+      "B) Stratified",
+      "C) Cluster"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Stratified",
+    "explanation": "Stratified sampling partitions the population into non-overlapping subgroups (strata) based on known characteristics (e.g., gender, grade, income) and selects proportional random samples from each stratum, guaranteeing representation across all segments.",
+    "sourceDeck": "Session 8 Types of sampling methods tuned.pptx",
+    "sourceSlide": "Slide 13-14 (Q1)"
+  },
+  {
+    "id": 60,
+    "track": "Statistics",
+    "session": "Session 8: Types of Sampling Methods",
+    "question": "Which method selects every k-th item?",
+    "options": [
+      "A) Random",
+      "B) Systematic",
+      "C) Cluster"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Systematic",
+    "explanation": "Systematic sampling selects elements from an ordered population list at regular intervals of size k (e.g., every 10th customer) starting from a randomly determined initial point.",
+    "sourceDeck": "Session 8 Types of sampling methods tuned.pptx",
+    "sourceSlide": "Slide 13-14 (Q2)"
+  },
+  {
+    "id": 61,
+    "track": "Statistics",
+    "session": "Session 9: Hypothesis Testing Formulation",
+    "question": "What is H0 usually about?",
+    "options": [
+      "A) No change",
+      "B) New discovery",
+      "C) 5% significance"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) No change",
+    "explanation": "The null hypothesis (H0) posits the baseline claim of no effect, no difference, or no relationship. It represents status quo that requires strong empirical evidence to be refuted.",
+    "sourceDeck": "Session 9 Hypotheiss testing formulation tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
+  },
+  {
+    "id": 62,
+    "track": "Statistics",
+    "session": "Session 9: Hypothesis Testing Formulation",
+    "question": "Which error occurs when H0 is wrongly rejected?",
+    "options": [
+      "A) Type I",
+      "B) Type II",
+      "C) Type III"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Type I",
+    "explanation": "A Type I error (false positive) occurs when the researcher rejects a null hypothesis that is actually true in reality. The probability of committing a Type I error is controlled by the significance level alpha.",
+    "sourceDeck": "Session 9 Hypotheiss testing formulation tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
+  },
+  {
+    "id": 63,
+    "track": "Statistics",
+    "session": "Session 10: Hypothesis Testing using Statistical Tests",
+    "question": "Which test is appropriate for testing a sample mean when the sample size is less than 30 and the population standard deviation is known?",
+    "options": [
+      "A) F-test",
+      "B) T-test",
+      "C) Chi-square test",
+      "D) Z-test"
+    ],
+    "correctIndex": 3,
+    "answerText": "D) Z-test",
+    "explanation": "Even though the sample size is small (< 30), if the population standard deviation (sigma) is known and the underlying population is approximately normally distributed, a Z-test can still be used. If the population standard deviation were unknown, a Student's T-test would be required.",
+    "sourceDeck": "Session 10 Hypothesis Testing using Statistical Tests - Tuned.pptx",
+    "sourceSlide": "Slide 12-13"
+  },
+  {
+    "id": 64,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "p = 0.03 -> ? (assuming standard alpha = 0.05)",
+    "options": [
+      "A) Accept H0",
+      "B) Reject H0"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Reject H0",
+    "explanation": "Because the p-value (0.03) is less than the significance threshold alpha (0.05), the observed test statistic is unlikely to have occurred under H0 alone, leading us to reject the null hypothesis.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q1)"
+  },
+  {
+    "id": 65,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "CI = (48, 52), mu0 = 53 -> ?",
+    "options": [
+      "A) Reject H0",
+      "B) Accept H0"
+    ],
+    "correctIndex": 0,
+    "answerText": "A) Reject H0 (when hypothesized mean is outside the CI, reject the null hypothesis)",
+    "explanation": "The hypothesized value mu0 = 53 falls completely outside the 95% Confidence Interval (48, 52). A value outside the confidence interval is statistically incompatible with the observed sample at that confidence level, leading to the rejection of H0.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q2)"
+  },
+  {
+    "id": 66,
+    "track": "Statistics",
+    "session": "Session 11: A/B Testing in Python",
+    "question": "p = 0.07, alpha = 0.05 -> ?",
+    "options": [
+      "A) Reject H0",
+      "B) Fail to reject H0"
+    ],
+    "correctIndex": 1,
+    "answerText": "B) Fail to reject H0",
+    "explanation": "Because the p-value (0.07) is greater than alpha (0.05), the difference could reasonably be attributed to random sampling variability. Therefore, there is insufficient evidence against H0, and we fail to reject the null hypothesis.",
+    "sourceDeck": "Session 11 A B Testing in python - Tuned.pptx",
+    "sourceSlide": "Slide 18-19 (Q3)"
+  }
+]

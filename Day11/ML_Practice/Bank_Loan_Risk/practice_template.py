@@ -38,17 +38,17 @@ def phase_1_discovery_and_target_identification():
     print("-" * 65)
     
     # FILL IN THE BLANKS:
-    df = pd.read_csv(___)
+    df = pd.read_csv(csv_path)
     print(f"Dataset Shape: {df.shape}")
     print("Class Balance:\n", df['default_flag'].value_counts())
     
     # 1. Drop non-predictive ID and the target column
-    X = df.drop(columns=[___, ___])
+    X = df.drop(columns=['applicant_id', 'default_flag'])
     
     # 2. Isolate the target column
-    y = df[___]
+    y = df['default_flag']
     
-    return ___, ___                     # 3. Return X, y
+    return X, y                     # 3. Return X, y
 
 
 def phase_2_feature_engineering_and_encoding(X):
@@ -61,15 +61,15 @@ def phase_2_feature_engineering_and_encoding(X):
     
     # FILL IN THE BLANKS:
     # 4. Prevent SettingWithCopyWarning
-    X = X.___()
+    X = X.copy()
     
     # 5. Calculate loan to income ratio
-    X['loan_to_income_ratio'] = X[___] / X[___]
+    X['loan_to_income_ratio'] = X['loan_amount_k'] / X['annual_income_k']
     
     # 6. Apply get_dummies dropping first level
-    X_encoded = pd.get_dummies(X, drop_first=___)
+    X_encoded = pd.get_dummies(X, drop_first=True)
     
-    return ___                          # 7. Return X_encoded
+    return X_encoded                          # 7. Return X_encoded
 
 
 def phase_3_scaling_and_train_test_split(X, y):
@@ -82,14 +82,14 @@ def phase_3_scaling_and_train_test_split(X, y):
     
     # FILL IN THE BLANKS:
     # 8. Train/test split with stratification on target
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=___)
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
     # 9. Fit scaler ONLY on training data
     scaler = StandardScaler()
-    X_tr_scaled = scaler.fit_transform(___)
+    X_tr_scaled = scaler.fit_transform(X_tr)
     
     # 10. Transform test data ONLY
-    X_te_scaled = scaler.transform(___)
+    X_te_scaled = scaler.transform(X_te)
     
     return X_tr_scaled, X_te_scaled, y_tr, y_te, scaler
 
@@ -103,16 +103,16 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     
     # FILL IN THE BLANKS:
     # 11. Fit LogisticRegression
-    model = LogisticRegression(random_state=42).fit(___, ___)
+    model = LogisticRegression(random_state=42).fit(X_train_scaled, y_train)
     
     # 12. Predict on test set
-    y_pred = model.predict(___)
+    y_pred = model.predict(X_test_scaled)
     
     print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
     print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
     print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
     
-    return ___                          # 13. Return model
+    return model                          # 13. Return model
 
 
 def phase_5_model_persistence_and_inference(model, scaler, feature_columns):
@@ -137,11 +137,11 @@ def run_ml_pipeline():
     print("STARTING LOAN RISK CLASSIFICATION LIFECYCLE (Logistic Regression)")
     print("=" * 65)
     
-    # X, y = phase_1_discovery_and_target_identification()
-    # X_enc = phase_2_feature_engineering_and_encoding(X)
-    # X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
-    # model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
-    # phase_5_model_persistence_and_inference(model, scaler, X_enc.columns.tolist())
+    X, y = phase_1_discovery_and_target_identification()
+    X_enc = phase_2_feature_engineering_and_encoding(X)
+    X_tr_s, X_te_s, y_tr, y_te, scaler = phase_3_scaling_and_train_test_split(X_enc, y)
+    model = phase_4_model_training_and_testing(X_tr_s, X_te_s, y_tr, y_te)
+    phase_5_model_persistence_and_inference(model, scaler, X_enc.columns.tolist())
 
 
 if __name__ == "__main__":

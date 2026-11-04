@@ -1,0 +1,8 @@
+.vercel
+.vercelignore
+*.py
+questions.json
+blanks.json
+fill_in_the_blanks.html
+interactive_quiz.html
+last_minute_revision.html
