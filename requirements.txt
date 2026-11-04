@@ -1,0 +1,41 @@
+# ==============================================================================
+# CDAC Machine Learning - Master Requirements Specification
+# Curriculum Coverage: Day 1 through Day 11 (End-to-End ML Pipelines)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Day 11 Core Requirements (Analytics Lifecycle, Modeling, & ML Practice)
+# ------------------------------------------------------------------------------
+pandas>=2.2.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+joblib>=1.3.2
+scipy>=1.12.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# ------------------------------------------------------------------------------
+# Additional Machine Learning, Clustering, & NLP Utilities (Days 1–10)
+# ------------------------------------------------------------------------------
+kneed>=0.8.5                  # Knee/Elbow point detection for K-Means clustering
+thefuzz>=0.22.1               # Fuzzy string matching and text similarity
+pydotplus>=2.0.2              # Graphviz visualization for Decision Trees
+ipython>=8.20.0               # Enhanced interactive terminal and display tools
+requests>=2.31.0              # HTTP request utilities for dataset fetching
+pyyaml>=6.0.1                 # Configuration and metadata parsing
+
+# ==============================================================================
+# Virtual Environment Quick Start Guide:
+#
+# Windows (PowerShell):
+#   python -m venv venv
+#   .\venv\Scripts\Activate.ps1
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+#
+# Linux / macOS (Bash):
+#   python3 -m venv venv
+#   source venv/bin/activate
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+# ==============================================================================
