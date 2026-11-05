@@ -2593,7 +2593,438 @@ mark {
   }
 }
 
- </style>
+/* ============================================================
+   TECHSELECT DEALS, CHANNELS & OFFLINE WEB STYLES
+   ============================================================ */
+
+.deals-glow-btn {
+  position: relative;
+  border-color: rgba(224, 82, 82, 0.45) !important;
+  color: #c92a2a !important;
+  font-weight: 600 !important;
+  background: rgba(224, 82, 82, 0.08) !important;
+}
+
+html.dark .deals-glow-btn {
+  border-color: rgba(248, 113, 113, 0.45) !important;
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.14) !important;
+}
+
+.deals-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e05252;
+  box-shadow: 0 0 0 0 rgba(224, 82, 82, 0.7);
+  animation: pulse-dot 1.8s infinite;
+  display: inline-block;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 82, 82, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(224, 82, 82, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 82, 82, 0); }
+}
+
+.deals-modal-content {
+  max-width: 660px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-panel);
+  padding: 28px;
+}
+
+.deals-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+html.dark .deals-badge {
+  color: #fca5a5;
+  background: #450a0a;
+}
+
+.deals-badge.green {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+html.dark .deals-badge.green {
+  color: #86efac;
+  background: #052e16;
+}
+
+.deals-header {
+  margin-bottom: 20px;
+  padding-right: 32px;
+}
+
+.deals-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.deals-subtitle {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.deals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.deal-card-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s var(--ease);
+  position: relative;
+}
+
+.deal-card-link:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.deal-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.deal-icon-wrapper.whatsapp {
+  background: #e6f9ed;
+  color: #25d366;
+}
+html.dark .deal-icon-wrapper.whatsapp {
+  background: #0f331e;
+  color: #4ade80;
+}
+
+.deal-icon-wrapper.telegram {
+  background: #e7f4fb;
+  color: #229ed9;
+}
+html.dark .deal-icon-wrapper.telegram {
+  background: #0d2838;
+  color: #38bdf8;
+}
+
+.deal-icon-wrapper.web {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+html.dark .deal-icon-wrapper.web {
+  background: #2e1065;
+  color: #a78bfa;
+}
+
+.deal-icon-wrapper.flash {
+  background: #fef3c7;
+  color: #d97706;
+}
+html.dark .deal-icon-wrapper.flash {
+  background: #451a03;
+  color: #fbbf24;
+}
+
+.deal-icon-wrapper.reviews {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+html.dark .deal-icon-wrapper.reviews {
+  background: #082f49;
+  color: #38bdf8;
+}
+
+.deal-icon-wrapper.download {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.deal-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.deal-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+  flex-wrap: wrap;
+}
+
+.deal-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.deal-card-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.deal-card-tag.hot {
+  background: #fecaca;
+  color: #991b1b;
+}
+html.dark .deal-card-tag.hot {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
+.deal-card-tag.whatsapp-tag {
+  background: #dcfce7;
+  color: #166534;
+}
+html.dark .deal-card-tag.whatsapp-tag {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+.deal-card-tag.telegram-tag {
+  background: #e0f2fe;
+  color: #075985;
+}
+html.dark .deal-card-tag.telegram-tag {
+  background: #0c4a6e;
+  color: #bae6fd;
+}
+
+.deal-card-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deal-card-arrow {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.deal-card-link:hover .deal-card-arrow {
+  transform: translateX(3px);
+  color: var(--text);
+}
+
+.deals-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.deals-dismiss-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.deals-dismiss-label input {
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+/* Dedicated Tab Section Styles */
+.deals-hub-hero {
+  background: linear-gradient(135deg, rgba(30, 92, 72, 0.08) 0%, rgba(224, 82, 82, 0.08) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+html.dark .deals-hub-hero {
+  background: linear-gradient(135deg, rgba(138, 199, 174, 0.08) 0%, rgba(248, 113, 113, 0.08) 100%);
+}
+
+.deals-hub-hero-inner {
+  max-width: 760px;
+}
+
+.deals-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.deals-showcase-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s var(--ease);
+}
+
+.deals-showcase-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.deals-showcase-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.deals-showcase-card-body h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.deals-showcase-card-body p {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.deals-showcase-btn {
+  margin-top: 18px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  transition: all 0.15s var(--ease);
+}
+
+.deals-showcase-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.deals-showcase-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.deals-showcase-btn.primary:hover {
+  filter: brightness(1.1);
+}
+
+.deals-showcase-btn.whatsapp-btn {
+  background: #25d366;
+  border-color: #25d366;
+  color: #ffffff;
+}
+
+.deals-showcase-btn.whatsapp-btn:hover {
+  background: #1eb956;
+  border-color: #1eb956;
+}
+
+.deals-showcase-btn.telegram-btn {
+  background: #229ed9;
+  border-color: #229ed9;
+  color: #ffffff;
+}
+
+.deals-showcase-btn.telegram-btn:hover {
+  background: #1b89be;
+  border-color: #1b89be;
+}
+
+.deals-offline-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.deals-offline-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.deals-offline-info p {
+  font-size: 13px;
+  color: var(--text-2);
+  margin: 0;
+  line-height: 1.5;
+}
+
+  </style>
 </head>
 <body>
 
@@ -2620,6 +3051,14 @@ mark {
  <button id="globalSearchBtn" class="btn-header accent" title="Search questions, blanks and notes">
           Search
  </button>
+ <button id="openDealsModalBtn" class="btn-header deals-glow-btn" title="TechSelect Deals, Discounts & Community Channels" onclick="openDealsModal()">
+ <span class="deals-dot"></span>
+ <span>⚡ Deals</span>
+ </button>
+ <button id="downloadWebBtn" class="btn-header accent" title="Download entire revision portal as offline HTML file" onclick="downloadWebApp()">
+ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+ <span>Download Web</span>
+ </button>
  </div>
  </div>
 
@@ -2639,6 +3078,9 @@ mark {
  </button>
  <button class="tab-btn" data-tab="research" onclick="switchTab('research')">
           Research
+ </button>
+ <button class="tab-btn" data-tab="deals" onclick="switchTab('deals')">
+          ⚡ Deals & Community <span class="tab-pill-count" style="background:#e05252;color:#ffffff;font-weight:600;">NEW</span>
  </button>
  </nav>
  </div>
@@ -4138,6 +4580,184 @@ mark {
 
  </section>
 
+    <!-- ========================================== -->
+    <!-- TAB 6: TECHSELECT DEALS & COMMUNITY        -->
+    <!-- ========================================== -->
+    <section id="dealsView" class="tab-view">
+      <div class="deals-hub-hero">
+        <div class="deals-hub-hero-inner">
+          <div class="deals-badge">⚡ TECHSELECT DEALS &amp; COMMUNITY</div>
+          <h1 class="deals-title" style="font-size: 26px; margin-bottom: 8px;">Tech Deals, Flash Sales &amp; Community Channels</h1>
+          <p class="deals-subtitle" style="font-size: 15px;">Handpicked gadgets, student hardware discounts, verified price drops, and instant messaging channels to save money and stay updated.</p>
+        </div>
+      </div>
+
+      <div class="deals-hub-grid">
+        <!-- 1. Official Website -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper web">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag">Official Hub</span>
+                <h3 style="margin-top: 4px;">TechSelect Blog</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>The main publication for technology analyses, in-depth hardware reviews, buyer recommendations, and student developer setup guides.</p>
+            </div>
+          </div>
+          <a href="https://techselect.blog" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn primary">
+            <span>Visit Website</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- 2. Flash Deals -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper flash">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag hot">Up to 70% Off</span>
+                <h3 style="margin-top: 4px;">Flash Deals &amp; Sales</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>Daily curated limited-time discounts, verified price drops on SSDs, RAM, gaming monitors, mechanical keyboards, and mobile accessories.</p>
+            </div>
+          </div>
+          <a href="https://techselect.blog/sales" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn primary">
+            <span>Browse Flash Deals</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- 3. Reviews & Buying Guides -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper reviews">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag">Buyer Guides</span>
+                <h3 style="margin-top: 4px;">Reviews &amp; Guides</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>Data-driven product benchmarks, comparative buying guides, and hands-on reviews to help you pick the best tech for programming &amp; work.</p>
+            </div>
+          </div>
+          <a href="https://techselect.blog/article" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn">
+            <span>Read Articles</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- 4. WhatsApp: Flash Deals -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper whatsapp">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag whatsapp-tag">Instant Alerts</span>
+                <h3 style="margin-top: 4px;">WhatsApp: Flash Deals</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>Receive immediate WhatsApp alerts whenever high-value loot deals, price bugs, lightning electronics sales, and coupon codes go live.</p>
+            </div>
+          </div>
+          <a href="https://whatsapp.com/channel/0029Vb8ptNY545ux1D4rUA2E" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn whatsapp-btn">
+            <span>Join WhatsApp Flash Deals</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- 5. WhatsApp: TechSelect -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper whatsapp">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag whatsapp-tag">Community</span>
+                <h3 style="margin-top: 4px;">WhatsApp: TechSelect</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>Official TechSelect broadcasts for curated developer news, launch announcements, tech highlights, and community updates.</p>
+            </div>
+          </div>
+          <a href="https://whatsapp.com/channel/0029VbDdnbkG3R3e7wu0g70C" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn whatsapp-btn">
+            <span>Join TechSelect Community</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- 6. Telegram: TechSelect Deals -->
+        <div class="deals-showcase-card">
+          <div>
+            <div class="deals-showcase-card-top">
+              <div class="deal-icon-wrapper telegram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.536-.197 1.006.128.832.965z"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <span class="deal-card-tag telegram-tag">Telegram</span>
+                <h3 style="margin-top: 4px;">Telegram: TechSelect Deals</h3>
+              </div>
+            </div>
+            <div class="deals-showcase-card-body">
+              <p>Join the Telegram channel for fast bot-verified deal alerts, deal discussions, search capabilities, and instant flash drops.</p>
+            </div>
+          </div>
+          <a href="https://t.me/TechSelectDeals" target="_blank" rel="noopener noreferrer" class="deals-showcase-btn telegram-btn">
+            <span>Join Telegram Channel</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Offline Study Webpage Box -->
+      <div class="deals-offline-box">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div class="deal-icon-wrapper download" style="width: 48px; height: 48px;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <div class="deals-offline-info">
+            <h3>Download Complete Portal for Offline Revision</h3>
+            <p>Save this entire ML revision portal as a standalone HTML file on your device. Study all 66 exam MCQs, 14 blanks, and 9 cheat sheets without needing an active internet connection.</p>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="downloadWebApp()" style="white-space: nowrap; padding: 12px 20px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Web (.html)
+        </button>
+      </div>
+    </section>
+
  </main>
 
  <!-- ========================================== -->
@@ -4216,7 +4836,136 @@ mark {
  </div>
  </div>
 
- <!-- Toast Notification Container -->
+ <!-- Deals & Community Channels Popup Modal -->
+ <div id="dealsModal" class="modal-backdrop" onclick="if(event.target===this)closeDealsModal()">
+   <div class="modal-content deals-modal-content">
+     <button class="modal-close-btn" onclick="closeDealsModal()" aria-label="Close">×</button>
+     
+     <div class="deals-header">
+       <div class="deals-badge">⚡ EXCLUSIVE COMMUNITY &amp; DEALS</div>
+       <h2 class="deals-title">Join TechSelect Deals &amp; Channels</h2>
+       <p class="deals-subtitle">Get instant alerts for high-value electronics deals, price drops, buying guides, and student tech communities.</p>
+     </div>
+
+     <div class="deals-list">
+       <!-- 1. Official Website -->
+       <a href="https://techselect.blog" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper web">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">TechSelect.blog</span>
+             <span class="deal-card-tag">Official Hub</span>
+           </div>
+           <p class="deal-card-desc">Curated technology publication, developer hardware guides &amp; news.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+
+       <!-- 2. Flash Deals -->
+       <a href="https://techselect.blog/sales" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper flash">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">Flash Deals &amp; Sales</span>
+             <span class="deal-card-tag hot">Up to 70% Off</span>
+           </div>
+           <p class="deal-card-desc">Daily price drops on laptops, SSDs, monitors, gadgets &amp; accessories.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+
+       <!-- 3. Reviews & Buying Guides -->
+       <a href="https://techselect.blog/article" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper reviews">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">Reviews &amp; Buying Guides</span>
+             <span class="deal-card-tag">Buyer Guides</span>
+           </div>
+           <p class="deal-card-desc">Detailed hardware reviews, comparative benchmarks &amp; setup advice.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+
+       <!-- 4. WhatsApp: Flash Deals -->
+       <a href="https://whatsapp.com/channel/0029Vb8ptNY545ux1D4rUA2E" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper whatsapp">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">WhatsApp: Flash Deals / All Items</span>
+             <span class="deal-card-tag whatsapp-tag">Instant Alerts</span>
+           </div>
+           <p class="deal-card-desc">Instant phone alerts for daily loot deals, error fares &amp; discounts.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+
+       <!-- 5. WhatsApp: TechSelect -->
+       <a href="https://whatsapp.com/channel/0029VbDdnbkG3R3e7wu0g70C" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper whatsapp">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">WhatsApp: TechSelect</span>
+             <span class="deal-card-tag whatsapp-tag">Community</span>
+           </div>
+           <p class="deal-card-desc">Official community updates, new tech drops &amp; discussion alerts.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+
+       <!-- 6. Telegram -->
+       <a href="https://t.me/TechSelectDeals" target="_blank" rel="noopener noreferrer" class="deal-card-link">
+         <div class="deal-icon-wrapper telegram">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.536-.197 1.006.128.832.965z"/>
+           </svg>
+         </div>
+         <div class="deal-card-info">
+           <div class="deal-card-title-row">
+             <span class="deal-card-title">Telegram: TechSelect Deals</span>
+             <span class="deal-card-tag telegram-tag">Telegram</span>
+           </div>
+           <p class="deal-card-desc">Instant telegram alerts, fast notifications &amp; active community chat.</p>
+         </div>
+         <svg class="deal-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </a>
+     </div>
+
+     <div class="deals-footer-bar">
+       <label class="deals-dismiss-label">
+         <input type="checkbox" id="dealsDismissCheckbox" onchange="handleDismissCheck(this)">
+         <span>Don't show popup automatically again</span>
+       </label>
+       <div style="display: flex; gap: 8px;">
+         <button class="btn btn-sm" onclick="downloadWebApp()" title="Download entire web page for offline studying">
+           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+           Offline Web
+         </button>
+         <button class="btn btn-primary btn-sm" onclick="closeDealsModal()">Continue Studying</button>
+       </div>
+     </div>
+   </div>
+ </div>
  <div id="toastContainer" class="toast-container"></div>
 
  <!-- Short sound played on a wrong practice answer -->
@@ -5688,9 +6437,87 @@ mark {
       trackEvent('web_search', { engine, query });
     }
 
+    // TechSelect Deals Modal & Channel Controls
+    function openDealsModal() {
+      const modal = document.getElementById('dealsModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      trackEvent('deals_modal_open', {});
+    }
+
+    function closeDealsModal() {
+      const modal = document.getElementById('dealsModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      const cb = document.getElementById('dealsDismissCheckbox');
+      if (cb && cb.checked) {
+        localStorage.setItem('techselect_deals_dismissed', 'true');
+      }
+    }
+
+    function handleDismissCheck(cb) {
+      if (cb.checked) {
+        localStorage.setItem('techselect_deals_dismissed', 'true');
+      } else {
+        localStorage.removeItem('techselect_deals_dismissed');
+      }
+    }
+
+    // Download Web Feature (Offline Portal)
+    function downloadWebApp() {
+      try {
+        const clone = document.documentElement.cloneNode(true);
+        const modal = clone.querySelector('#dealsModal');
+        if (modal) modal.classList.remove('active');
+        const attemptModal = clone.querySelector('#attemptResultModal');
+        if (attemptModal) attemptModal.classList.remove('active');
+        const inspectModal = clone.querySelector('#attemptInspectModal');
+        if (inspectModal) inspectModal.classList.remove('active');
+
+        const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'CDAC_ML_Revision_Portal_Offline.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast('Offline Revision Webpage downloaded! Open it in any browser without internet.');
+        trackEvent('download_offline_web', {});
+      } catch (err) {
+        console.error('Download error:', err);
+        alert('Could not auto-download. You can also press Ctrl+S to save this entire page for offline practice.');
+      }
+    }
+
+    // Auto-prompt deals popup after 3.5s if not previously dismissed
+    setTimeout(() => {
+      try {
+        const dismissed = localStorage.getItem('techselect_deals_dismissed');
+        if (!dismissed) {
+          openDealsModal();
+        }
+      } catch (e) {
+        // Safe fallback if local storage is restricted
+      }
+    }, 3500);
+
     // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
       if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
+      if (e.key === 'Escape') {
+        closeDealsModal();
+        closeAttemptResultModal();
+        closeInspectModal();
+        return;
+      }
 
       if (e.key === 'ArrowLeft') {
         goToPrevQuestion();
