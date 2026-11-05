@@ -6,6 +6,10 @@ Description: Simple, built-in function driven Python script for customer churn p
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -33,7 +37,7 @@ def phase_2_feature_engineering_and_encoding(X):
     print("\n[PHASE 2] Feature Engineering & Categorical Encoding")
     print("-" * 65)
     X = X.copy()
-    X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months']
+    X['avg_monthly_spend'] = X['total_charges'] / X['tenure_months'].replace(0, 1)
     X_encoded = pd.get_dummies(X, drop_first=True)
     print("Transformed Feature Matrix Head:\n", X_encoded.head(2))
     return X_encoded
@@ -51,14 +55,28 @@ def phase_3_scaling_and_train_test_split(X, y):
 
 
 def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y_test):
-    """Phase 4: Train Random Forest classifier and evaluate test metrics."""
+    """Phase 4: Train Random Forest classifier, evaluate test metrics, and plot confusion matrix."""
     print("\n[PHASE 4] Model Training & Test Set Evaluation")
     print("-" * 65)
     model = RandomForestClassifier(n_estimators=50, random_state=42).fit(X_train_scaled, y_train)
     y_pred = model.predict(X_test_scaled)
     print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
-    print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+    cm = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:\n", cm)
     print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Active (0)', 'Churn (1)'],
+                yticklabels=['Active (0)', 'Churn (1)'])
+    plt.title("Confusion Matrix - Customer Churn Retention")
+    plt.ylabel("Actual Label")
+    plt.xlabel("Predicted Label")
+    plt.tight_layout()
+    plt.savefig(base_dir / "churn_confusion_matrix.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'churn_confusion_matrix.png'")
     return model
 
 
@@ -72,8 +90,8 @@ def phase_5_joblib_model_persistence(model, scaler, feature_names):
     print("Artifacts saved: churn_rf_model.joblib, churn_scaler.joblib")
 
     # Sample inference
-    sample_profile = [[2, 70.0, 140.0, 3, 70.0, False, False, True]]
-    sample_scaled = scaler.transform(sample_profile)
+    sample = [[2, 70.0, 140.0, 3, 70.0, False, False, True]]
+    sample_scaled = scaler.transform(sample)
     pred = model.predict(sample_scaled)
     print(f"Sample Subscriber Churn Prediction (0=Retain, 1=Churn Risk): {pred[0]}")
 

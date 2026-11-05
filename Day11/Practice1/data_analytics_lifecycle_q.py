@@ -6,6 +6,10 @@ Description: Minimal, built-in function driven Python script for the 5 lifecycle
 
 from pathlib import Path
 import os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
@@ -44,10 +48,36 @@ def phase_2_descriptive_statistics():
 
 
 def phase_3_bivariate_association():
-    """Phase 3: Association using built-in cov() and corr()."""
-    print("\n--- Phase 3: Bivariate Association ---")
+    """Phase 3: Association & Exploratory Visualizations (Heatmap & Scatter Plot)."""
+    print("\n--- Phase 3: Bivariate Association & Visualization ---")
     print("Covariance Matrix:\n", df.cov(numeric_only=True))
-    print("\nCorrelation Matrix:\n", df.corr(numeric_only=True))
+    corr = df.corr(numeric_only=True)
+    print("\nCorrelation Matrix:\n", corr)
+
+    base_dir = Path(__file__).resolve().parent
+
+    # 1. Correlation Heatmap
+    plt.figure(figsize=(7, 5))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".4f", cbar=True)
+    plt.title("Correlation Heatmap - Coffee Shop Analytics")
+    plt.tight_layout()
+    heatmap_path = base_dir / "correlation_heatmap.png"
+    plt.savefig(heatmap_path, dpi=150)
+    plt.close()
+
+    # 2. Bivariate Scatter Plot with Regression Line
+    plt.figure(figsize=(7, 5))
+    sns.regplot(data=df, x='Marketing_Spend_USD', y='Daily_Revenue_USD', color='royalblue', line_kws={'color': 'darkred'})
+    plt.title("Bivariate Association: Marketing Spend vs Daily Revenue")
+    plt.xlabel("Marketing Spend ($ USD)")
+    plt.ylabel("Daily Revenue ($ USD)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    scatter_path = base_dir / "bivariate_scatter.png"
+    plt.savefig(scatter_path, dpi=150)
+    plt.close()
+
+    print(f"Saved visualizations: '{heatmap_path.name}', '{scatter_path.name}'")
 
 
 def phase_4_predictive_modeling():

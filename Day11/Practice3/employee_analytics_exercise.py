@@ -4,6 +4,10 @@ Description: Simple, built-in function driven Python script for employee product
 """
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
@@ -37,12 +41,35 @@ def phase_2_descriptive_statistics(df):
 
 
 def phase_3_bivariate_association(df):
-    """Phase 3: Bivariate Pearson correlation matrix."""
-    print("\n[PHASE 3] Bivariate Association")
+    """Phase 3: Bivariate Pearson correlation matrix & Visualizations."""
+    print("\n[PHASE 3] Bivariate Association & Visualization")
     print("-" * 65)
     corr = df.corr(numeric_only=True)
     print(corr.round(4))
     print(f"\nTraining_Hours vs Weekly_Tasks_Completed: r = {corr.loc['Training_Hours', 'Weekly_Tasks_Completed']:.4f}")
+
+    base_dir = Path(__file__).resolve().parent
+    
+    # 1. Correlation Heatmap
+    plt.figure(figsize=(7, 5))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".4f", cbar=True)
+    plt.title("Correlation Matrix - Employee Analytics")
+    plt.tight_layout()
+    plt.savefig(base_dir / "employee_correlation_heatmap.png", dpi=150)
+    plt.close()
+
+    # 2. Scatter Plot with Regression Line
+    plt.figure(figsize=(7, 5))
+    sns.regplot(data=df, x='Training_Hours', y='Weekly_Tasks_Completed', color='teal', line_kws={'color': 'darkred'})
+    plt.title("Training Hours vs Weekly Tasks Completed")
+    plt.xlabel("Training Hours Completed")
+    plt.ylabel("Weekly Tasks Completed")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(base_dir / "employee_training_vs_tasks.png", dpi=150)
+    plt.close()
+
+    print("Saved visualizations: 'employee_correlation_heatmap.png', 'employee_training_vs_tasks.png'")
     return df
 
 

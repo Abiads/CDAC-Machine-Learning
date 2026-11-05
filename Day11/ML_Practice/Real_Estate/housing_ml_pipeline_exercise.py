@@ -6,6 +6,10 @@ Description: Simple, built-in function driven Python script for real estate pric
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -52,7 +56,7 @@ def phase_3_scaling_and_train_test_split(X, y):
 
 
 def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y_test):
-    """Phase 4: Train Linear Regression model and compute MAE, RMSE, and R2."""
+    """Phase 4: Train Linear Regression model, compute metrics, and plot actual vs predicted."""
     print("\n[PHASE 4] Model Training & Test Set Evaluation")
     print("-" * 65)
     model = LinearRegression().fit(X_train_scaled, y_train)
@@ -63,6 +67,21 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     print(f"R-squared Score: {r2:.4f}")
     print(f"Mean Absolute Error (MAE): ${mae:,.2f}")
     print(f"Root Mean Squared Error (RMSE): ${rmse:,.2f}")
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y_test, y_pred, color='dodgerblue', edgecolor='black', alpha=0.85, s=90, label='Test Residences')
+    min_val, max_val = min(y_test.min(), y_pred.min()), max(y_test.max(), y_pred.max())
+    plt.plot([min_val, max_val], [min_val, max_val], color='red', linestyle='--', linewidth=2, label='Perfect Fit')
+    plt.title(f"Real Estate Valuation: Actual vs Predicted (R^2 = {r2:.4f})")
+    plt.xlabel("Actual Price ($ USD)")
+    plt.ylabel("Predicted Price ($ USD)")
+    plt.legend()
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(base_dir / "housing_actual_vs_predicted.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'housing_actual_vs_predicted.png'")
     return model
 
 

@@ -4,6 +4,10 @@ Description: Simple, built-in function driven Python script for healthcare risk 
 """
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -42,12 +46,27 @@ def phase_3_classification_modeling(df):
 
 
 def phase_4_model_evaluation(model, X, y):
-    """Phase 4: Evaluate accuracy and confusion matrix."""
+    """Phase 4: Evaluate accuracy, confusion matrix, and save confusion matrix heatmap."""
     print("\n[PHASE 4] Model Evaluation & Clinical Action")
     print("-" * 65)
     y_pred = model.predict(X)
     print(f"Accuracy: {accuracy_score(y, y_pred) * 100:.2f}%")
-    print("Confusion Matrix:\n", confusion_matrix(y, y_pred))
+    cm = confusion_matrix(y, y_pred)
+    print("Confusion Matrix:\n", cm)
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Normal (0)', 'High Risk (1)'],
+                yticklabels=['Normal (0)', 'High Risk (1)'])
+    plt.title("Confusion Matrix - Hypertension Risk Classification")
+    plt.ylabel("Actual Label")
+    plt.xlabel("Predicted Label")
+    plt.tight_layout()
+    plt.savefig(base_dir / "hypertension_confusion_matrix.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'hypertension_confusion_matrix.png'")
+
     print("\nClinical Action: Proactively flag patients with low daily steps and high BMI for hypertension screening.")
 
 

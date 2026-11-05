@@ -4,6 +4,10 @@ Description: Simple, built-in function driven Python script for loan default pre
 """
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -55,8 +59,22 @@ def phase_4_model_training_and_testing(X_train_scaled, X_test_scaled, y_train, y
     model = LogisticRegression(random_state=42).fit(X_train_scaled, y_train)
     y_pred = model.predict(X_test_scaled)
     print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
-    print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+    cm = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:\n", cm)
     print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=0))
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Approved (0)', 'Default (1)'],
+                yticklabels=['Approved (0)', 'Default (1)'])
+    plt.title("Confusion Matrix - Loan Default Risk")
+    plt.ylabel("Actual Label")
+    plt.xlabel("Predicted Label")
+    plt.tight_layout()
+    plt.savefig(base_dir / "loan_risk_confusion_matrix.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'loan_risk_confusion_matrix.png'")
     return model
 
 

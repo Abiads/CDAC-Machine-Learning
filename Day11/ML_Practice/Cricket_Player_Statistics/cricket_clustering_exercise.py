@@ -6,6 +6,10 @@ Description: Simple, built-in function driven Python script for KMeans cricket c
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -48,13 +52,28 @@ def phase_3_kmeans_model_induction(X_scaled, df_original):
 
 
 def phase_4_cluster_evaluation_and_profiling(X_scaled, labels, df_clustered):
-    """Phase 4: Evaluate silhouette score and profile cluster centroids."""
+    """Phase 4: Evaluate silhouette score and profile cluster centroids with Visualization."""
     print("\n[PHASE 4] Cluster Evaluation & Role Profiling")
     print("-" * 65)
     score = silhouette_score(X_scaled, labels)
     print(f"Silhouette Score (Cluster Quality): {score:.4f}")
     profile = df_clustered.groupby('cluster_id')[['runs_scored', 'batting_average', 'wickets_taken', 'bowling_economy']].mean()
     print("\nCluster Centroid Profiles (Roles):\n", profile.round(2))
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(df_clustered['runs_scored'], df_clustered['wickets_taken'], 
+                          c=df_clustered['cluster_id'], cmap='viridis', s=120, edgecolor='black', alpha=0.85)
+    plt.title("Cricket Player Archetypes (K-Means Clustering)")
+    plt.xlabel("Career Runs Scored")
+    plt.ylabel("Career Wickets Taken")
+    cbar = plt.colorbar(scatter)
+    cbar.set_label("Assigned Role Cluster (0, 1, 2)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(base_dir / "cricket_player_clusters.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'cricket_player_clusters.png'")
 
 
 def phase_5_joblib_model_persistence(model, scaler, feature_names):

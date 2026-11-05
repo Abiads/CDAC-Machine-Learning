@@ -1,9 +1,13 @@
 """
 Title: E-Commerce Customer Analytics Lifecycle 
-Description: Simple, built-in function driven Python script for e-commerce customer analytics.
+Description: Simple, built-in function driven Python script for ecommerce spend analytics.
 """
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
@@ -41,13 +45,36 @@ def phase_2_descriptive_statistics(df):
 
 
 def phase_3_bivariate_association(df):
-    """Phase 3: Bivariate Pearson correlation matrix."""
-    print("\n[PHASE 3] Bivariate Association")
+    """Phase 3: Bivariate Pearson correlation matrix & Visualizations."""
+    print("\n[PHASE 3] Bivariate Association & Visualization")
     print("-" * 65)
     corr = df.corr(numeric_only=True)
     print(corr.round(4))
     print(f"\nBrowsing_Minutes vs Annual_Spend_USD: r = {corr.loc['Browsing_Minutes', 'Annual_Spend_USD']:.4f}")
     print(f"Items_In_Cart vs Annual_Spend_USD: r = {corr.loc['Items_In_Cart', 'Annual_Spend_USD']:.4f}")
+
+    base_dir = Path(__file__).resolve().parent
+
+    # 1. Heatmap
+    plt.figure(figsize=(7, 5))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".4f", cbar=True)
+    plt.title("Correlation Matrix - E-Commerce Analytics")
+    plt.tight_layout()
+    plt.savefig(base_dir / "ecommerce_correlation_heatmap.png", dpi=150)
+    plt.close()
+
+    # 2. Scatter plot with regression line
+    plt.figure(figsize=(7, 5))
+    sns.regplot(data=df, x='Browsing_Minutes', y='Annual_Spend_USD', color='darkorange', line_kws={'color': 'darkblue'})
+    plt.title("Browsing Minutes vs Annual Spend ($ USD)")
+    plt.xlabel("Browsing Minutes")
+    plt.ylabel("Annual Spend ($ USD)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(base_dir / "browsing_minutes_vs_spend.png", dpi=150)
+    plt.close()
+
+    print("Saved visualizations: 'ecommerce_correlation_heatmap.png', 'browsing_minutes_vs_spend.png'")
     return df
 
 
@@ -70,13 +97,13 @@ def phase_5_evaluation_and_reporting(model, X, y, df):
     y_pred = model.predict(X)
     print(f"R-squared Score: {model.score(X, y):.4f}")
     print(f"Mean Absolute Error (MAE): ${mean_absolute_error(y, y_pred):.2f}")
-    print("\nMarketing Action: Browsing time strongly drives spending; optimize UX and personalized recommendations.")
+    print("\nMarketing Action: Browsing duration strongly drives customer checkout value; optimize on-site product engagement.")
 
 
 def run_analytics_lifecycle():
     """Facade Orchestrator function."""
     print("=" * 65)
-    print("STARTING E-COMMERCE ANALYTICS LIFECYCLE")
+    print("STARTING E-COMMERCE ANALYTICS LIFECYCLE (Out of 40 Marks)")
     print("=" * 65)
 
     df = phase_1_discovery_and_setup()

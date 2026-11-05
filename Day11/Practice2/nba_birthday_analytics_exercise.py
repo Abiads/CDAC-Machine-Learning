@@ -6,6 +6,10 @@ Description: Simple, built-in function driven Python script for loading,
 
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 
 # Direct path to dataset in the current folder
@@ -36,6 +40,19 @@ def phase_2_birthday_paradox_analysis(df):
 
     print("Top 5 Most Common Birthdays in NBA History:")
     print(bday_counts.head())
+
+    base_dir = Path(__file__).resolve().parent
+    plt.figure(figsize=(10, 5))
+    top10 = bday_counts.head(10)
+    sns.barplot(x=top10.index, y=top10.values, palette='mako')
+    plt.title("Top 10 Most Common Birthdays in NBA History")
+    plt.xlabel("Birthday (Month & Day)")
+    plt.ylabel("Player Count")
+    plt.xticks(rotation=30)
+    plt.tight_layout()
+    plt.savefig(base_dir / "nba_top_birthdays.png", dpi=150)
+    plt.close()
+    print("Saved visualization: 'nba_top_birthdays.png'")
     return df
 
 

@@ -18,6 +18,10 @@ OVERFITTING & GENERALIZATION REQUIREMENT:
 """
 
 from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -75,10 +79,11 @@ def phase_2_descriptive_statistics(df):
 
 def phase_3_bivariate_association(df):
     """
-    [Phase 3] Bivariate Correlation
+    [Phase 3] Bivariate Correlation & Visualizations
     - Compute correlation and extract association between Foot_Traffic and revenue.
+    - Generate correlation heatmap and scatter plot with regression fit.
     """
-    print("\n[PHASE 3] Bivariate Association")
+    print("\n[PHASE 3] Bivariate Association & Visualization")
     print("-" * 65)
     
     corr = df.corr(numeric_only=True)
@@ -88,6 +93,28 @@ def phase_3_bivariate_association(df):
     target = "Daily_Revenue_USD"
     print(f"\nCorrelation ({predictor} vs {target}): r = {corr.loc[predictor, target]:.4f}")
     
+    base_dir = Path(__file__).resolve().parent
+    
+    # 1. Heatmap
+    plt.figure(figsize=(7, 5))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".4f", cbar=True)
+    plt.title("Correlation Matrix Heatmap")
+    plt.tight_layout()
+    plt.savefig(base_dir / "practice_correlation_heatmap.png", dpi=150)
+    plt.close()
+    
+    # 2. Scatter with fit line
+    plt.figure(figsize=(7, 5))
+    sns.regplot(data=df, x=predictor, y=target, color='teal', line_kws={'color': 'darkred'})
+    plt.title(f"Bivariate Scatter: {predictor} vs {target}")
+    plt.xlabel(f"{predictor} (Store Volume)")
+    plt.ylabel(f"{target} ($)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.savefig(base_dir / "practice_foot_traffic_scatter.png", dpi=150)
+    plt.close()
+    
+    print("Saved visualizations: 'practice_correlation_heatmap.png', 'practice_foot_traffic_scatter.png'")
     return df
 
 
